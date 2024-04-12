@@ -6,20 +6,26 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
         inputData: [],
-        weights: []
+        weights: [],
+        index: 0
     },
     mutations: {
         changeWeights (state, weights) {
             state.weights = weights;
         },
+        changeIndex (state, index) {
+            state.index = index;
+        },
     },
     getters: {
-
         inputData (state) {
             return state.inputData
         },
         weights (state) {
             return state.weights
+        },
+        index (state) {
+            return state.index
         }
     },
     actions: {

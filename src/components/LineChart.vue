@@ -130,8 +130,6 @@ export default {
                     .attr('class', 'mse-line')
                     .attr('d', line)
                     .attr("fill", "none")
-
-            console.log(this.slice(ref))
         },
         drawCircle(ref) {
             const circleGroup = d3.select(this.$refs["circleGroup" + ref]);

@@ -15,6 +15,7 @@
                     <g class="axis axis-x" ref="axisXOutput"></g>
                     <g class="axis axis-y" ref="axisYOutput"></g>
                     <g class="circle-group" ref="circleGroupOutput"></g>
+                    <g class="line-group" ref="lineGroup"></g>
                 </g>
             </svg>
         </div>
@@ -47,6 +48,9 @@
             this.drawXAxis(variable);
             this.drawYAxis(variable);
             this.drawCircles(data, variable);
+            if (variable === "Output") {
+                this.drawLines()
+            }
         },
         drawXAxis(variable) {
             d3.select(this.$refs["axisX" + variable]).select(".axis-label").remove()
@@ -91,11 +95,52 @@
                 .attr('r', 4)
             console.log(this.MSE)
         },
+        drawLines(ref) {
+            const linesGroup = d3.select(this.$refs["lineGroup"]);
+            linesGroup.selectAll('.mse-line').remove();
+
+            const line = d3.line()
+                .x((d) => this.xScale(d.x))
+                .y((d) => this.yScale(d.label));
+
+            const clipPath = linesGroup
+                .attr('clip-path', 'url(#clip)');
+
+            clipPath.selectAll('.line')
+                .data(this.computeTrajectory(ref))
+                .join('path')
+                .attr('class', 'mse-line')
+                .attr('d', d => line(d))
+                .attr("fill", "none")
+                .style("stroke", (d, i) => d3.schemeCategory10[i]);
+        },
+        computeTrajectory() {
+            let trajectories = []
+            for(let i=0; i<this.range.length; i++) {
+                let weightsNew = [...this.weights]
+                weightsNew[this.index] = {id: this.index, value: this.range[i]}
+                trajectories.push(this.predictData(weightsNew).slice().sort((a,b) => d3.ascending(a.x, b.x)))
+            }
+            console.log(trajectories)
+            return trajectories
+        },
+        predictData(weights) {
+            let predictedData = []
+            for(let i=0; i<this.data.length; i++) {
+                predictedData.push({x: this.data[i].x, label: this.predict(this.data[i].x,weights)})
+            }
+            return predictedData
+        },
     },
     computed: {
         data: {
             get: function() {
                 return this.$store.getters.inputData
+            }
+        },
+        index: {
+            get: function() {
+                return this.$store.getters.index
             }
         },
         predictedData() {
@@ -120,6 +165,14 @@
                 .range([this.svgHeight - this.svgPadding.top - this.svgPadding.bottom, 0])
                 .domain([Math.sin(-1.5) * 1.1, Math.sin(1.5) * 1.1]);
         },
+        range() {
+            var step = 2.5;
+            var range = [];
+            for (let j = -5; j <= 5; j += step) {
+                range.push(parseFloat(j));
+            }
+            return range
+        },
         MSE() {
             let mse = 0.0
             for(let i=0; i<this.data.length; i++) {
@@ -140,6 +193,12 @@
         weights: {
             handler() {
                 this.drawChart(this.data, "Input");
+                this.drawChart(this.predictedData,"Output");
+            },
+            deep: true,
+        },
+        index: {
+            handler() {
                 this.drawChart(this.predictedData,"Output");
             },
             deep: true,

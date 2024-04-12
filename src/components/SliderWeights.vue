@@ -2,7 +2,11 @@
     <div>
         <div v-for="(weight, index) in weights" :key="index">
             <label :for="'weights-bar'">Weight {{ index }} : {{ weight.value }}</label>
-            <b-form-input id="range-year" v-model="weights[index].value" type="range" min="-5" max="5" step="0.1"></b-form-input>
+            <b-form-input id="range-year"
+                          v-model="weights[index].value"
+                          type="range"
+                          min="-5" max="5" step="0.1"
+                          v-on:click="test(index)"></b-form-input>
         </div>
     </div>
 </template>
@@ -23,6 +27,9 @@ export default {
     mounted() {
     },
     methods: {
+        test(index) {
+            this.$store.commit('changeIndex', index);
+        }
     },
     computed: {
         weights: {
