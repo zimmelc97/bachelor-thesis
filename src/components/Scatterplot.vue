@@ -14,8 +14,8 @@
                 <g class="chart-group" ref="chartGroupOutput">
                     <g class="axis axis-x" ref="axisXOutput"></g>
                     <g class="axis axis-y" ref="axisYOutput"></g>
-                    <g class="circle-group" ref="circleGroupOutput"></g>
                     <g class="line-group" ref="lineGroup"></g>
+                    <g class="circle-group" ref="circleGroupOutput"></g>
                 </g>
             </svg>
         </div>
@@ -84,18 +84,17 @@
         },
         drawCircles(data, variable) {
             const circleGroup = d3.select(this.$refs["circleGroup" + variable]);
-            circleGroup.selectAll('.circle')
+            circleGroup.selectAll('.circle-output')
                 .data(data)
                 .join('circle')
-                .attr('class', 'circle')
+                .attr('class', 'circle-output')
                 .attr('cx', (d) => this.xScale(d.x))
                 .attr('cy', (d) => this.yScale(d.label))
-                .attr('r', 4)
-            console.log(this.MSE)
+                .attr('r', 3)
         },
         drawLines(ref) {
             const linesGroup = d3.select(this.$refs["lineGroup"]);
-            linesGroup.selectAll('.mse-line').remove();
+            linesGroup.selectAll('.trajectory').remove();
 
             const line = d3.line()
                 .x((d) => this.xScale(d.x))
@@ -107,10 +106,9 @@
             clipPath.selectAll('.line')
                 .data(this.computeTrajectory(ref))
                 .join('path')
-                .attr('class', 'mse-line')
+                .attr('class', 'trajectory')
                 .attr('d', d => line(d))
                 .attr("fill", "none")
-                .style("stroke", (d, i) => d3.schemeCategory10[i]);
         },
         computeTrajectory() {
             let trajectories = []
@@ -119,7 +117,6 @@
                 weightsNew[this.index] = {id: this.index, value: this.range[i]}
                 trajectories.push(this.predictData(weightsNew).slice().sort((a,b) => d3.ascending(a.x, b.x)))
             }
-            console.log(trajectories)
             return trajectories
         },
         predictData(weights) {
@@ -164,20 +161,7 @@
                 .domain([Math.sin(-1.5) * 1.1, Math.sin(1.5) * 1.1]);
         },
         range() {
-            var step = 2.5;
-            var range = [];
-            for (let j = -5; j <= 5; j += step) {
-                range.push(parseFloat(j));
-            }
-            return range
-        },
-        MSE() {
-            let mse = 0.0
-            for(let i=0; i<this.data.length; i++) {
-                let y = this.predict(this.data[i].x,this.weights)
-                mse += Math.pow((y-this.data[i].label),2)
-            }
-            return mse/this.data.length
+            return d3.range(-5, 5.1, 10)
         },
     },
     watch: {
@@ -206,14 +190,21 @@
     }
 </script>
 <style>
-    .circle {
-    fill: #B7B6B6;
-    stroke: #ffffff;
-    stroke-width: 1;
-}
+    .trajectory {
+        stroke: #A5A5A5;
+        stroke-width: 1.5;
+        opacity: 0.4;
+        border: none;
+        border-top: 1px dotted black;
+    }
+    .circle-output {
+        fill: #616161;
+        stroke: #B7B6B6;
+        stroke-width: 1;
+    }
     .hoverText {
-    fill: black;
-    font-size: 16px;
-    font-weight: bold;
-}
+        fill: black;
+        font-size: 16px;
+        font-weight: bold;
+    }
 </style>

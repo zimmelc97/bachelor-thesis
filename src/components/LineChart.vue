@@ -186,12 +186,7 @@ export default {
             return this.weights.length
         },
         range() {
-            var step = 0.2;
-            var range = [];
-            for (let j = -5; j <= 5; j += step) {
-                range.push(parseFloat(j));
-            }
-            return range
+            return d3.range(-5, 5, 0.2)
         },
         xScale() {
             return d3.scaleLinear()
