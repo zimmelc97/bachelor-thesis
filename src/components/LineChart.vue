@@ -34,7 +34,6 @@
         </svg>
     </div>
 </template>
-
 <script>
 import * as d3 from "d3";
 
@@ -134,9 +133,7 @@ export default {
         drawCircle(ref) {
             const circleGroup = d3.select(this.$refs["circleGroup" + ref]);
             let drag = d3.drag()
-                .on('start', this.dragStarted)
-                .on('drag', this.dragged)
-                .on('end', this.dragEnded);
+                .on('drag', (event) => this.dragged(event, ref));
 
             circleGroup.selectAll('.circle')
                 .data([[this.weights[parseInt(ref)].value, this.MSE(this.weights)]])
@@ -145,23 +142,27 @@ export default {
                 .attr('cx', (d) => this.xScale(d[0]))
                 .attr('cy', (d) => this.yScale(d[1]))
                 .attr('r', 5)
-                .style("cursor", "pointer");
-
-            circleGroup.selectAll('.circle').call(drag);
+                .style("cursor", "pointer")
+                .call(drag)
+                .on("click", () => this.changeTrajectory(ref))
         },
         dragStarted() {
             d3.select(this).raise().classed('stroke', true);
         },
-        dragged() {
-            d3.select(this)
-                .attr('cx', 0)
-                .attr('cy', 0);
-
+        dragged(event, ref) {
+            let weightsNew = [...this.weights]
+            weightsNew[ref] = {id: ref, value: this.xScale.invert(event.x)}
+            this.$store.commit('changeWeights', weightsNew);
+            d3.select(event.sourceEvent.target)
+                .attr('cx', event.x)
+                .attr('cy', this.yScale(this.MSE(this.weights)));
         },
         dragEnded() {
             d3.select(this).classed('stroke', false);
+        },
+        changeTrajectory(ref) {
+            this.$store.commit('changeIndex', ref);
         }
-
     },
     computed: {
         data: {

@@ -7,7 +7,7 @@ const store = new Vuex.Store({
     state: {
         inputData: [],
         weights: [],
-        index: 0
+        index: []
     },
     mutations: {
         changeWeights (state, weights) {

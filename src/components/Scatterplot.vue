@@ -40,6 +40,7 @@
     mounted() {
         this.drawChart(this.data, "Input");
         this.drawChart(this.predictedData,"Output");
+        this.drawLines()
     },
     methods: {
         drawChart(data,variable) {
@@ -48,9 +49,6 @@
             this.drawXAxis(variable);
             this.drawYAxis(variable);
             this.drawCircles(data, variable);
-            if (variable === "Output") {
-                this.drawLines()
-            }
         },
         drawXAxis(variable) {
             d3.select(this.$refs["axisX" + variable]).select(".axis-label").remove()
@@ -200,6 +198,7 @@
         index: {
             handler() {
                 this.drawChart(this.predictedData,"Output");
+                this.drawLines()
             },
             deep: true,
         },
