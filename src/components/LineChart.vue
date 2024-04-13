@@ -1,35 +1,11 @@
 <template>
     <div>
         <svg class="main-svg" ref="svg" :width="svgWidth" :height="svgHeight">
-            <g class="chart-group" :ref="'chartGroup0'">
-                <g class="axis axis-x" :ref="'axisX0'"></g>
-                <g class="axis axis-y" :ref="'axisY0'"></g>
-                <g class="line-group" :ref="'lineGroup0'"></g>
-                <g class="circle-group" :ref="'circleGroup0'"></g>
-            </g>
-        </svg>
-        <svg class="main-svg" ref="svg" :width="svgWidth" :height="svgHeight">
-            <g class="chart-group" :ref="'chartGroup1'">
-                <g class="axis axis-x" :ref="'axisX1'"></g>
-                <g class="axis axis-y" :ref="'axisY1'"></g>
-                <g class="line-group" :ref="'lineGroup1'"></g>
-                <g class="circle-group" :ref="'circleGroup1'"></g>
-            </g>
-        </svg>
-        <svg class="main-svg" ref="svg" :width="svgWidth" :height="svgHeight">
-            <g class="chart-group" :ref="'chartGroup2'">
-                <g class="axis axis-x" :ref="'axisX2'"></g>
-                <g class="axis axis-y" :ref="'axisY2'"></g>
-                <g class="line-group" :ref="'lineGroup2'"></g>
-                <g class="circle-group" :ref="'circleGroup2'"></g>
-            </g>
-        </svg>
-        <svg class="main-svg" ref="svg" :width="svgWidth" :height="svgHeight">
-            <g class="chart-group" :ref="'chartGroup3'">
-                <g class="axis axis-x" :ref="'axisX3'"></g>
-                <g class="axis axis-y" :ref="'axisY3'"></g>
-                <g class="line-group" :ref="'lineGroup3'"></g>
-                <g class="circle-group" :ref="'circleGroup3'"></g>
+            <g class="chart-group" :ref="'chartGroup' + this.index">
+                <g class="axis axis-x" :ref="'axisX' + this.index"></g>
+                <g class="axis axis-y" :ref="'axisY' + this.index"></g>
+                <g class="line-group" :ref="'lineGroup' + this.index"></g>
+                <g class="circle-group" :ref="'circleGroup' + this.index"></g>
             </g>
         </svg>
     </div>
@@ -39,33 +15,36 @@ import * as d3 from "d3";
 
 export default {
     name: 'LineChart',
-    props: {},
+    props: {
+        index: {
+            type: Number,
+            required: true
+        }
+    },
     data() {
         return {
-            svgWidth: 350,
-            svgHeight: 350,
+            svgWidth: 250,
+            svgHeight: 250,
             svgPadding: {
                 top: 10, right: 10, bottom: 30, left: 30,
             },
         }
     },
     mounted() {
-        for (let i=0; i<this.weightsNr; i++) {
-            this.drawChart(i.toString())
-        }
+        this.drawChart()
     },
     methods: {
-        drawChart(ref) {
-            d3.select(this.$refs["chartGroup" + ref])
+        drawChart() {
+            d3.select(this.$refs["chartGroup" + this.index])
                 .attr('transform', `translate(${this.svgPadding.left},${this.svgPadding.top})`);
-            this.drawXAxis(ref);
-            this.drawYAxis(ref);
-            this.drawLine(ref);
-            this.drawCircle(ref)
+            this.drawXAxis();
+            this.drawYAxis();
+            this.drawLine();
+            this.drawCircle()
         },
-        drawXAxis(ref) {
-            d3.select(this.$refs["axisX" + ref]).select(".axis-label").remove()
-            d3.select(this.$refs["axisX" + ref])
+        drawXAxis() {
+            d3.select(this.$refs["axisX" + this.index]).select(".axis-label").remove()
+            d3.select(this.$refs["axisX" + this.index])
                 .attr('transform', `translate( 0, ${this.svgHeight - this.svgPadding.top - this.svgPadding.bottom} )`)
                 .call(d3.axisBottom(this.xScale).ticks(5))
                 .append('text')
@@ -76,9 +55,9 @@ export default {
                 .style("font-size", "12px")
                 .attr("x", this.svgWidth - this.svgPadding.right - this.svgPadding.left)
         },
-        drawYAxis(ref) {
-            d3.select(this.$refs["axisY" + ref]).select(".axis-label").remove()
-            d3.select(this.$refs["axisY" + ref])
+        drawYAxis() {
+            d3.select(this.$refs["axisY" + this.index]).select(".axis-label").remove()
+            d3.select(this.$refs["axisY" + this.index])
                 .call(d3.axisLeft(this.yScale).ticks(5))
                 .append('text')
                 .attr('class', 'axis-label')
@@ -103,17 +82,17 @@ export default {
             }
             return mse/this.data.length
         },
-        slice(index) {
+        slice() {
             let slice = []
             for(let i=0; i<this.range.length; i++) {
                 let weightsNew = [...this.weights]
-                weightsNew[index] = {id: index, value: this.range[i]}
+                weightsNew[this.index] = {id: this.index, value: this.range[i]}
                 slice.push([this.range[i], this.MSE(weightsNew)])
             }
             return slice
         },
-        drawLine(ref) {
-                const linesGroup = d3.select(this.$refs["lineGroup" + ref]);
+        drawLine() {
+                const linesGroup = d3.select(this.$refs["lineGroup" + this.index]);
                 linesGroup.selectAll('.mse-line').remove();
 
                 const line = d3.line()
@@ -124,19 +103,19 @@ export default {
                     .attr('clip-path', 'url(#clip)');
 
                 clipPath.selectAll('.line')
-                    .data([this.slice(ref)])
+                    .data([this.slice()])
                     .join('path')
                     .attr('class', 'mse-line')
                     .attr('d', line)
                     .attr("fill", "none")
         },
-        drawCircle(ref) {
-            const circleGroup = d3.select(this.$refs["circleGroup" + ref]);
+        drawCircle() {
+            const circleGroup = d3.select(this.$refs["circleGroup" + this.index]);
             let drag = d3.drag()
-                .on('drag', (event) => this.dragged(event, ref));
+                .on('drag', this.dragged);
 
             circleGroup.selectAll('.circle')
-                .data([[this.weights[parseInt(ref)].value, this.MSE(this.weights)]])
+                .data([[this.weights[this.index].value, this.MSE(this.weights)]])
                 .join('circle')
                 .attr('class', 'circle')
                 .attr('cx', (d) => this.xScale(d[0]))
@@ -144,14 +123,14 @@ export default {
                 .attr('r', 5)
                 .style("cursor", "pointer")
                 .call(drag)
-                .on("click", () => this.changeTrajectory(ref))
+                .on("click", () => this.changeTrajectory())
         },
         dragStarted() {
             d3.select(this).raise().classed('stroke', true);
         },
-        dragged(event, ref) {
+        dragged(event) {
             let weightsNew = [...this.weights]
-            weightsNew[ref] = {id: ref, value: this.xScale.invert(event.x)}
+            weightsNew[this.index] = {id: this.index, value: this.xScale.invert(event.x)}
             this.$store.commit('changeWeights', weightsNew);
             d3.select(event.sourceEvent.target)
                 .attr('cx', event.x)
@@ -160,8 +139,8 @@ export default {
         dragEnded() {
             d3.select(this).classed('stroke', false);
         },
-        changeTrajectory(ref) {
-            this.$store.commit('changeIndex', ref);
+        changeTrajectory() {
+            this.$store.commit('changeIndex', this.index);
         }
     },
     computed: {
@@ -169,13 +148,6 @@ export default {
             get: function() {
                 return this.$store.getters.inputData
             }
-        },
-        predictedData() {
-            let predictedData = []
-            for(let i=0; i<this.data.length; i++) {
-                predictedData.push({x: this.data[i].x, label: this.predict(this.data[i].x,this.weights)})
-            }
-            return predictedData
         },
         weights: {
             get: function() {
@@ -186,7 +158,7 @@ export default {
             return this.weights.length
         },
         range() {
-            return d3.range(-5, 5, 0.2)
+            return d3.range(-5, 5, 0.5)
         },
         xScale() {
             return d3.scaleLinear()
@@ -202,9 +174,7 @@ export default {
     watch: {
         weights: {
             handler() {
-                for (let i=0; i<this.weightsNr; i++) {
-                    this.drawChart(i.toString())
-                }
+                this.drawChart()
             },
             deep: true,
         },

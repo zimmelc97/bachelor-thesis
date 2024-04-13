@@ -1,24 +1,13 @@
 <template>
     <div>
-    <div class="vis-component" ref="chart1">
         <svg class="main-svg" ref="svg" :width="svgWidth" :height="svgHeight">
-            <g class="chart-group" ref="chartGroupInput">
-                <g class="axis axis-x" ref="axisXInput"></g>
-                <g class="axis axis-y" ref="axisYInput"></g>
-                <g class="circle-group" ref="circleGroupInput"></g>
+            <g class="chart-group" :ref="'chartGroup' + this.variable">
+                <g class="axis axis-x" :ref="'axisX' + this.variable"></g>
+                <g class="axis axis-y" :ref="'axisY' + this.variable"></g>
+                <g v-if="this.variable === 'Output'" class="line-group" :ref="'lineGroup' + this.variable"></g>
+                <g class="circle-group" :ref="'circleGroup' + this.variable"></g>
             </g>
         </svg>
-    </div>
-        <div class="vis-component" ref="chart2">
-            <svg class="main-svg" ref="svg" :width="svgWidth" :height="svgHeight">
-                <g class="chart-group" ref="chartGroupOutput">
-                    <g class="axis axis-x" ref="axisXOutput"></g>
-                    <g class="axis axis-y" ref="axisYOutput"></g>
-                    <g class="line-group" ref="lineGroup"></g>
-                    <g class="circle-group" ref="circleGroupOutput"></g>
-                </g>
-            </svg>
-        </div>
     </div>
 </template>
 
@@ -27,7 +16,16 @@
 
     export default {
     name: 'Scatterplot',
-    props: {},
+    props: {
+        dataset: {
+            type: Array,
+            required: true
+        },
+        variable: {
+            type: String,
+            required: true
+    }
+    },
     data() {
         return {
             svgWidth: 350,
@@ -38,21 +36,20 @@
         }
     },
     mounted() {
-        this.drawChart(this.data, "Input");
-        this.drawChart(this.predictedData,"Output");
+        this.drawChart();
         this.drawLines()
     },
     methods: {
-        drawChart(data,variable) {
-            d3.select(this.$refs["chartGroup" + variable])
+        drawChart() {
+            d3.select(this.$refs["chartGroup" + this.variable])
                 .attr('transform', `translate(${this.svgPadding.left},${this.svgPadding.top})`);
-            this.drawXAxis(variable);
-            this.drawYAxis(variable);
-            this.drawCircles(data, variable);
+            this.drawXAxis();
+            this.drawYAxis();
+            this.drawCircles();
         },
-        drawXAxis(variable) {
-            d3.select(this.$refs["axisX" + variable]).select(".axis-label").remove()
-            d3.select(this.$refs["axisX" + variable])
+        drawXAxis() {
+            d3.select(this.$refs["axisX" + this.variable]).select(".axis-label").remove()
+            d3.select(this.$refs["axisX" + this.variable])
                 .attr('transform', `translate( 0, ${this.svgHeight - this.svgPadding.top - this.svgPadding.bottom} )`)
                 .call(d3.axisBottom(this.xScale).ticks(5))
                 .append('text')
@@ -63,9 +60,9 @@
                 .style("font-size", "12px")
                 .attr("x", this.svgWidth - this.svgPadding.right - this.svgPadding.left)
         },
-        drawYAxis(variable) {
-            d3.select(this.$refs["axisY" + variable]).select(".axis-label").remove()
-            d3.select(this.$refs["axisY" + variable])
+        drawYAxis() {
+            d3.select(this.$refs["axisY" + this.variable]).select(".axis-label").remove()
+            d3.select(this.$refs["axisY" + this.variable])
                 .call(d3.axisLeft(this.yScale).ticks(5))
                 .append('text')
                 .attr('class', 'axis-label')
@@ -82,18 +79,18 @@
         predict(x,w) {
             return w[2].value*this.sigmoid(w[0].value*x)+w[3].value*this.sigmoid(w[1].value*x)
         },
-        drawCircles(data, variable) {
-            const circleGroup = d3.select(this.$refs["circleGroup" + variable]);
+        drawCircles() {
+            const circleGroup = d3.select(this.$refs["circleGroup" + this.variable]);
             circleGroup.selectAll('.circle-output')
-                .data(data)
+                .data(this.dataset)
                 .join('circle')
                 .attr('class', 'circle-output')
                 .attr('cx', (d) => this.xScale(d.x))
                 .attr('cy', (d) => this.yScale(d.label))
                 .attr('r', 3)
         },
-        drawLines(ref) {
-            const linesGroup = d3.select(this.$refs["lineGroup"]);
+        drawLines() {
+            const linesGroup = d3.select(this.$refs["lineGroup" + this.variable]);
             linesGroup.selectAll('.trajectory').remove();
 
             const line = d3.line()
@@ -104,7 +101,7 @@
                 .attr('clip-path', 'url(#clip)');
 
             clipPath.selectAll('.line')
-                .data(this.computeTrajectory(ref))
+                .data(this.computeTrajectory())
                 .join('path')
                 .attr('class', 'trajectory')
                 .attr('d', d => line(d))
@@ -121,14 +118,14 @@
         },
         predictData(weights) {
             let predictedData = []
-            for(let i=0; i<this.data.length; i++) {
-                predictedData.push({x: this.data[i].x, label: this.predict(this.data[i].x,weights)})
+            for(let i=0; i<this.inputData.length; i++) {
+                predictedData.push({x: this.inputData[i].x, label: this.predict(this.inputData[i].x,weights)})
             }
             return predictedData
         },
     },
     computed: {
-        data: {
+        inputData: {
             get: function() {
                 return this.$store.getters.inputData
             }
@@ -137,13 +134,6 @@
             get: function() {
                 return this.$store.getters.index
             }
-        },
-        predictedData() {
-            let predictedData = []
-            for(let i=0; i<this.data.length; i++) {
-                predictedData.push({x: this.data[i].x, label: this.predict(this.data[i].x,this.weights)})
-            }
-            return predictedData
         },
         weights: {
             get: function() {
@@ -165,24 +155,15 @@
         },
     },
     watch: {
-        data: {
-            handler() {
-                this.drawChart(this.data, "Input");
-                this.drawChart(this.predictedData,"Output");
-            },
-            deep: true,
-        },
         weights: {
             handler() {
-                this.drawChart(this.data, "Input");
-                this.drawChart(this.predictedData,"Output");
+                this.drawChart();
             },
             deep: true,
         },
         index: {
             handler() {
-                this.drawChart(this.predictedData,"Output");
-                this.drawLines()
+                this.drawLines();
             },
             deep: true,
         },
