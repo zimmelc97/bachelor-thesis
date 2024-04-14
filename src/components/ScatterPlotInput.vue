@@ -30,7 +30,7 @@ export default {
     },
     methods: {
         drawChart() {
-            d3.select(this.$refs["chartGroup" + this.variable])
+            d3.select(this.$refs["chartGroup"])
                 .attr('transform', `translate(${this.svgPadding.left},${this.svgPadding.top})`);
             this.drawXAxis();
             this.drawYAxis();
