@@ -158,7 +158,7 @@ export default {
             return this.weights.length
         },
         range() {
-            return d3.range(-5, 5, 0.5)
+            return d3.range(-5, 5, 0.2)
         },
         xScale() {
             return d3.scaleLinear()

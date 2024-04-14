@@ -1,11 +1,11 @@
 <template>
     <div>
         <svg class="main-svg" ref="svg" :width="svgWidth" :height="svgHeight">
-            <g class="chart-group" :ref="'chartGroup' + this.variable">
-                <g class="axis axis-x" :ref="'axisX' + this.variable"></g>
-                <g class="axis axis-y" :ref="'axisY' + this.variable"></g>
-                <g v-if="this.variable === 'Output'" class="line-group" :ref="'lineGroup' + this.variable"></g>
-                <g class="circle-group" :ref="'circleGroup' + this.variable"></g>
+            <g class="chart-group" ref="chartGroup">
+                <g class="axis axis-x" ref="axisX"></g>
+                <g class="axis axis-y" ref="axisY"></g>
+                <g class="line-group" ref="lineGroup"></g>
+                <g class="circle-group" ref="circleGroup"></g>
             </g>
         </svg>
     </div>
@@ -15,17 +15,8 @@
     import * as d3 from "d3";
 
     export default {
-    name: 'Scatterplot',
-    props: {
-        dataset: {
-            type: Array,
-            required: true
-        },
-        variable: {
-            type: String,
-            required: true
-    }
-    },
+    name: 'ScatterPlotOutput',
+    props: {},
     data() {
         return {
             svgWidth: 350,
@@ -37,19 +28,19 @@
     },
     mounted() {
         this.drawChart();
-        this.drawLines()
+        this.drawLines();
     },
     methods: {
         drawChart() {
-            d3.select(this.$refs["chartGroup" + this.variable])
+            d3.select(this.$refs["chartGroup"])
                 .attr('transform', `translate(${this.svgPadding.left},${this.svgPadding.top})`);
             this.drawXAxis();
             this.drawYAxis();
             this.drawCircles();
         },
         drawXAxis() {
-            d3.select(this.$refs["axisX" + this.variable]).select(".axis-label").remove()
-            d3.select(this.$refs["axisX" + this.variable])
+            d3.select(this.$refs["axisX"]).select(".axis-label").remove()
+            d3.select(this.$refs["axisX"])
                 .attr('transform', `translate( 0, ${this.svgHeight - this.svgPadding.top - this.svgPadding.bottom} )`)
                 .call(d3.axisBottom(this.xScale).ticks(5))
                 .append('text')
@@ -61,8 +52,8 @@
                 .attr("x", this.svgWidth - this.svgPadding.right - this.svgPadding.left)
         },
         drawYAxis() {
-            d3.select(this.$refs["axisY" + this.variable]).select(".axis-label").remove()
-            d3.select(this.$refs["axisY" + this.variable])
+            d3.select(this.$refs["axisY"]).select(".axis-label").remove()
+            d3.select(this.$refs["axisY"])
                 .call(d3.axisLeft(this.yScale).ticks(5))
                 .append('text')
                 .attr('class', 'axis-label')
@@ -80,9 +71,9 @@
             return w[2].value*this.sigmoid(w[0].value*x)+w[3].value*this.sigmoid(w[1].value*x)
         },
         drawCircles() {
-            const circleGroup = d3.select(this.$refs["circleGroup" + this.variable]);
+            const circleGroup = d3.select(this.$refs["circleGroup"]);
             circleGroup.selectAll('.circle-output')
-                .data(this.dataset)
+                .data(this.predictedData)
                 .join('circle')
                 .attr('class', 'circle-output')
                 .attr('cx', (d) => this.xScale(d.x))
@@ -90,7 +81,7 @@
                 .attr('r', 3)
         },
         drawLines() {
-            const linesGroup = d3.select(this.$refs["lineGroup" + this.variable]);
+            const linesGroup = d3.select(this.$refs["lineGroup"]);
             linesGroup.selectAll('.trajectory').remove();
 
             const line = d3.line()
@@ -128,6 +119,11 @@
         inputData: {
             get: function() {
                 return this.$store.getters.inputData
+            }
+        },
+        predictedData: {
+            get: function() {
+                return this.predictData(this.weights)
             }
         },
         index: {
