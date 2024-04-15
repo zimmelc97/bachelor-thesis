@@ -7,14 +7,21 @@ const store = new Vuex.Store({
     state: {
         inputData: [],
         weights: [],
-        index: []
+        index: [],
+        MSE: []
     },
     mutations: {
         changeWeights (state, weights) {
             state.weights = weights;
         },
+        changeWeightsPerIndex (state, weight, index) {
+            state.weights[index] = weight;
+        },
         changeIndex (state, index) {
             state.index = index;
+        },
+        changeMSE (state, MSE) {
+            state.MSE = MSE;
         },
     },
     getters: {
@@ -26,6 +33,9 @@ const store = new Vuex.Store({
         },
         index (state) {
             return state.index
+        },
+        MSE (state) {
+            return state.MSE
         }
     },
     actions: {
@@ -35,9 +45,8 @@ const store = new Vuex.Store({
                 state.inputData.push({x: random, label: Math.sin(random)})
             }
             for (let i=0; i<4; i++) {
-                state.weights.push({id: i, value: Math.random() * 2 - 1});
+                state.weights.push({id: i, value: Math.random() * 4 - 2});
             }
-
         },
     },
 })

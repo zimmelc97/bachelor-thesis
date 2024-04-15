@@ -8,13 +8,17 @@
                 <g class="circle-group" :ref="'circleGroup' + this.index"></g>
             </g>
         </svg>
+        <SliderWeights :index="index"/>
+        <div style="margin-bottom: 50px;"></div>
     </div>
 </template>
 <script>
 import * as d3 from "d3";
+import SliderWeights from "@/components/SliderWeights.vue";
 
 export default {
     name: 'LineChart',
+    components: {SliderWeights},
     props: {
         index: {
             type: Number,
@@ -31,6 +35,7 @@ export default {
         }
     },
     mounted() {
+        this.setMSE()
         this.drawChart()
     },
     methods: {
@@ -72,9 +77,9 @@ export default {
             return 1 / (1 + Math.pow(Math.E,-x))
         },
         predict(x,w) {
-            return w[2].value*this.sigmoid(w[0].value*x)+w[3].value*this.sigmoid(w[1].value*x)
+            return w[1].value*this.sigmoid(w[0].value*x)+w[3].value*this.sigmoid(w[2].value*x)
         },
-        MSE(weights) {
+        computeMSE(weights) {
             let mse = 0.0
             for(let i=0; i<this.data.length; i++) {
                 let y = this.predict(this.data[i].x,weights)
@@ -82,12 +87,15 @@ export default {
             }
             return mse/this.data.length
         },
+        setMSE() {
+            this.$store.commit('changeMSE', this.computeMSE(this.weights));
+        },
         slice() {
             let slice = []
             for(let i=0; i<this.range.length; i++) {
                 let weightsNew = [...this.weights]
                 weightsNew[this.index] = {id: this.index, value: this.range[i]}
-                slice.push([this.range[i], this.MSE(weightsNew)])
+                slice.push([this.range[i], this.computeMSE(weightsNew)])
             }
             return slice
         },
@@ -115,7 +123,7 @@ export default {
                 .on('drag', this.dragged);
 
             circleGroup.selectAll('.circle')
-                .data([[this.weights[this.index].value, this.MSE(this.weights)]])
+                .data([[this.weights[this.index].value, this.MSE]])
                 .join('circle')
                 .attr('class', 'circle')
                 .attr('cx', (d) => this.xScale(d[0]))
@@ -125,19 +133,13 @@ export default {
                 .call(drag)
                 .on("click", () => this.changeTrajectory())
         },
-        dragStarted() {
-            d3.select(this).raise().classed('stroke', true);
-        },
         dragged(event) {
             let weightsNew = [...this.weights]
             weightsNew[this.index] = {id: this.index, value: this.xScale.invert(event.x)}
             this.$store.commit('changeWeights', weightsNew);
             d3.select(event.sourceEvent.target)
                 .attr('cx', event.x)
-                .attr('cy', this.yScale(this.MSE(this.weights)));
-        },
-        dragEnded() {
-            d3.select(this).classed('stroke', false);
+                .attr('cy', this.yScale(this.MSE));
         },
         changeTrajectory() {
             this.$store.commit('changeIndex', this.index);
@@ -154,6 +156,11 @@ export default {
                 return this.$store.getters.weights
             }
         },
+        MSE: {
+            get: function() {
+                return this.$store.getters.MSE
+            }
+        },
         weightsNr() {
             return this.weights.length
         },
@@ -168,13 +175,14 @@ export default {
         yScale() {
             return d3.scaleLinear()
                 .range([this.svgHeight - this.svgPadding.top - this.svgPadding.bottom, 0])
-                .domain([Math.sin(-1.5) * 1.1, Math.sin(1.5) * 1.1]);
+                .domain([0, 5]);
         },
     },
     watch: {
         weights: {
             handler() {
                 this.drawChart()
+                this.setMSE()
             },
             deep: true,
         },

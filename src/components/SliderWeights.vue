@@ -1,13 +1,11 @@
 <template>
     <div>
-        <div v-for="(weight, index) in weights" :key="index">
-            <label :for="'weights-bar'">Weight {{ index }} : {{ weight.value }}</label>
-            <b-form-input id="range-year"
-                          v-model="weights[index].value"
-                          type="range"
-                          min="-5" max="5" step="0.1"
-                          v-on:click="test(index)"></b-form-input>
-        </div>
+        <label for="range-weights">Weight {{ index }} : {{ parseFloat(weights[this.index].value).toFixed(2) }}</label>
+        <b-form-input id="range-weights"
+                      v-model="weights[index].value"
+                      type="range"
+                      min="-5" max="5" step="0.01"
+                      v-on:click="changeIndex(index)"></b-form-input>
     </div>
 </template>
 
@@ -18,6 +16,10 @@
 export default {
     name: 'SliderWeights',
     props: {
+        index: {
+            type: Number,
+            required: true
+        }
     },
     components: {
     },
@@ -27,7 +29,7 @@ export default {
     mounted() {
     },
     methods: {
-        test(index) {
+        changeIndex(index) {
             this.$store.commit('changeIndex', index);
         }
     },

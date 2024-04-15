@@ -1,5 +1,6 @@
 <template>
     <div>
+        <p>MSE : {{ parseFloat(this.MSE).toFixed(7) }}</p>
         <svg class="main-svg" ref="svg" :width="svgWidth" :height="svgHeight">
             <g class="chart-group" ref="chartGroup">
                 <g class="axis axis-x" ref="axisX"></g>
@@ -68,7 +69,7 @@
             return 1 / (1 + Math.pow(Math.E,-x))
         },
         predict(x,w) {
-            return w[2].value*this.sigmoid(w[0].value*x)+w[3].value*this.sigmoid(w[1].value*x)
+            return w[1].value*this.sigmoid(w[0].value*x)+w[3].value*this.sigmoid(w[2].value*x)
         },
         drawCircles() {
             const circleGroup = d3.select(this.$refs["circleGroup"]);
@@ -131,6 +132,11 @@
                 return this.$store.getters.index
             }
         },
+        MSE: {
+            get: function() {
+                return this.$store.getters.MSE
+            }
+        },
         weights: {
             get: function() {
                 return this.$store.getters.weights
@@ -147,7 +153,7 @@
                 .domain([Math.sin(-1.5) * 1.1, Math.sin(1.5) * 1.1]);
         },
         range() {
-            return d3.range(-5, 5.1, 10)
+            return d3.range(-5, 5.1, 1)
         },
     },
     watch: {
