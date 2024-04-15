@@ -58,6 +58,7 @@ export default {
                 .attr('fill', 'black')
                 .attr('text-anchor', 'end')
                 .style("font-size", "12px")
+                .text("weight")
                 .attr("x", this.svgWidth - this.svgPadding.right - this.svgPadding.left)
         },
         drawYAxis() {
@@ -71,6 +72,7 @@ export default {
                 .attr('dy', '0.71em')
                 .attr('text-anchor', 'end')
                 .style("font-size", "12px")
+                .text("MSE")
                 .attr('fill', 'black')
         },
         sigmoid(x) {
