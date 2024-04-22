@@ -4,7 +4,7 @@
         <b-form-input id="range-weights"
                       v-model="weights[index].value"
                       type="range"
-                      min="-5" max="5" step="0.01"
+                      min="-5" max="5" step="0.001"
                       v-on:click="changeIndex(index)"></b-form-input>
     </div>
 </template>

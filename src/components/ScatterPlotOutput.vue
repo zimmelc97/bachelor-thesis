@@ -6,7 +6,8 @@
                 <g class="axis axis-x" ref="axisX"></g>
                 <g class="axis axis-y" ref="axisY"></g>
                 <g class="line-group" ref="lineGroup"></g>
-                <g class="circle-group" ref="circleGroup"></g>
+                <g class="circle-group" ref="circleGroupInput"></g>
+                <g class="circle-group" ref="circleGroupOutput"></g>
             </g>
         </svg>
     </div>
@@ -30,6 +31,7 @@
     mounted() {
         this.drawChart();
         this.drawLines();
+        this.drawCircles(this.inputData, "Input");
     },
     methods: {
         drawChart() {
@@ -37,7 +39,7 @@
                 .attr('transform', `translate(${this.svgPadding.left},${this.svgPadding.top})`);
             this.drawXAxis();
             this.drawYAxis();
-            this.drawCircles();
+            this.drawCircles(this.predictedData, "Output");
         },
         drawXAxis() {
             d3.select(this.$refs["axisX"]).select(".axis-label").remove()
@@ -71,12 +73,12 @@
         predict(x,w) {
             return w[1].value*this.sigmoid(w[0].value*x)+w[3].value*this.sigmoid(w[2].value*x)
         },
-        drawCircles() {
-            const circleGroup = d3.select(this.$refs["circleGroup"]);
-            circleGroup.selectAll('.circle-output')
-                .data(this.predictedData)
+        drawCircles(data, variable) {
+            const circleGroup = d3.select(this.$refs["circleGroup" + variable]);
+            circleGroup.selectAll('.circle-' + variable)
+                .data(data)
                 .join('circle')
-                .attr('class', 'circle-output')
+                .attr('class', 'circle-' + variable)
                 .attr('cx', (d) => this.xScale(d.x))
                 .attr('cy', (d) => this.yScale(d.label))
                 .attr('r', 3)
@@ -157,6 +159,12 @@
         },
     },
     watch: {
+        inputData: {
+            handler() {
+                this.drawCircles(this.inputData, "Input");
+            },
+            deep: true,
+        },
         weights: {
             handler() {
                 this.drawChart();
@@ -180,10 +188,16 @@
         border: none;
         border-top: 1px dotted black;
     }
-    .circle-output {
+    .circle-Output {
         fill: #616161;
         stroke: #B7B6B6;
         stroke-width: 1;
+    }
+    .circle-Input {
+        fill: #616161;
+        stroke: #B7B6B6;
+        stroke-width: 1;
+        opacity: 0.5;
     }
     .hoverText {
         fill: black;
