@@ -6,9 +6,14 @@
                     <div class="col-md-3" :style="{display: 'flex', alignItems: 'center'}">
                         <ScatterPlotInput/>
                     </div>
-                    <div class="col-md-6" :style="{justifyItems: 'center', display: 'grid',
-                    gridTemplateColumns: '300px 300px', gridRow: 'auto auto', gridRowGap: '20px', gridColumnGap: '150px'}">
-                        <LineChart v-for="(dataset, index) in this.weights" :key="index" :index="index"/>
+                    <div class="col-md-6">
+                      <div v-for="(dataset, layerIndex) in networkShape" :key="'layer' + layerIndex" :style="{display: 'inline-block'}">
+                        <div v-for="(dataset, neuronIndex) in [...Array(networkShape[layerIndex]).keys()]" :key="'neuron' + neuronIndex">
+                          <div v-for="(dataset, weightIndex) in network[layerIndex][neuronIndex].getInputLinks()" :key="'weight' + weightIndex">
+                            <LineChart :layerIndex="layerIndex" :neuronIndex="neuronIndex" :weightIndex="weightIndex" />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     <div class="col-md-3" :style="{display: 'flex', alignItems: 'center'}">
                         <ScatterPlotOutput/>
@@ -34,11 +39,16 @@ export default {
         this.$store.dispatch('loadData');
     },
     computed: {
-        weights: {
+        network: {
             get: function() {
-                return this.$store.getters.weights
+                return this.$store.getters.network
             }
         },
+      networkShape: {
+        get: function() {
+          return this.$store.getters.networkShape
+        }
+      },
     }
 }
 </script>

@@ -1,26 +1,35 @@
 <template>
     <div>
         <svg class="main-svg" ref="svg" :width="svgWidth" :height="svgHeight">
-            <g class="chart-group" :ref="'chartGroup' + this.index">
-                <g class="axis axis-x" :ref="'axisX' + this.index"></g>
-                <g class="axis axis-y" :ref="'axisY' + this.index"></g>
-                <g class="line-group" :ref="'lineGroup' + this.index"></g>
-                <g class="circle-group" :ref="'circleGroup' + this.index"></g>
+            <g class="chart-group" ref="chartGroup">
+                <g class="axis axis-x" ref="axisX"></g>
+                <g class="axis axis-y" ref="axisY"></g>
+                <!--<g class="line-group" ref="lineGroup"></g>-->
+                <g class="circle-group" ref="circleGroup"></g>
             </g>
         </svg>
-        <SliderWeights :index="index"/>
+        <!--<SliderWeights :index="index"/>-->
         <div style="margin-bottom: 50px;"></div>
     </div>
 </template>
 <script>
 import * as d3 from "d3";
-import SliderWeights from "@/components/SliderWeights.vue";
+//import SliderWeights from "@/components/SliderWeights.vue";
+import { getInputWeight, forwardProp, forwardPropSlices } from "@/neural-network/nn";
 
 export default {
     name: 'LineChart',
-    components: {SliderWeights},
+    components: {},
     props: {
-        index: {
+      layerIndex: {
+        type: Number,
+        required: true
+      },
+      neuronIndex: {
+        type: Number,
+        required: true
+      },
+        weightIndex: {
             type: Number,
             required: true
         }
@@ -40,16 +49,16 @@ export default {
     },
     methods: {
         drawChart() {
-            d3.select(this.$refs["chartGroup" + this.index])
+            d3.select(this.$refs["chartGroup"])
                 .attr('transform', `translate(${this.svgPadding.left},${this.svgPadding.top})`);
             this.drawXAxis();
             this.drawYAxis();
-            this.drawLine();
+            //this.drawLine();
             this.drawCircle()
         },
         drawXAxis() {
-            d3.select(this.$refs["axisX" + this.index]).select(".axis-label").remove()
-            d3.select(this.$refs["axisX" + this.index])
+            d3.select(this.$refs["axisX"]).select(".axis-label").remove()
+            d3.select(this.$refs["axisX"])
                 .attr('transform', `translate( 0, ${this.svgHeight - this.svgPadding.top - this.svgPadding.bottom} )`)
                 .call(d3.axisBottom(this.xScale).ticks(5))
                 .append('text')
@@ -62,8 +71,8 @@ export default {
                 .attr("x", this.svgWidth - this.svgPadding.right - this.svgPadding.left)
         },
         drawYAxis() {
-            d3.select(this.$refs["axisY" + this.index]).select(".axis-label").remove()
-            d3.select(this.$refs["axisY" + this.index])
+            d3.select(this.$refs["axisY"]).select(".axis-label").remove()
+            d3.select(this.$refs["axisY"])
                 .call(d3.axisLeft(this.yScale).ticks(5))
                 .append('text')
                 .attr('class', 'axis-label')
@@ -75,34 +84,35 @@ export default {
                 .text("MSE")
                 .attr('fill', 'black')
         },
-        sigmoid(x) {
-            return 1 / (1 + Math.pow(Math.E,-x))
-        },
-        predict(x,w) {
-            return w[1].value*this.sigmoid(w[0].value*x)+w[3].value*this.sigmoid(w[2].value*x)
-        },
-        computeMSE(weights) {
+        computeMSE() {
             let mse = 0.0
             for(let i=0; i<this.data.length; i++) {
-                let y = this.predict(this.data[i].x,weights)
+                let y = forwardProp(this.network, [this.data[i].x])
                 mse += Math.pow((y-this.data[i].label),2)
             }
             return mse/this.data.length
         },
+      computeMSESlices(weight) {
+        let mse = 0.0
+        for(let i=0; i<this.data.length; i++) {
+          let y = forwardPropSlices(this.network, [this.data[i].x],this.layerIndex, this.neuronIndex, this.weightIndex, weight)
+          mse += Math.pow((y-this.data[i].label),2)
+        }
+        return mse/this.data.length
+      },
         setMSE() {
-            this.$store.commit('changeMSE', this.computeMSE(this.weights));
+            this.$store.commit('changeMSE', this.computeMSE());
         },
         slice() {
             let slice = []
             for(let i=0; i<this.range.length; i++) {
-                let weightsNew = [...this.weights]
-                weightsNew[this.index] = {id: this.index, value: this.range[i]}
-                slice.push([this.range[i], this.computeMSE(weightsNew)])
+                slice.push([this.range[i], this.computeMSESlices(this.range[i])])
             }
+            console.log(slice)
             return slice
         },
         drawLine() {
-                const linesGroup = d3.select(this.$refs["lineGroup" + this.index]);
+                const linesGroup = d3.select(this.$refs["lineGroup"]);
                 linesGroup.selectAll('.mse-line').remove();
 
                 const line = d3.line()
@@ -120,12 +130,12 @@ export default {
                     .attr("fill", "none")
         },
         drawCircle() {
-            const circleGroup = d3.select(this.$refs["circleGroup" + this.index]);
+            const circleGroup = d3.select(this.$refs["circleGroup"]);
             let drag = d3.drag()
                 .on('drag', this.dragged);
 
             circleGroup.selectAll('.circle')
-                .data([[this.weights[this.index].value, this.MSE]])
+                .data([[getInputWeight(this.network[this.layerIndex][this.neuronIndex], this.weightIndex), this.MSE]])
                 .join('circle')
                 .attr('class', 'circle')
                 .attr('cx', (d) => this.xScale(d[0]))
@@ -136,9 +146,10 @@ export default {
                 .on("click", () => this.changeTrajectory())
         },
         dragged(event) {
-            let weightsNew = [...this.weights]
-            weightsNew[this.index] = {id: this.index, value: this.xScale.invert(event.x)}
-            this.$store.commit('changeWeights', weightsNew);
+            this.$store.commit('changeWeightInNetwork', {layerIndex: this.layerIndex,
+              neuronIndex: this.neuronIndex,
+              weightIndex: this.weightIndex,
+              weight: this.xScale.invert(event.x)});
             d3.select(event.sourceEvent.target)
                 .attr('cx', event.x)
                 .attr('cy', this.yScale(this.MSE));
@@ -153,18 +164,15 @@ export default {
                 return this.$store.getters.inputData
             }
         },
-        weights: {
+        network: {
             get: function() {
-                return this.$store.getters.weights
+                return this.$store.getters.network
             }
         },
         MSE: {
             get: function() {
                 return this.$store.getters.MSE
             }
-        },
-        weightsNr() {
-            return this.weights.length
         },
         range() {
             return d3.range(-5, 5, 0.2)
@@ -181,13 +189,15 @@ export default {
         },
     },
     watch: {
-        weights: {
+       /* network: {
             handler() {
                 this.drawChart()
                 this.setMSE()
             },
             deep: true,
         },
+
+        */
     }
 }
 </script>

@@ -15,6 +15,7 @@
 
 <script>
     import * as d3 from "d3";
+    import {forwardProp} from "@/neural-network/nn";
 
     export default {
     name: 'ScatterPlotOutput',
@@ -67,12 +68,6 @@
                 .style("font-size", "12px")
                 .attr('fill', 'black')
         },
-        sigmoid(x) {
-            return 1 / (1 + Math.pow(Math.E,-x))
-        },
-        predict(x,w) {
-            return w[1].value*this.sigmoid(w[0].value*x)+w[3].value*this.sigmoid(w[2].value*x)
-        },
         drawCircles(data, variable) {
             const circleGroup = d3.select(this.$refs["circleGroup" + variable]);
             circleGroup.selectAll('.circle-' + variable)
@@ -110,10 +105,10 @@
             }
             return trajectories
         },
-        predictData(weights) {
+        predictData() {
             let predictedData = []
             for(let i=0; i<this.inputData.length; i++) {
-                predictedData.push({x: this.inputData[i].x, label: this.predict(this.inputData[i].x,weights)})
+                predictedData.push({x: this.inputData[i].x, label: forwardProp(this.network, [this.inputData[i].x])})
             }
             return predictedData
         },
@@ -126,7 +121,7 @@
         },
         predictedData: {
             get: function() {
-                return this.predictData(this.weights)
+                return this.predictData()
             }
         },
         index: {
@@ -137,6 +132,11 @@
         MSE: {
             get: function() {
                 return this.$store.getters.MSE
+            }
+        },
+        network: {
+            get: function() {
+              return this.$store.getters.network
             }
         },
         weights: {

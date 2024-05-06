@@ -33,6 +33,25 @@ class Node {
     this.output = this.activation.output(this.totalInput);
     return this.output;
   }
+  updateOutputSlices(weightIndex, weight) {
+    // Stores total input into the node.
+    this.totalInput = 0;
+    for (let j = 0; j < this.inputLinks.length; j++) {
+      let link = this.inputLinks[j];
+      if (j !== weightIndex) {
+        this.totalInput += link.weight * link.source.output;
+      }
+      else {
+        this.totalInput += weight * link.source.output;
+      }
+    }
+    let output = this.activation.output(this.totalInput);
+    return output;
+  }
+
+  getInputLinks() {
+    return this.inputLinks
+  }
 }
 
 export const Activations = {
@@ -46,7 +65,11 @@ class Link {
     this.id = source.id + "-" + dest.id;
     this.source = source;
     this.dest = dest;
-    this.weight = Math.random() - 0.5;
+    this.weight = Math.random() * 4 - 2;
+  }
+
+  changeWeight(weight) {
+    this.weight = weight
   }
 
   getWeight() {
@@ -54,22 +77,17 @@ class Link {
   }
 }
 
-export function buildNetwork(networkShape, activation, inputIds) {
+export function buildNetwork(networkShape, activation) {
   let numLayers = networkShape.length;
   let id = 1;
   let network = [];
   for (let layerIdx = 0; layerIdx < numLayers; layerIdx++) {
-    let isInputLayer = layerIdx === 0;
     let currentLayer = [];
     network.push(currentLayer);
     let numNodes = networkShape[layerIdx];
     for (let i = 0; i < numNodes; i++) {
       let nodeId = id.toString();
-      if (isInputLayer) {
-        nodeId = inputIds[i];
-      } else {
-        id++;
-      }
+      id++;
       let node = new Node(nodeId, activation);
       currentLayer.push(node);
       if (layerIdx >= 1) {
@@ -82,6 +100,7 @@ export function buildNetwork(networkShape, activation, inputIds) {
       }
     }
   }
+  console.log(network)
   return network;
 }
 
@@ -104,6 +123,40 @@ export function forwardProp(network, inputs) {
     }
   }
   return network[network.length - 1][0].output;
+}
+
+export function forwardPropSlices(network, inputs, layerIndex, neuronIndex, weightIndex, weight) {
+  let inputLayer = network[0];
+  if (inputs.length !== inputLayer.length) {
+    throw new Error("The number of inputs must match the number of nodes in" +
+        " the input layer");
+  }
+  // Update the input layer.
+  for (let i = 0; i < inputLayer.length; i++) {
+    let node = inputLayer[i];
+    node.output = inputs[i];
+  }
+  for (let layerIdx = 1; layerIdx < network.length; layerIdx++) {
+    let currentLayer = network[layerIdx];
+    for (let i = 0; i < currentLayer.length; i++) {
+      let node = currentLayer[i];
+      if (layerIdx !== layerIdx && i !== neuronIndex) {
+        node.updateOutput()
+      }
+      else {
+        node.updateOutputSlices(weightIndex, weight);
+      }
+    }
+  }
+  return network[network.length - 1][0].output;
+}
+
+export function getInputWeight(node, weightIndex) {
+  return node.inputLinks[weightIndex].getWeight()
+}
+
+export function changeInputWeight(node, weightIndex, newWeight) {
+  return node.inputLinks[weightIndex].changeWeight(newWeight)
 }
 
 export function getOutputNode(network) {

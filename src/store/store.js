@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { forwardProp, buildNetwork, Activations } from '@/neural-network/nn.js';
+import { buildNetwork, Activations, getInputWeight, changeInputWeight } from '@/neural-network/nn.js';
 
 Vue.use(Vuex);
 
@@ -9,11 +9,13 @@ const store = new Vuex.Store({
         inputData: [],
         weights: [],
         index: [],
-        MSE: []
+        MSE: [],
+        network: [],
+        networkShape: [1,2,1]
     },
     mutations: {
-        changeWeights (state, weights) {
-            state.weights = weights;
+        changeWeightInNetwork (state, {layerIndex, neuronIndex, weightIndex, weight}) {
+            changeInputWeight(state.network[layerIndex][neuronIndex], weightIndex, weight)
         },
         changeWeightsPerIndex (state, weight, index) {
             state.weights[index] = weight;
@@ -37,6 +39,12 @@ const store = new Vuex.Store({
         },
         MSE (state) {
             return state.MSE
+        },
+        network (state) {
+            return state.network
+        },
+        networkShape (state) {
+            return state.networkShape
         }
     },
     actions: {
@@ -48,9 +56,8 @@ const store = new Vuex.Store({
             for (let i=0; i<4; i++) {
                 state.weights.push({id: i, value: Math.random() * 4 - 2});
             }
-            let network = buildNetwork([1,2,1], Activations.SIGMOID, [1])
-            forwardProp(network, [0])
-            console.log(network[0][0])
+            state.network = buildNetwork(state.networkShape, Activations.SIGMOID)
+            console.log(getInputWeight(state.network[1][0], 0))
         },
     },
 })
