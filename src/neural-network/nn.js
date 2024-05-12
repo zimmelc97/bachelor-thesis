@@ -14,16 +14,22 @@ limitations under the License.
 ==============================================================================*/
 
 
-class Node {
-  constructor(id, activation) {
-    this.id = id;
-    this.output = 0;
-    this.activation = activation;
-    this.inputLinks = [];
-    this.outputLinks = [];
-  }
+let Node = {
+  id: -1,
+  output: 0,
+  activation: null,
+  inputLinks: [],
+  outputLinks: [],
 
-  updateOutput() {
+  create: function (id, activation) {
+    let node = Object.create(this);
+    node.id =id;
+    node.activation = activation;
+    node.inputLinks = []
+    node.outputLinks = []
+    return node
+  },
+  updateOutput: function () {
     // Stores total input into the node.
     this.totalInput = 0;
     for (let j = 0; j < this.inputLinks.length; j++) {
@@ -32,8 +38,18 @@ class Node {
     }
     this.output = this.activation.output(this.totalInput);
     return this.output;
-  }
-  updateOutputSlices(weightIndex, weight) {
+  },
+  updateOutputLast: function () {
+    // Stores total input into the node.
+    this.totalInput = 0;
+    for (let j = 0; j < this.inputLinks.length; j++) {
+      let link = this.inputLinks[j];
+      this.totalInput += link.weight * link.source.output;
+    }
+    this.output = this.totalInput;
+    return this.output;
+  },
+  updateOutputSlices: function (weightIndex, weight) {
     // Stores total input into the node.
     this.totalInput = 0;
     for (let j = 0; j < this.inputLinks.length; j++) {
@@ -45,11 +61,10 @@ class Node {
         this.totalInput += weight * link.source.output;
       }
     }
-    let output = this.activation.output(this.totalInput);
-    return output;
-  }
-
-  getInputLinks() {
+    this.output = this.activation.output(this.totalInput);
+    return this.output;
+  },
+  getInputLinks: function() {
     return this.inputLinks
   }
 }
@@ -60,19 +75,24 @@ export const Activations = {
   }
 }
 
-class Link {
-  constructor(source, dest) {
-    this.id = source.id + "-" + dest.id;
-    this.source = source;
-    this.dest = dest;
-    this.weight = Math.random() * 4 - 2;
-  }
+let Link = {
+  id: -1,
+  source: null,
+  dest: null,
+  weight: 0,
 
-  changeWeight(weight) {
+  create: function (source, dest) {
+    let link = Object.create(this)
+    link.id = source.id + "-" + dest.id;
+    link.source = source;
+    link.dest = dest;
+    link.weight = Math.random() * 4 - 2;
+    return link;
+  },
+  changeWeight: function (weight) {
     this.weight = weight
-  }
-
-  getWeight() {
+  },
+  getWeight: function () {
     return this.weight;
   }
 }
@@ -88,12 +108,12 @@ export function buildNetwork(networkShape, activation) {
     for (let i = 0; i < numNodes; i++) {
       let nodeId = id.toString();
       id++;
-      let node = new Node(nodeId, activation);
+      let node = Node.create(nodeId, activation);
       currentLayer.push(node);
       if (layerIdx >= 1) {
         for (let j = 0; j < network[layerIdx - 1].length; j++) {
           let prevNode = network[layerIdx - 1][j];
-          let link = new Link(prevNode, node);
+          let link = Link.create(prevNode, node);
           prevNode.outputLinks.push(link);
           node.inputLinks.push(link);
         }
@@ -119,7 +139,7 @@ export function forwardProp(network, inputs) {
     let currentLayer = network[layerIdx];
     for (let i = 0; i < currentLayer.length; i++) {
       let node = currentLayer[i];
-      node.updateOutput();
+        node.updateOutput();
     }
   }
   return network[network.length - 1][0].output;
@@ -140,14 +160,13 @@ export function forwardPropSlices(network, inputs, layerIndex, neuronIndex, weig
     let currentLayer = network[layerIdx];
     for (let i = 0; i < currentLayer.length; i++) {
       let node = currentLayer[i];
-      if (layerIdx !== layerIdx && i !== neuronIndex) {
-        node.updateOutput()
-      }
-      else {
-        node.updateOutputSlices(weightIndex, weight);
+        if (layerIdx !== layerIndex && i !== neuronIndex) {
+          node.updateOutput()
+        } else {
+          node.updateOutputSlices(weightIndex, weight);
+        }
       }
     }
-  }
   return network[network.length - 1][0].output;
 }
 

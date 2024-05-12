@@ -4,7 +4,7 @@
             <g class="chart-group" ref="chartGroup">
                 <g class="axis axis-x" ref="axisX"></g>
                 <g class="axis axis-y" ref="axisY"></g>
-                <!--<g class="line-group" ref="lineGroup"></g>-->
+                <g class="line-group" ref="lineGroup"></g>
                 <g class="circle-group" ref="circleGroup"></g>
             </g>
         </svg>
@@ -53,7 +53,7 @@ export default {
                 .attr('transform', `translate(${this.svgPadding.left},${this.svgPadding.top})`);
             this.drawXAxis();
             this.drawYAxis();
-            //this.drawLine();
+            this.drawLine();
             this.drawCircle()
         },
         drawXAxis() {
@@ -189,15 +189,13 @@ export default {
         },
     },
     watch: {
-       /* network: {
+        network: {
             handler() {
                 this.drawChart()
                 this.setMSE()
             },
             deep: true,
         },
-
-        */
     }
 }
 </script>

@@ -165,7 +165,7 @@
             },
             deep: true,
         },
-        weights: {
+        network: {
             handler() {
                 this.drawChart();
             },
