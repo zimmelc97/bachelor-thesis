@@ -21,6 +21,8 @@ let Node = {
   inputLinks: [],
   outputLinks: [],
   totalInput: 0,
+  outputDer: 0,
+  inputDer: 0,
 
   create: function (id, activation) {
     let node = Object.create(this)
@@ -29,31 +31,34 @@ let Node = {
     node.inputLinks = []
     node.outputLinks = []
     node.totalInput = 0
+    node.output = 0
+    node.outputDer = 0
+    node.inputDer = 0
     return node
   },
   updateOutput: function () {
     // Stores total input into the node.
-    let totalInput = 0;
+    this.totalInput = 0;
     for (let j = 0; j < this.inputLinks.length; j++) {
       let link = this.inputLinks[j];
-      totalInput += link.weight * link.source.output;
+      this.totalInput += link.weight * link.source.output;
     }
-    this.output = this.activation.output(totalInput);
+    this.output = this.activation.output(this.totalInput);
     return this.output;
   },
   updateOutputSlices: function (weightIndex, weight) {
     // Stores total input into the node.
-    let totalInput = 0;
+    this.totalInput = 0;
     for (let j = 0; j < this.inputLinks.length; j++) {
       let link = this.inputLinks[j];
       if (j !== weightIndex) {
-        totalInput += link.weight * link.source.output;
+        this.totalInput += link.weight * link.source.output;
       }
       else {
-        totalInput += weight * link.source.output;
+        this.totalInput += weight * link.source.output;
       }
     }
-    this.output = this.activation.output(totalInput);
+    this.output = this.activation.output(this.totalInput);
     return this.output;
   },
   getInputLinks: function() {
@@ -63,10 +68,21 @@ let Node = {
 
 export const Activations = {
   SIGMOID: {
-    output: x => 1 / (1 + Math.exp(-x))
+    output: x => 1 / (1 + Math.exp(-x)),
+    der: x => {
+      let output = Activations.SIGMOID.output(x);
+      return output * (1 - output);
+    }
   },
   LINEAR: {
-    output: x => x
+    output: x => x,
+    der: x => x/x
+  }
+}
+export const Errors = {
+  SQUARE: {
+    error: (output, target) => 0.5 * Math.pow(output - target, 2),
+    der: (output, target) => output - target
   }
 }
 
@@ -75,6 +91,7 @@ let Link = {
   source: null,
   dest: null,
   weight: 0,
+  errorDer: 0,
 
   create: function (source, dest) {
     let link = Object.create(this)
@@ -82,6 +99,7 @@ let Link = {
     link.source = source;
     link.dest = dest;
     link.weight = Math.random() * 4 - 2;
+    link.errorDer = 0;
     return link;
   },
   changeWeight: function (weight) {
@@ -89,6 +107,9 @@ let Link = {
   },
   getWeight: function () {
     return this.weight;
+  },
+  getErrorDer: function () {
+    return this.errorDer
   }
 }
 
@@ -164,6 +185,38 @@ export function forwardPropSlices(network, inputs, layerIndex, neuronIndex, weig
       }
     }
   return network[network.length - 1][0].output;
+}
+
+export function computeDer (network, target, errorFunc) {
+  let outputNode = network[network.length - 1][0];
+  outputNode.outputDer = errorFunc.der(outputNode.output, target);
+
+  for (let layerIdx = network.length - 1; layerIdx >= 1; layerIdx--) {
+    let currentLayer = network[layerIdx];
+    for (let i = 0; i < currentLayer.length; i++) {
+      let node = currentLayer[i];
+      node.inputDer = node.outputDer * node.activation.der(node.totalInput);
+    }
+    for (let i = 0; i < currentLayer.length; i++) {
+      let node = currentLayer[i];
+      for (let j = 0; j < node.inputLinks.length; j++) {
+        let link = node.inputLinks[j];
+        link.errorDer = node.inputDer * link.source.output;
+      }
+    }
+    if (layerIdx === 1) {
+      continue;
+    }
+    let prevLayer = network[layerIdx - 1];
+    for (let i = 0; i < prevLayer.length; i++) {
+      let node = prevLayer[i];
+      node.outputDer = 0;
+      for (let j = 0; j < node.outputLinks.length; j++) {
+        let output = node.outputLinks[j];
+        node.outputDer += output.weight * output.dest.inputDer;
+      }
+    }
+  }
 }
 
 export function getInputWeight(node, weightIndex) {

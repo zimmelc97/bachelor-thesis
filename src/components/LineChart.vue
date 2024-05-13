@@ -1,5 +1,6 @@
 <template>
     <div>
+        <p>{{ der }}</p>
         <svg class="main-svg" ref="svg" :width="svgWidth" :height="svgHeight">
             <g class="chart-group" ref="chartGroup">
                 <g class="axis axis-x" ref="axisX"></g>
@@ -16,7 +17,7 @@
 import * as d3 from "d3";
 
 import SliderWeights from "@/components/SliderWeights.vue";
-import { getInputWeight, forwardProp, forwardPropSlices } from "@/neural-network/nn";
+import {getInputWeight, forwardProp, forwardPropSlices, Errors, computeDer} from "@/neural-network/nn";
 
 export default {
     name: 'LineChart',
@@ -37,6 +38,7 @@ export default {
     },
     data() {
         return {
+            der: 0,
             svgWidth: 250,
             svgHeight: 250,
             svgPadding: {
@@ -86,15 +88,19 @@ export default {
                 .attr('fill', 'black')
         },
         computeMSE() {
-            let mse = 0.0
+            let mse = 0
+            this.der = 0
             for(let i=0; i<this.data.length; i++) {
                 let y = forwardProp(this.network, [this.data[i].x])
+                computeDer(this.network, this.data[i].label, Errors.SQUARE)
+                this.der += this.network[this.layerIndex][this.neuronIndex].getInputLinks()[this.weightIndex].getErrorDer()
                 mse += Math.pow((y-this.data[i].label),2)
             }
+            console.log(this.der/this.data.length)
             return mse/this.data.length
         },
       computeMSESlices(weight) {
-        let mse = 0.0
+        let mse = 0
         for(let i=0; i<this.data.length; i++) {
           let y = forwardPropSlices(this.network, [this.data[i].x],this.layerIndex, this.neuronIndex, this.weightIndex, weight)
           mse += Math.pow((y-this.data[i].label),2)
@@ -112,22 +118,22 @@ export default {
             return slice
         },
         drawLine() {
-                const linesGroup = d3.select(this.$refs["lineGroup"]);
-                linesGroup.selectAll('.mse-line').remove();
+            const linesGroup = d3.select(this.$refs["lineGroup"]);
+            linesGroup.selectAll('.mse-line').remove();
 
-                const line = d3.line()
-                    .x((d) => this.xScale(d[0]))
-                    .y((d) => this.yScale(d[1]));
+            const line = d3.line()
+                .x((d) => this.xScale(d[0]))
+                .y((d) => this.yScale(d[1]));
 
-                const clipPath = linesGroup
-                    .attr('clip-path', 'url(#clip)');
+            const clipPath = linesGroup
+                .attr('clip-path', 'url(#clip)');
 
-                clipPath.selectAll('.line')
-                    .data([this.slice()])
-                    .join('path')
-                    .attr('class', 'mse-line')
-                    .attr('d', line)
-                    .attr("fill", "none")
+            clipPath.selectAll('.line')
+                .data([this.slice()])
+                .join('path')
+                .attr('class', 'mse-line')
+                .attr('d', line)
+                .attr("fill", "none")
         },
         drawCircle() {
             const circleGroup = d3.select(this.$refs["circleGroup"]);
@@ -169,6 +175,22 @@ export default {
                 return this.$store.getters.network
             }
         },
+        weights: {
+            get: function() {
+                let weights = []
+                for (let layerIdx = 1; layerIdx < this.network.length; layerIdx++) {
+                    let currentLayer = this.network[layerIdx];
+                    for (let i = 0; i < currentLayer.length; i++) {
+                        let node = currentLayer[i];
+                        for (let j = 0; j < node.getInputLinks().length; j++) {
+                            let link = node.getInputLinks()[j];
+                            weights.push(link.getWeight())
+                        }
+                    }
+                }
+                return weights
+            }
+        },
         MSE: {
             get: function() {
                 return this.$store.getters.MSE
@@ -189,7 +211,7 @@ export default {
         },
     },
     watch: {
-        network: {
+        weights: {
             handler() {
                 this.drawChart()
                 this.setMSE()
