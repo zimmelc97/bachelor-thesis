@@ -8,26 +8,27 @@
                 <g class="circle-group" ref="circleGroup"></g>
             </g>
         </svg>
-        <!--<SliderWeights :index="index"/>-->
+        <SliderWeights :layerIndex="layerIndex" :neuronIndex="neuronIndex" :weightIndex="weightIndex"/>
         <div style="margin-bottom: 50px;"></div>
     </div>
 </template>
 <script>
 import * as d3 from "d3";
-//import SliderWeights from "@/components/SliderWeights.vue";
+
+import SliderWeights from "@/components/SliderWeights.vue";
 import { getInputWeight, forwardProp, forwardPropSlices } from "@/neural-network/nn";
 
 export default {
     name: 'LineChart',
-    components: {},
+    components: {SliderWeights},
     props: {
-      layerIndex: {
-        type: Number,
-        required: true
+        layerIndex: {
+            type: Number,
+            required: true
       },
-      neuronIndex: {
-        type: Number,
-        required: true
+        neuronIndex: {
+            type: Number,
+            required: true
       },
         weightIndex: {
             type: Number,
@@ -108,7 +109,6 @@ export default {
             for(let i=0; i<this.range.length; i++) {
                 slice.push([this.range[i], this.computeMSESlices(this.range[i])])
             }
-            console.log(slice)
             return slice
         },
         drawLine() {
@@ -155,7 +155,7 @@ export default {
                 .attr('cy', this.yScale(this.MSE));
         },
         changeTrajectory() {
-            this.$store.commit('changeIndex', this.index);
+            this.$store.commit('changeIndex', [this.layerIndex, this.neuronIndex, this.weightIndex]);
         }
     },
     computed: {

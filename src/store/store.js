@@ -56,7 +56,7 @@ const store = new Vuex.Store({
             for (let i=0; i<4; i++) {
                 state.weights.push({id: i, value: Math.random() * 4 - 2});
             }
-            state.network = buildNetwork(state.networkShape, Activations.SIGMOID)
+            state.network = buildNetwork(state.networkShape, Activations.SIGMOID, Activations.LINEAR)
             console.log(getInputWeight(state.network[1][0], 0))
         },
     },

@@ -20,48 +20,40 @@ let Node = {
   activation: null,
   inputLinks: [],
   outputLinks: [],
+  totalInput: 0,
 
   create: function (id, activation) {
-    let node = Object.create(this);
-    node.id =id;
-    node.activation = activation;
+    let node = Object.create(this)
+    node.id =id
+    node.activation = activation
     node.inputLinks = []
     node.outputLinks = []
+    node.totalInput = 0
     return node
   },
   updateOutput: function () {
     // Stores total input into the node.
-    this.totalInput = 0;
+    let totalInput = 0;
     for (let j = 0; j < this.inputLinks.length; j++) {
       let link = this.inputLinks[j];
-      this.totalInput += link.weight * link.source.output;
+      totalInput += link.weight * link.source.output;
     }
-    this.output = this.activation.output(this.totalInput);
-    return this.output;
-  },
-  updateOutputLast: function () {
-    // Stores total input into the node.
-    this.totalInput = 0;
-    for (let j = 0; j < this.inputLinks.length; j++) {
-      let link = this.inputLinks[j];
-      this.totalInput += link.weight * link.source.output;
-    }
-    this.output = this.totalInput;
+    this.output = this.activation.output(totalInput);
     return this.output;
   },
   updateOutputSlices: function (weightIndex, weight) {
     // Stores total input into the node.
-    this.totalInput = 0;
+    let totalInput = 0;
     for (let j = 0; j < this.inputLinks.length; j++) {
       let link = this.inputLinks[j];
       if (j !== weightIndex) {
-        this.totalInput += link.weight * link.source.output;
+        totalInput += link.weight * link.source.output;
       }
       else {
-        this.totalInput += weight * link.source.output;
+        totalInput += weight * link.source.output;
       }
     }
-    this.output = this.activation.output(this.totalInput);
+    this.output = this.activation.output(totalInput);
     return this.output;
   },
   getInputLinks: function() {
@@ -72,6 +64,9 @@ let Node = {
 export const Activations = {
   SIGMOID: {
     output: x => 1 / (1 + Math.exp(-x))
+  },
+  LINEAR: {
+    output: x => x
   }
 }
 
@@ -97,18 +92,19 @@ let Link = {
   }
 }
 
-export function buildNetwork(networkShape, activation) {
+export function buildNetwork(networkShape, activation, outputActivation) {
   let numLayers = networkShape.length;
   let id = 1;
   let network = [];
   for (let layerIdx = 0; layerIdx < numLayers; layerIdx++) {
+    let isOutputLayer = layerIdx === numLayers - 1;
     let currentLayer = [];
     network.push(currentLayer);
     let numNodes = networkShape[layerIdx];
     for (let i = 0; i < numNodes; i++) {
       let nodeId = id.toString();
       id++;
-      let node = Node.create(nodeId, activation);
+      let node = Node.create(nodeId, isOutputLayer ? outputActivation : activation);
       currentLayer.push(node);
       if (layerIdx >= 1) {
         for (let j = 0; j < network[layerIdx - 1].length; j++) {

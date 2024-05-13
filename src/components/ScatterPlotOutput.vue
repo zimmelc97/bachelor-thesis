@@ -15,7 +15,7 @@
 
 <script>
     import * as d3 from "d3";
-    import {forwardProp} from "@/neural-network/nn";
+    import {forwardProp, forwardPropSlices} from "@/neural-network/nn";
 
     export default {
     name: 'ScatterPlotOutput',
@@ -31,7 +31,6 @@
     },
     mounted() {
         this.drawChart();
-        this.drawLines();
         this.drawCircles(this.inputData, "Input");
     },
     methods: {
@@ -99,9 +98,12 @@
         computeTrajectory() {
             let trajectories = []
             for(let i=0; i<this.range.length; i++) {
-                let weightsNew = [...this.weights]
-                weightsNew[this.index] = {id: this.index, value: this.range[i]}
-                trajectories.push(this.predictData(weightsNew).slice().sort((a,b) => d3.ascending(a.x, b.x)))
+                let predictedData = []
+                for(let j=0; j<this.inputData.length; j++) {
+                    predictedData.push({x: this.inputData[j].x,
+                        label: forwardPropSlices(this.network, [this.inputData[j].x], this.index[0], this.index[1], this.index[2], this.range[i])})
+                }
+                trajectories.push(predictedData.slice().sort((a,b) => d3.ascending(a.x, b.x)))
             }
             return trajectories
         },
