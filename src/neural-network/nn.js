@@ -177,7 +177,7 @@ export function forwardPropSlices(network, inputs, layerIndex, neuronIndex, weig
     let currentLayer = network[layerIdx];
     for (let i = 0; i < currentLayer.length; i++) {
       let node = currentLayer[i];
-        if (layerIdx !== layerIndex && i !== neuronIndex) {
+        if (layerIdx !== layerIndex || i !== neuronIndex) {
           node.updateOutput()
         } else {
           node.updateOutputSlices(weightIndex, weight);

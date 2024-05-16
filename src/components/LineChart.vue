@@ -121,6 +121,7 @@ export default {
             const linesGroup = d3.select(this.$refs["lineGroup"]);
             linesGroup.selectAll('.mse-line').remove();
 
+            console.log(this.slice())
             const line = d3.line()
                 .x((d) => this.xScale(d[0]))
                 .y((d) => this.yScale(d[1]));
@@ -213,8 +214,10 @@ export default {
     watch: {
         weights: {
             handler() {
+                if (this.layerIndex === 1 && this.neuronIndex === 0) {
+                    this.setMSE()
+                }
                 this.drawChart()
-                this.setMSE()
             },
             deep: true,
         },
