@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p>{{ der }}</p>
+        <p>{{ der.toFixed(4) }}</p>
         <svg class="main-svg" ref="svg" :width="svgWidth" :height="svgHeight">
             <g class="chart-group" ref="chartGroup">
                 <g class="axis axis-x" ref="axisX"></g>
@@ -48,6 +48,7 @@ export default {
     },
     mounted() {
         this.setMSE()
+        this.computeDer()
         this.drawChart()
     },
     methods: {
@@ -89,23 +90,28 @@ export default {
         },
         computeMSE() {
             let mse = 0
-            this.der = 0
             for(let i=0; i<this.data.length; i++) {
                 let y = forwardProp(this.network, [this.data[i].x])
-                computeDer(this.network, this.data[i].label, Errors.SQUARE)
-                this.der += this.network[this.layerIndex][this.neuronIndex].getInputLinks()[this.weightIndex].getErrorDer()
                 mse += Math.pow((y-this.data[i].label),2)
             }
             return mse/this.data.length
         },
-      computeMSESlices(weight) {
-        let mse = 0
-        for(let i=0; i<this.data.length; i++) {
-          let y = forwardPropSlices(this.network, [this.data[i].x],this.layerIndex, this.neuronIndex, this.weightIndex, weight)
-          mse += Math.pow((y-this.data[i].label),2)
-        }
-        return mse/this.data.length
-      },
+        computeDer() {
+            this.der = 0
+            for(let i=0; i<this.data.length; i++) {
+                forwardProp(this.network, [this.data[i].x])
+                computeDer(this.network, this.data[i].label, Errors.SQUARE)
+                this.der += this.network[this.layerIndex][this.neuronIndex].getInputLinks()[this.weightIndex].getErrorDer()
+            }
+        },
+        computeMSESlices(weight) {
+            let mse = 0
+            for(let i=0; i<this.data.length; i++) {
+              let y = forwardPropSlices(this.network, [this.data[i].x],this.layerIndex, this.neuronIndex, this.weightIndex, weight)
+              mse += Math.pow((y-this.data[i].label),2)
+            }
+            return mse/this.data.length
+        },
         setMSE() {
             this.$store.commit('changeMSE', this.computeMSE());
         },
@@ -201,7 +207,7 @@ export default {
             }
         },
         range() {
-            return d3.range(-5, 5, 0.2)
+            return d3.range(-5, 5, 0.5)
         },
         xScale() {
             return d3.scaleLinear()
@@ -220,12 +226,8 @@ export default {
                 if (this.layerIndex === 1 && this.neuronIndex === 0) {
                     this.setMSE()
                 }
+                this.computeDer()
                 this.drawChart()
-            },
-            deep: true,
-        },
-        weight: {
-            handler() {
             },
             deep: true,
         },

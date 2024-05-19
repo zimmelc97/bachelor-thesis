@@ -1,20 +1,13 @@
 <template>
     <div id="app">
         <div class="container-fluid">
-            <LoggingButton/>
             <div class="col">
                 <div class="row">
                     <div class="col-md-3" :style="{display: 'flex', alignItems: 'center'}">
                         <ScatterPlotInput/>
                     </div>
                     <div class="col-md-6">
-                      <div v-for="(dataset, layerIndex) in networkShape" :key="'layer' + layerIndex" :style="{display: 'inline-block'}">
-                        <div v-for="(dataset, neuronIndex) in [...Array(networkShape[layerIndex]).keys()]" :key="'neuron' + neuronIndex">
-                          <div v-for="(dataset, weightIndex) in network[layerIndex][neuronIndex].getInputLinks()" :key="'weight' + weightIndex">
-                            <LineChart :layerIndex="layerIndex" :neuronIndex="neuronIndex" :weightIndex="weightIndex" />
-                          </div>
-                        </div>
-                      </div>
+                      <component @swapComponent="swapComponent" v-bind:is="currentComponent"/>
                     </div>
                     <div class="col-md-3" :style="{display: 'flex', alignItems: 'center'}">
                         <ScatterPlotOutput/>
@@ -22,36 +15,40 @@
                 </div>
             </div>
         </div>
+        <LoggingButton/>
     </div>
 </template>
 
 <script>
 
-import LineChart from "./components/LineChart.vue";
 import ScatterPlotInput from "@/components/ScatterPlotInput.vue";
 import ScatterPlotOutput from "@/components/ScatterPlotOutput.vue";
 import LoggingButton from "@/components/Logging.vue";
+import WeightSlicesVis from "@/components/WeightSlicesVis.vue";
+import GradientHeatmap from "@/components/GradientHeatmap.vue";
 
 export default {
     name: 'App',
     components: {
+        'slices': WeightSlicesVis,
+        'gradient': GradientHeatmap,
         LoggingButton,
-        ScatterPlotOutput, ScatterPlotInput, LineChart
+        ScatterPlotOutput,
+        ScatterPlotInput
+    },
+    data() {
+        return {
+            currentComponent: 'slices'
+        }
     },
     mounted() {
         this.$store.dispatch('loadData');
     },
-    computed: {
-        network: {
-            get: function() {
-                return this.$store.getters.network
-            }
-        },
-      networkShape: {
-        get: function() {
-          return this.$store.getters.networkShape
+    computed: {},
+    methods: {
+        swapComponent: function(component) {
+            this.currentComponent = component;
         }
-      },
     }
 }
 </script>
