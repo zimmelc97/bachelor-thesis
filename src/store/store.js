@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { buildNetwork, Activations, getInputWeight, changeInputWeight } from '@/neural-network/nn.js';
+import { buildNetwork, Activations, changeInputWeight } from '@/neural-network/nn.js';
 
 Vue.use(Vuex);
 
@@ -57,7 +57,6 @@ const store = new Vuex.Store({
                 state.weights.push({id: i, value: Math.random() * 4 - 2});
             }
             state.network = buildNetwork(state.networkShape, Activations.SIGMOID, Activations.LINEAR)
-            console.log(getInputWeight(state.network[1][0], 0))
         },
     },
 })

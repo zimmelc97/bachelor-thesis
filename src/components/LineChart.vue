@@ -96,7 +96,6 @@ export default {
                 this.der += this.network[this.layerIndex][this.neuronIndex].getInputLinks()[this.weightIndex].getErrorDer()
                 mse += Math.pow((y-this.data[i].label),2)
             }
-            console.log(this.der/this.data.length)
             return mse/this.data.length
         },
       computeMSESlices(weight) {
@@ -121,7 +120,6 @@ export default {
             const linesGroup = d3.select(this.$refs["lineGroup"]);
             linesGroup.selectAll('.mse-line').remove();
 
-            console.log(this.slice())
             const line = d3.line()
                 .x((d) => this.xScale(d[0]))
                 .y((d) => this.yScale(d[1]));
@@ -163,7 +161,7 @@ export default {
         },
         changeTrajectory() {
             this.$store.commit('changeIndex', [this.layerIndex, this.neuronIndex, this.weightIndex]);
-        }
+        },
     },
     computed: {
         data: {
@@ -192,6 +190,11 @@ export default {
                 return weights
             }
         },
+        weight: {
+          get: function() {
+              return this.network[this.layerIndex][this.neuronIndex].getInputLinks()[this.weightIndex].getWeight()
+          }
+        },
         MSE: {
             get: function() {
                 return this.$store.getters.MSE
@@ -218,6 +221,11 @@ export default {
                     this.setMSE()
                 }
                 this.drawChart()
+            },
+            deep: true,
+        },
+        weight: {
+            handler() {
             },
             deep: true,
         },

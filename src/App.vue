@@ -1,6 +1,7 @@
 <template>
     <div id="app">
         <div class="container-fluid">
+            <LoggingButton/>
             <div class="col">
                 <div class="row">
                     <div class="col-md-3" :style="{display: 'flex', alignItems: 'center'}">
@@ -29,10 +30,12 @@
 import LineChart from "./components/LineChart.vue";
 import ScatterPlotInput from "@/components/ScatterPlotInput.vue";
 import ScatterPlotOutput from "@/components/ScatterPlotOutput.vue";
+import LoggingButton from "@/components/Logging.vue";
 
 export default {
     name: 'App',
     components: {
+        LoggingButton,
         ScatterPlotOutput, ScatterPlotInput, LineChart
     },
     mounted() {
