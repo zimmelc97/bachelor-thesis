@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p>{{ der.toFixed(4) }}</p>
+        <!--<p>{{ der.toFixed(4) }}</p>-->
         <svg class="main-svg" ref="svg" :width="svgWidth" :height="svgHeight">
             <g class="chart-group" ref="chartGroup">
                 <g class="axis axis-x" ref="axisX"></g>
@@ -16,7 +16,7 @@
 <script>
 import * as d3 from "d3";
 
-import SliderWeights from "@/components/SliderWeights.vue";
+import SliderWeights from "@/components/hidden-layers/slices/SliderWeights.vue";
 import {getInputWeight, forwardProp, forwardPropSlices, Errors, computeDer} from "@/neural-network/nn";
 
 export default {
@@ -223,10 +223,7 @@ export default {
     watch: {
         weights: {
             handler() {
-                if (this.layerIndex === 1 && this.neuronIndex === 0) {
-                    this.setMSE()
-                }
-                this.computeDer()
+                this.setMSE()
                 this.drawChart()
             },
             deep: true,

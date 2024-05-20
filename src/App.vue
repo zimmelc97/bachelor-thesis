@@ -21,24 +21,24 @@
 
 <script>
 
-import ScatterPlotInput from "@/components/ScatterPlotInput.vue";
-import ScatterPlotOutput from "@/components/ScatterPlotOutput.vue";
+import ScatterPlotInput from "@/components/input-output-layer/ScatterPlotInput.vue";
+import ScatterPlotOutput from "@/components/input-output-layer/ScatterPlotOutput.vue";
 import LoggingButton from "@/components/Logging.vue";
-import WeightSlicesVis from "@/components/WeightSlicesVis.vue";
-import GradientHeatmap from "@/components/GradientHeatmap.vue";
+import GradientHeatmapVis from "@/components/hidden-layers/gradient/GradientHeatmapVis.vue";
+import WeightSlicesSelection from "@/components/hidden-layers/slices/WeightSlicesSelection.vue";
 
 export default {
     name: 'App',
     components: {
-        'slices': WeightSlicesVis,
-        'gradient': GradientHeatmap,
+        'slices': WeightSlicesSelection,
+        'gradient': GradientHeatmapVis,
         LoggingButton,
         ScatterPlotOutput,
         ScatterPlotInput
     },
     data() {
         return {
-            currentComponent: 'slices'
+            currentComponent: 'gradient'
         }
     },
     mounted() {

@@ -8,10 +8,15 @@ const store = new Vuex.Store({
     state: {
         inputData: [],
         weights: [],
+        selectedWeights: [],
         index: [],
         MSE: [],
         network: [],
-        networkShape: [1,2,1]
+        networkShape: [1,2,2,2,2,2,1],
+        colors:
+            {blue: ["#D1DCFF","#BAC9F8","#A3B5F2","#8BA2EB","#748FE5","#5D7BDE","#4668D8","#2E55D1","#1741CB","#002EC4"],
+            white: ["#FFFFFF"],
+            red: ["#F1DBDB","#ECC3C3","#E7AAAA","#E29292","#DD7A7A","#D86161","#D34949","#CE3131","#C91818","#C40000"]}
     },
     mutations: {
         changeWeightInNetwork (state, {layerIndex, neuronIndex, weightIndex, weight}) {
@@ -25,6 +30,19 @@ const store = new Vuex.Store({
         },
         changeMSE (state, MSE) {
             state.MSE = MSE;
+        },
+        selectWeight (state, index) {
+            const weightsJSON = JSON.stringify(state.selectedWeights)
+            const weightJSON = JSON.stringify(index)
+            if (state.selectedWeights.length < 10 && weightsJSON.indexOf(weightJSON) === -1) {
+                state.selectedWeights.push(index);
+            }
+
+            if (weightsJSON.indexOf(weightJSON) !== -1) {
+                state.selectedWeights = state.selectedWeights.filter(element => {
+                    return !(element[0] === index[0] && element[1] === index[1] && element[2] === index[2])
+                })
+            }
         },
     },
     getters: {
@@ -45,6 +63,12 @@ const store = new Vuex.Store({
         },
         networkShape (state) {
             return state.networkShape
+        },
+        colors (state) {
+            return state.colors
+        },
+        selectedWeights (state) {
+            return state.selectedWeights
         }
     },
     actions: {
