@@ -12,7 +12,7 @@ const store = new Vuex.Store({
         index: [],
         MSE: [],
         network: [],
-        networkShape: [1,2,2,2,2,2,1],
+        networkShape: [1,4,4,4,4,4,4,4,1],
         colors:
             {blue: ["#D1DCFF","#BAC9F8","#A3B5F2","#8BA2EB","#748FE5","#5D7BDE","#4668D8","#2E55D1","#1741CB","#002EC4"],
             white: ["#FFFFFF"],
@@ -31,10 +31,13 @@ const store = new Vuex.Store({
         changeMSE (state, MSE) {
             state.MSE = MSE;
         },
+        changeNetworkShape (state, networkShape) {
+          state.networkShape = networkShape
+        },
         selectWeight (state, index) {
             const weightsJSON = JSON.stringify(state.selectedWeights)
             const weightJSON = JSON.stringify(index)
-            if (state.selectedWeights.length < 10 && weightsJSON.indexOf(weightJSON) === -1) {
+            if (state.selectedWeights.length < 5 && weightsJSON.indexOf(weightJSON) === -1) {
                 state.selectedWeights.push(index);
             }
 

@@ -4,7 +4,8 @@
         <div v-for="(dataset, layerIndex) in networkShape" :key="'layer' + layerIndex" :style="{display: 'inline-block'}">
             <div v-for="(dataset, neuronIndex) in [...Array(networkShape[layerIndex]).keys()]" :key="'neuron' + neuronIndex">
                 <div v-for="(dataset, weightIndex) in network[layerIndex][neuronIndex].getInputLinks()" :key="'weight' + weightIndex">
-                    <GradientHeatmap :layerIndex="layerIndex" :neuronIndex="neuronIndex" :weightIndex="weightIndex" />
+                    <GradientHeatmap :layerIndex="layerIndex" :neuronIndex="neuronIndex" :weightIndex="weightIndex"
+                                     :isActiveProp="setIsActive([layerIndex, neuronIndex, weightIndex])" />
                 </div>
             </div>
         </div>
@@ -29,10 +30,20 @@ export default {
                 return this.$store.getters.networkShape
             }
         },
+        selectedWeights: {
+            get: function() {
+                return this.$store.getters.selectedWeights
+            }
+        },
     },
     methods: {
         swapComponent() {
             this.$emit("swapComponent", "slices");
+        },
+        setIsActive(index) {
+            const weightsJSON = JSON.stringify(this.selectedWeights)
+            const weightJSON = JSON.stringify(index)
+            return weightsJSON.indexOf(weightJSON) !== -1
         }
     }
 }

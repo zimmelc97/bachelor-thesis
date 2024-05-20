@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!--<p>{{ der.toFixed(4) }}</p>-->
+        <p>{{ der.toFixed(4) }}</p>
         <svg class="main-svg" ref="svg" :width="svgWidth" :height="svgHeight">
             <g class="chart-group" ref="chartGroup">
                 <g class="axis axis-x" ref="axisX"></g>
@@ -146,7 +146,7 @@ export default {
                 .on('drag', this.dragged);
 
             circleGroup.selectAll('.circle')
-                .data([[getInputWeight(this.network[this.layerIndex][this.neuronIndex], this.weightIndex), this.MSE]])
+                .data([[this.weight, this.MSE]])
                 .join('circle')
                 .attr('class', 'circle')
                 .attr('cx', (d) => this.xScale(d[0]))
@@ -198,7 +198,7 @@ export default {
         },
         weight: {
           get: function() {
-              return this.network[this.layerIndex][this.neuronIndex].getInputLinks()[this.weightIndex].getWeight()
+              return getInputWeight(this.network[this.layerIndex][this.neuronIndex], this.weightIndex)
           }
         },
         MSE: {
@@ -224,7 +224,9 @@ export default {
         weights: {
             handler() {
                 this.setMSE()
-                this.drawChart()
+                this.computeDer()
+                this.drawLine()
+                this.drawCircle()
             },
             deep: true,
         },

@@ -28,12 +28,17 @@ export default {
         weightIndex: {
             type: Number,
             required: true
+        },
+        isActiveProp: {
+            type: Boolean,
+            required: true
         }
     },
     data() {
         return {
             der: 0,
             color: "#000000",
+            isActive: this.isActiveProp,
             svgWidth: 50,
             svgHeight: 50,
         }
@@ -46,7 +51,7 @@ export default {
     methods: {
         drawBox() {
             d3.select(this.$refs["colorBox"]).append("rect")
-                .attr("class", "rectangle")
+                .attr("class", this.isActive ? "rectangle-active" : "rectangle")
                 .attr("x", 0)
                 .attr("y", 0)
                 .attr("width", this.svgWidth)
@@ -88,6 +93,8 @@ export default {
             this.$emit("swapComponent", "slices");
         },
         selectWeight() {
+            this.isActive = !this.isActive
+            d3.select(this.$refs["colorBox"]).select("rect").attr("class", this.isActive ? "rectangle-active" : "rectangle")
             this.$store.commit('selectWeight', [this.layerIndex, this.neuronIndex, this.weightIndex]);
         },
     },
@@ -114,5 +121,9 @@ export default {
 .rectangle  {
     stroke: black;
     stroke-width: 1px;
+}
+.rectangle-active  {
+    stroke: black;
+    stroke-width: 10px;
 }
 </style>

@@ -1,5 +1,6 @@
 <template>
     <div id="app">
+        <!--<input v-model="networkShape" placeholder="edit me" />-->
         <div class="container-fluid">
             <div class="col">
                 <div class="row">
@@ -44,7 +45,13 @@ export default {
     mounted() {
         this.$store.dispatch('loadData');
     },
-    computed: {},
+    computed: {
+        networkShape: {
+            set(networkShape) {
+                this.$store.commit('changeNetworkShape', networkShape);
+            }
+        },
+    },
     methods: {
         swapComponent: function(component) {
             this.currentComponent = component;
