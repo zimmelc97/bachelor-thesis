@@ -6,7 +6,8 @@
                     <div class="neurons">
                         <div v-for="(dataset, neuronIndex) in [...Array(networkShape[layerIndex]).keys()]" :key="'neuron' + neuronIndex" class="neuron">
                             <div class="weights">
-                            <div v-for="(dataset, weightIndex) in network[layerIndex + 1][neuronIndex].getInputLinks()" :key="'weight' + weightIndex">
+                            <div v-for="(dataset, weightIndex) in network[layerIndex + 1][neuronIndex].getInputLinks()" :key="'weight' + weightIndex"
+                            class="weight">
                                 <GradientHeatmap :layerIndex="layerIndex + 1" :neuronIndex="neuronIndex" :weightIndex="weightIndex"
                                                  :isActiveProp="setIsActive([layerIndex, neuronIndex, weightIndex])" class="weight-box" />
                             </div>
@@ -64,41 +65,43 @@ export default {
 .layers {
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    padding: 10px;
 }
 
 .layer {
     display: flex;
     flex-direction: column;
-    margin: 0 10px;
     background: #A5A5A5;
-
 }
 
 .neurons {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 80vh;
 }
 
 .neuron {
     display: flex;
     flex-direction: column;
     background: #B7B6B6;
-    margin: 10px 2px;
 }
 
 .weights {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    max-height: calc(90vh - 30px);
+    max-height: 80vh;
+}
+.weight {
+  width: 20px;
+  height: 20px;
 }
 
 .weight-box {
-    width: 15px; /* Example width, adjust as needed */
-    height: 15px; /* Example height, adjust as needed */
+  display: flex;
+  align-items: center;
+  margin: auto;
+  height: 80%;
+  width: 80%;
 }
 </style>
