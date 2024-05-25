@@ -1,7 +1,7 @@
 <template>
     <div>
         <!--<p>{{ der.toFixed(4) }}</p>-->
-        <svg class="main-svg" ref="svg" :width="svgWidth" :height="svgHeight">
+        <svg class="main-svg" ref="svg">
             <g class="color-box" ref="colorBox"></g>
         </svg>
     </div>
@@ -32,15 +32,14 @@ export default {
         isActiveProp: {
             type: Boolean,
             required: true
-        }
+        },
     },
     data() {
+        console.log()
         return {
             der: 0,
             color: "#000000",
             isActive: this.isActiveProp,
-            svgWidth: 50,
-            svgHeight: 50,
         }
     },
     mounted() {
@@ -50,12 +49,13 @@ export default {
     },
     methods: {
         drawBox() {
+            console.log()
             d3.select(this.$refs["colorBox"]).append("rect")
                 .attr("class", this.isActive ? "rectangle-active" : "rectangle")
                 .attr("x", 0)
                 .attr("y", 0)
-                .attr("width", this.svgWidth)
-                .attr("height", this.svgHeight)
+                .attr("width", this.$refs["svg"].clientWidth)
+                .attr("height", this.$refs["svg"].clientHeight)
                 .attr("fill", this.color)
                 .on("click", () => this.selectWeight())
         },
@@ -125,5 +125,9 @@ export default {
 .rectangle-active  {
     stroke: black;
     stroke-width: 10px;
+}
+.main-svg {
+    width: 100%;
+    height: 100%;
 }
 </style>

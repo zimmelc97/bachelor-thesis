@@ -4,19 +4,21 @@
         <div class="container-fluid">
             <div class="col">
                 <div class="row">
-                    <div class="col-md-3" :style="{display: 'flex', alignItems: 'center'}">
-                        <ScatterPlotInput/>
+                    <div class="col-md-2" :style="{display: 'flex', alignItems: 'center'}">
+                        <div class="col">
+                            <ScatterPlotInput/>
+                            <LoggingButton/>
+                        </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                       <component @swapComponent="swapComponent" v-bind:is="currentComponent"/>
                     </div>
-                    <div class="col-md-3" :style="{display: 'flex', alignItems: 'center'}">
+                    <div class="col-md-2" :style="{display: 'flex', alignItems: 'center'}">
                         <ScatterPlotOutput/>
                     </div>
                 </div>
             </div>
         </div>
-        <LoggingButton/>
     </div>
 </template>
 
@@ -67,6 +69,5 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    margin-top: 20px;
 }
 </style>

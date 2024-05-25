@@ -22,8 +22,8 @@
     props: {},
     data() {
         return {
-            svgWidth: 350,
-            svgHeight: 350,
+            svgWidth: 250,
+            svgHeight: 250,
             svgPadding: {
             top: 10, right: 10, bottom: 30, left: 30,
             },

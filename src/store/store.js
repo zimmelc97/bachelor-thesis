@@ -12,7 +12,7 @@ const store = new Vuex.Store({
         index: [],
         MSE: [],
         network: [],
-        networkShape: [1,4,4,4,4,4,4,4,1],
+        networkShape: [1,70,2,1],
         colors:
             {blue: ["#D1DCFF","#BAC9F8","#A3B5F2","#8BA2EB","#748FE5","#5D7BDE","#4668D8","#2E55D1","#1741CB","#002EC4"],
             white: ["#FFFFFF"],
@@ -84,6 +84,7 @@ const store = new Vuex.Store({
                 state.weights.push({id: i, value: Math.random() * 4 - 2});
             }
             state.network = buildNetwork(state.networkShape, Activations.SIGMOID, Activations.LINEAR)
+            console.log(state.networkShape.slice(1,state.networkShape.length))
         },
     },
 })
