@@ -12,7 +12,7 @@ const store = new Vuex.Store({
         index: [],
         MSE: [],
         network: [],
-        networkShape: [1,70,2,1],
+        networkShape: [1,4,1],
         colors:
             {blue: ["#D1DCFF","#BAC9F8","#A3B5F2","#8BA2EB","#748FE5","#5D7BDE","#4668D8","#2E55D1","#1741CB","#002EC4"],
             white: ["#FFFFFF"],

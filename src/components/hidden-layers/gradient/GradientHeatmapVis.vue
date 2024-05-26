@@ -2,30 +2,36 @@
         <div class="heatmap">
             <button @click="swapComponent">Show Slices</button>
             <div class="layers">
-                <div v-for="(dataset, layerIndex) in networkShape" :key="'layer' + layerIndex" class="layer">
-                    <p>Layer: {{ layerIndex + 1 }}</p>
-                    <div class="neurons">
+                <div v-for="(numberNeurons, layerIndex) in networkShape" :key="'layer' + layerIndex" >
+                  <div class="network">
+                    <Neurons :numberNeurons="numberNeurons" class="neuron-circle"></Neurons>
+                    <div class="layer">
+                      <p>Layer: {{ layerIndex + 1 }}</p>
+                      <div class="neurons">
                         <div v-for="(dataset, neuronIndex) in [...Array(networkShape[layerIndex]).keys()]" :key="'neuron' + neuronIndex" class="neuron">
-                            <div class="weights">
+                          <div class="weights">
                             <div v-for="(dataset, weightIndex) in network[layerIndex + 1][neuronIndex].getInputLinks()" :key="'weight' + weightIndex"
-                            class="weight">
-                                <GradientHeatmap :layerIndex="layerIndex + 1" :neuronIndex="neuronIndex" :weightIndex="weightIndex"
-                                                 :isActiveProp="setIsActive([layerIndex + 1, neuronIndex, weightIndex])" class="weight-box" />
+                                 class="weight">
+                              <GradientHeatmap :layerIndex="layerIndex + 1" :neuronIndex="neuronIndex" :weightIndex="weightIndex"
+                                               :isActiveProp="setIsActive([layerIndex + 1, neuronIndex, weightIndex])" class="weight-box" />
                             </div>
+                          </div>
                         </div>
-                        </div>
+                      </div>
                     </div>
-                </div>
+                  </div>
+                  </div>
             </div>
         </div>
 </template>
 
 <script>
 import GradientHeatmap from "@/components/hidden-layers/gradient/GradientHeatmap.vue";
+import Neurons from "@/components/hidden-layers/neurons/Neurons.vue";
 
 export default {
     name: 'GradientHeatmapVis',
-    components: {GradientHeatmap},
+    components: {Neurons, GradientHeatmap},
     props: {},
     computed: {
         network: {
@@ -62,10 +68,18 @@ export default {
     flex-direction: column;
     align-items: center;
 }
-
+.network{
+  display: flex;
+  flex-direction: row;
+}
 .layers {
     display: flex;
     flex-direction: row;
+}
+
+.neuron-circle {
+    height: 90vh;
+    width: 2vw;
 }
 
 .layer {
@@ -75,6 +89,7 @@ export default {
     padding-left: 0.5vw;
     padding-right: 0.5vw;
     margin-left: 0.7vw;
+    margin-right: 0.7vw;
 }
 
 .neurons {
@@ -98,7 +113,7 @@ export default {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    max-height: 90vh;
+    max-height: 88vh;
 }
 .weight {
     position: relative;

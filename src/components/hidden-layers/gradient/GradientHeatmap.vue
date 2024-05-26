@@ -88,9 +88,6 @@ export default {
                 this.color = this.colors.red[index];
             }
         },
-        swapComponent() {
-            this.$emit("swapComponent", "slices");
-        },
         changeTrajectory() {
             this.$store.commit('changeIndex', [this.layerIndex, this.neuronIndex, this.weightIndex]);
         },
