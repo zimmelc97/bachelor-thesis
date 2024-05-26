@@ -92,6 +92,7 @@ let Link = {
   dest: null,
   weight: 0,
   errorDer: 0,
+  accErrorDer: 0,
 
   create: function (source, dest) {
     let link = Object.create(this)
@@ -100,6 +101,7 @@ let Link = {
     link.dest = dest;
     link.weight = Math.random() * 4 - 2;
     link.errorDer = 0;
+    link.accErrorDer = 0;
     return link;
   },
   changeWeight: function (weight) {
@@ -107,6 +109,9 @@ let Link = {
   },
   getWeight: function () {
     return this.weight;
+  },
+  getAccErrorDer: function () {
+    return this.accErrorDer
   },
   getErrorDer: function () {
     return this.errorDer
@@ -202,6 +207,7 @@ export function computeDer (network, target, errorFunc) {
       for (let j = 0; j < node.inputLinks.length; j++) {
         let link = node.inputLinks[j];
         link.errorDer = node.inputDer * link.source.output;
+        link.accErrorDer += link.errorDer
       }
     }
     if (layerIdx === 1) {
@@ -214,6 +220,19 @@ export function computeDer (network, target, errorFunc) {
       for (let j = 0; j < node.outputLinks.length; j++) {
         let output = node.outputLinks[j];
         node.outputDer += output.weight * output.dest.inputDer;
+      }
+    }
+  }
+}
+
+export function setAccErrDerToZero(network) {
+  for (let layerIdx = network.length - 1; layerIdx >= 1; layerIdx--) {
+    let currentLayer = network[layerIdx];
+    for (let i = 0; i < currentLayer.length; i++) {
+      let node = currentLayer[i];
+      for (let j = 0; j < node.inputLinks.length; j++) {
+        let link = node.inputLinks[j];
+        link.accErrorDer = 0
       }
     }
   }

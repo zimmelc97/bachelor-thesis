@@ -9,8 +9,6 @@
 <script>
 //import * as d3 from "d3";
 
-
-import {computeDer, Errors, forwardProp} from "@/neural-network/nn";
 import * as d3 from "d3";
 
 export default {
@@ -59,12 +57,7 @@ export default {
                 .on("click", () => this.selectWeight())
         },
         computeDer() {
-            this.der = 0
-            for(let i=0; i<this.data.length; i++) {
-                forwardProp(this.network, [this.data[i].x])
-                computeDer(this.network, this.data[i].label, Errors.SQUARE)
-                this.der += this.network[this.layerIndex][this.neuronIndex].getInputLinks()[this.weightIndex].getErrorDer()
-            }
+            this.der = this.network[this.layerIndex][this.neuronIndex].getInputLinks()[this.weightIndex].getAccErrorDer()
         },
         chooseColor() {
             console.log(this.colors.blue[this.color.length - 1])
@@ -124,7 +117,7 @@ export default {
 }
 .rectangle-active  {
     stroke: black;
-    stroke-width: 10px;
+    stroke-width: 7px;
 }
 .main-svg {
     width: 100%;

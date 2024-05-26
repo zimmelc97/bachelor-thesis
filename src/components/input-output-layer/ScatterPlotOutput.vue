@@ -114,6 +114,17 @@
             }
             return predictedData
         },
+        computeMSE() {
+            let mse = 0
+            for(let i=0; i<this.inputData.length; i++) {
+                let y = forwardProp(this.network, [this.inputData[i].x])
+                mse += Math.pow((y-this.inputData[i].label),2)
+            }
+            return mse/this.inputData.length
+        },
+        setMSE() {
+            this.$store.commit('changeMSE', this.computeMSE());
+        },
     },
     computed: {
         inputData: {
@@ -169,6 +180,7 @@
         },
         weights: {
             handler() {
+                this.setMSE()
                 this.drawCircles(this.predictedData, "Output");
             },
             deep: true,

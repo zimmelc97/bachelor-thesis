@@ -56,7 +56,7 @@ export default {
                         let node = currentLayer[i];
                         for (let j = 0; j < node.getInputLinks().length; j++) {
                             let link = node.getInputLinks()[j];
-                            weights.push(link.getWeight())
+                            weights.push({layerIndex: layerIdx, neuronIndex: i, weightIndex: j, weight: link.getWeight()})
                         }
                     }
                 }

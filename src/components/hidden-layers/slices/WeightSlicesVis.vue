@@ -19,6 +19,11 @@ export default {
     components: {LineChart},
     props: {},
     computed: {
+        data: {
+            get: function() {
+                return this.$store.getters.inputData
+            }
+        },
         network: {
             get: function() {
                 return this.$store.getters.network
@@ -34,6 +39,6 @@ export default {
         swapComponent() {
             this.$emit("swapComponent", "gradient");
         }
-    }
+    },
 }
 </script>
