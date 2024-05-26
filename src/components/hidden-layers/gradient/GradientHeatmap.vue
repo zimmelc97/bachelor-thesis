@@ -49,7 +49,6 @@ export default {
     },
     methods: {
         drawBox() {
-            console.log()
             d3.select(this.$refs["colorBox"]).append("rect")
                 .attr("class", this.isActive ? "rectangle-active" : "rectangle")
                 .attr("x", 0)
@@ -69,20 +68,20 @@ export default {
         },
         chooseColor() {
             console.log(this.colors.blue[this.color.length - 1])
-            if (this.der < -20) {
+            if (this.der < -10) {
                 this.color = this.colors.blue[this.colors.blue.length - 1];
                 return
             }
-            if (this.der > 20) {
+            if (this.der > 10) {
                 this.color = this.colors.red[this.colors.red.length - 1];
                 return
             }
-            if (this.der < 0.5 && this.der > -0.5) {
+            if (this.der < 0.1 && this.der > -0.1) {
                 this.color = this.colors.white;
                 return
             }
 
-            const index = Math.floor(Math.abs(this.der) / 2);
+            const index = Math.floor(Math.abs(this.der));
             if (this.der < 0) {
                 this.color = this.colors.blue[index];
             } else {
@@ -92,8 +91,12 @@ export default {
         swapComponent() {
             this.$emit("swapComponent", "slices");
         },
+        changeTrajectory() {
+            this.$store.commit('changeIndex', [this.layerIndex, this.neuronIndex, this.weightIndex]);
+        },
         selectWeight() {
             this.isActive = !this.isActive
+            this.changeTrajectory()
             d3.select(this.$refs["colorBox"]).select("rect").attr("class", this.isActive ? "rectangle-active" : "rectangle")
             this.$store.commit('selectWeight', [this.layerIndex, this.neuronIndex, this.weightIndex]);
         },

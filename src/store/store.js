@@ -21,12 +21,18 @@ const store = new Vuex.Store({
     mutations: {
         changeWeightInNetwork (state, {layerIndex, neuronIndex, weightIndex, weight}) {
             changeInputWeight(state.network[layerIndex][neuronIndex], weightIndex, weight)
+            this.commit("setWeights")
         },
         changeWeightsPerIndex (state, weight, index) {
             state.weights[index] = weight;
         },
         changeIndex (state, index) {
-            state.index = index;
+            if (state.index[0] === index[0] && state.index[1] === index[1] && state.index[2] === index[2]) {
+                state.index = []
+            }
+            else {
+                state.index = index;
+            }
         },
         changeMSE (state, MSE) {
             state.MSE = MSE;
@@ -47,6 +53,22 @@ const store = new Vuex.Store({
                 })
             }
         },
+        setWeights(state) {
+            state.weights = []
+            for (let layerIdx = 1; layerIdx < state.network.length; layerIdx++) {
+                let currentLayer = state.network[layerIdx];
+                for (let i = 0; i < currentLayer.length; i++) {
+                    let node = currentLayer[i];
+                    for (let j = 0; j < node.getInputLinks().length; j++) {
+                        let link = node.getInputLinks()[j];
+                        state.weights.push(link.getWeight())
+                    }
+                }
+            }
+        }
+    },
+    methods: {
+
     },
     getters: {
         inputData (state) {
@@ -84,7 +106,8 @@ const store = new Vuex.Store({
                 state.weights.push({id: i, value: Math.random() * 4 - 2});
             }
             state.network = buildNetwork(state.networkShape, Activations.SIGMOID, Activations.LINEAR)
-            console.log(state.networkShape.slice(1,state.networkShape.length))
+            this.commit("setWeights")
+
         },
     },
 })

@@ -136,14 +136,14 @@
                 return this.$store.getters.MSE
             }
         },
-        network: {
-            get: function() {
-              return this.$store.getters.network
-            }
-        },
         weights: {
             get: function() {
                 return this.$store.getters.weights
+            }
+        },
+        network: {
+            get: function() {
+              return this.$store.getters.network
             }
         },
         xScale() {
@@ -167,15 +167,17 @@
             },
             deep: true,
         },
-        network: {
+        weights: {
             handler() {
-                this.drawChart();
+                this.drawCircles(this.predictedData, "Output");
             },
             deep: true,
         },
         index: {
             handler() {
-                this.drawLines();
+                if (this.index !== []) {
+                    this.drawLines();
+                }
             },
             deep: true,
         },

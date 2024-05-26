@@ -182,18 +182,8 @@ export default {
         },
         weights: {
             get: function() {
-                let weights = []
-                for (let layerIdx = 1; layerIdx < this.network.length; layerIdx++) {
-                    let currentLayer = this.network[layerIdx];
-                    for (let i = 0; i < currentLayer.length; i++) {
-                        let node = currentLayer[i];
-                        for (let j = 0; j < node.getInputLinks().length; j++) {
-                            let link = node.getInputLinks()[j];
-                            weights.push(link.getWeight())
-                        }
-                    }
-                }
-                return weights
+                console.log("weights")
+                return this.$store.getters.weights
             }
         },
         weight: {
