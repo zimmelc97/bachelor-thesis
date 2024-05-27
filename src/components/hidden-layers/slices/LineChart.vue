@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p>{{ this.der.toFixed(4) }}</p>
+        <p>L{{ this.layerIndex }} - N{{ this.neuronIndex }} - W{{ this.weightIndex }}</p>
         <svg class="main-svg" ref="svg" :width="svgWidth" :height="svgHeight">
             <g class="chart-group" ref="chartGroup">
                 <g class="axis axis-x" ref="axisX"></g>
@@ -9,8 +9,8 @@
                 <g class="circle-group" ref="circleGroup"></g>
             </g>
         </svg>
+        <p>Der : {{ this.der.toFixed(4) }}</p>
         <SliderWeights :layerIndex="layerIndex" :neuronIndex="neuronIndex" :weightIndex="weightIndex"/>
-        <div style="margin-bottom: 50px;"></div>
     </div>
 </template>
 <script>
@@ -60,7 +60,7 @@ export default {
         drawXAxis() {
             d3.select(this.$refs["axisX"]).select(".axis-label").remove()
             d3.select(this.$refs["axisX"])
-                .attr('transform', `translate( 0, ${this.svgHeight - this.svgPadding.top - this.svgPadding.bottom} )`)
+                .attr('transform', `translate( 0, ${this.svgHeight - this.svgPadding.bottom - this.svgPadding.top} )`)
                 .call(d3.axisBottom(this.xScale).ticks(5))
                 .append('text')
                 .attr('class', 'axis-label')
@@ -69,7 +69,7 @@ export default {
                 .attr('text-anchor', 'end')
                 .style("font-size", "12px")
                 .text("weight")
-                .attr("x", this.svgWidth - this.svgPadding.right - this.svgPadding.left)
+                .attr("x", this.svgWidth - this.svgPadding.left - this.svgPadding.right)
         },
         drawYAxis() {
             d3.select(this.$refs["axisY"]).select(".axis-label").remove()
@@ -180,7 +180,7 @@ export default {
           }
         },
         range() {
-            return d3.range(-5, 5, 0.5)
+            return d3.range(-5.1, 5.1, 0.5)
         },
         xScale() {
             return d3.scaleLinear()
@@ -215,4 +215,5 @@ export default {
     stroke: #ffffff;
     stroke-width: 1;
 }
+
 </style>

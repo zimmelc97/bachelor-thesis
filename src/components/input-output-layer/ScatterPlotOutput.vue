@@ -81,19 +81,21 @@
             const linesGroup = d3.select(this.$refs["lineGroup"]);
             linesGroup.selectAll('.trajectory').remove();
 
-            const line = d3.line()
-                .x((d) => this.xScale(d.x))
-                .y((d) => this.yScale(d.label));
+            if (this.index.length !== 0) {
+                const line = d3.line()
+                    .x((d) => this.xScale(d.x))
+                    .y((d) => this.yScale(d.label));
 
-            const clipPath = linesGroup
-                .attr('clip-path', 'url(#clip)');
+                const clipPath = linesGroup
+                    .attr('clip-path', 'url(#clip)');
 
-            clipPath.selectAll('.line')
-                .data(this.computeTrajectory())
-                .join('path')
-                .attr('class', 'trajectory')
-                .attr('d', d => line(d))
-                .attr("fill", "none")
+                clipPath.selectAll('.line')
+                    .data(this.computeTrajectory())
+                    .join('path')
+                    .attr('class', 'trajectory')
+                    .attr('d', d => line(d))
+                    .attr("fill", "none")
+            }
         },
         computeTrajectory() {
             let trajectories = []
@@ -187,9 +189,7 @@
         },
         index: {
             handler() {
-                if (this.index !== []) {
-                    this.drawLines();
-                }
+                this.drawLines();
             },
             deep: true,
         },

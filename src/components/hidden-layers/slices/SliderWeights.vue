@@ -1,6 +1,6 @@
 <template>
     <div>
-        <label for="range-weights">Weight {{ layerIndex }} - {{ neuronIndex }} - {{ weightIndex }} : {{ parseFloat(weight).toFixed(2) }}</label>
+        <label for="range-weights">Weight : {{ parseFloat(weight).toFixed(2) }}</label>
         <b-form-input id="range-weights"
                       v-model="weight"
                       type="range"
@@ -68,6 +68,5 @@ export default {
 </script>
 
 
-<style scoped>
-
+<style>
 </style>

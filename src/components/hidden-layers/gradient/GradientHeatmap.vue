@@ -85,10 +85,12 @@ export default {
             this.$store.commit('changeIndex', [this.layerIndex, this.neuronIndex, this.weightIndex]);
         },
         selectWeight() {
-            this.isActive = !this.isActive
             this.changeTrajectory()
-            d3.select(this.$refs["colorBox"]).select("rect").attr("class", this.isActive ? "rectangle-active" : "rectangle")
-            this.$store.commit('selectWeight', [this.layerIndex, this.neuronIndex, this.weightIndex]);
+            if (this.selectedWeights.length < 5 || this.isActive) {
+                this.isActive = !this.isActive
+                d3.select(this.$refs["colorBox"]).select("rect").attr("class", this.isActive ? "rectangle-active" : "rectangle")
+                this.$store.commit('selectWeight', [this.layerIndex, this.neuronIndex, this.weightIndex]);
+            }
         },
     },
     computed: {
@@ -106,7 +108,12 @@ export default {
             get: function() {
                 return this.$store.getters.colors
             }
-        }
+        },
+        selectedWeights: {
+            get: function() {
+                return this.$store.getters.selectedWeights
+            }
+        },
     }
 }
 </script>

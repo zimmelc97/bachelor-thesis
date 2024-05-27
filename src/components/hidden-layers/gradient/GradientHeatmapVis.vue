@@ -1,6 +1,8 @@
 <template>
         <div class="heatmap">
-            <button @click="swapComponent">Show Slices</button>
+            <div class="gradientButton">
+                <button @click="swapComponent">Show Slices</button>
+            </div>
             <div class="layers">
                 <div v-for="(numberNeurons, layerIndex) in networkShape" :key="'layer' + layerIndex" >
                   <div class="network">
@@ -92,6 +94,12 @@ export default {
     flex-direction: column;
     align-items: center;
 }
+.gradientButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh;
+}
 .network{
   display: flex;
   flex-direction: row;
@@ -120,7 +128,7 @@ export default {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    height: 90vh;
+    height: 80vh;
 }
 
 .neuron {
@@ -136,19 +144,19 @@ export default {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    max-height: 88vh;
+    max-height: 78vh;
 }
 .weight {
     position: relative;
-    width: 1.5vh;
-    height: 1.5vh;
+    width: 2vh;
+    height: 2vh;
 }
 
 .weight-box {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -100%);
+    transform: translate(-50%, -80%);
     height: 80%;
     width: 80%;
 }

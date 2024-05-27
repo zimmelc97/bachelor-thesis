@@ -1,10 +1,16 @@
 <template>
-    <div>
-        <button @click="swapComponent">Show Heatmap</button>
-        <div v-for="(dataset, index) in selectedWeights" :key="index" :style="{display: 'inline-block'}">
-                <LineChart :layerIndex="dataset[0]" :neuronIndex="dataset[1]" :weightIndex="dataset[2]" />
+    <div class="sliceSelection">
+        <div class="sliceButton">
+            <button @click="swapComponent" >Show Heatmap</button>
+        </div>
+        <div class="slicesContainer">
+            <div class="slices">
+                <div v-for="(dataset, index) in selectedWeights" :key="index" >
+                    <LineChart :layerIndex="dataset[0]" :neuronIndex="dataset[1]" :weightIndex="dataset[2]" />
+                </div>
             </div>
         </div>
+    </div>
 </template>
 
 <script>
@@ -59,3 +65,27 @@ export default {
     }
 }
 </script>
+<style>
+.sliceSelection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.sliceButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh;
+}
+.slicesContainer {
+    display: flex;
+    justify-content: center;
+    height: 90vh;
+}
+.slices{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center
+}
+</style>

@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import { buildNetwork, Activations, changeInputWeight } from '@/neural-network/nn.js';
+import * as d3 from "d3";
 
 Vue.use(Vuex);
 
@@ -12,7 +13,7 @@ const store = new Vuex.Store({
         index: [],
         MSE: [],
         network: [],
-        networkShape: [1,7,1],
+        networkShape: [1,10,4,4,4,4,4,4,4,1],
         colors:
             {blue: ["#D1DCFF","#BAC9F8","#A3B5F2","#8BA2EB","#748FE5","#5D7BDE","#4668D8","#2E55D1","#1741CB","#002EC4"],
             white: ["#FFFFFF"],
@@ -52,6 +53,10 @@ const store = new Vuex.Store({
                     return !(element[0] === index[0] && element[1] === index[1] && element[2] === index[2])
                 })
             }
+
+            state.selectedWeights = state.selectedWeights.sort((a, b) => {
+                return d3.ascending(a[0], b[0]) || d3.ascending(a[1], b[1]) || d3.ascending(a[2], b[2]);
+            });
         },
         setWeights(state) {
             state.weights = []
