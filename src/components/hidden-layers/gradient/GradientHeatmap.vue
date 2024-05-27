@@ -47,6 +47,11 @@ export default {
     },
     methods: {
         drawBox() {
+            const tooltip = d3.select("body")
+                .append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0);
+
             d3.select(this.$refs["colorBox"]).append("rect")
                 .attr("class", this.isActive ? "rectangle-active" : "rectangle")
                 .attr("x", 0)
@@ -54,6 +59,9 @@ export default {
                 .attr("width", this.$refs["svg"].clientWidth)
                 .attr("height", this.$refs["svg"].clientHeight)
                 .attr("fill", this.color)
+                .on('mouseover', (event) => this.handleMouseOver(tooltip, event))
+                .on('mousemove', (event) => this.handleMouseMove(tooltip, event))
+                .on('mouseout', () => this.handleMouseOut(tooltip))
                 .on("click", () => this.selectWeight())
         },
         computeDer() {
@@ -84,8 +92,26 @@ export default {
         changeTrajectory() {
             this.$store.commit('changeIndex', [this.layerIndex, this.neuronIndex, this.weightIndex]);
         },
-        selectWeight() {
+        handleMouseOver(tooltip, event) {
+            tooltip.transition()
+                .style("opacity", 0.9);
+            tooltip.html("<span>L" + this.layerIndex +
+                "<span> - N" + this.neuronIndex +
+                "<span> - W" + this.weightIndex + "</span>")
+                .style("left", (event.pageX) + "px")
+                .style("top", (event.pageY) + "px");
             this.changeTrajectory()
+        },
+        handleMouseMove(tooltip, event) {
+            tooltip.style("left", (event.pageX) + "px")
+                .style("top", (event.pageY) + "px");
+        },
+        handleMouseOut(tooltip) {
+            this.changeTrajectory()
+            tooltip.transition()
+                .style("opacity", 0);
+        },
+        selectWeight() {
             if (this.selectedWeights.length < 5 || this.isActive) {
                 this.isActive = !this.isActive
                 d3.select(this.$refs["colorBox"]).select("rect").attr("class", this.isActive ? "rectangle-active" : "rectangle")
@@ -129,5 +155,18 @@ export default {
 .main-svg {
     width: 100%;
     height: 100%;
+}
+.tooltip {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 8px;
+    font-size: 12px;
+    pointer-events: none;
+}
+.tooltip-text-bold{
+    display: block;
+    text-align: center;
+    font-weight: 700;
 }
 </style>

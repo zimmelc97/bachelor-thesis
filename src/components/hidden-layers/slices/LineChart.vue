@@ -180,7 +180,7 @@ export default {
           }
         },
         range() {
-            return d3.range(-5.1, 5.1, 0.5)
+            return d3.range(-5.1, 5.1, 1)
         },
         xScale() {
             return d3.scaleLinear()
