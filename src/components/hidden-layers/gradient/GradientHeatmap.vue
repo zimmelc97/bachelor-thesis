@@ -33,7 +33,6 @@ export default {
         },
     },
     data() {
-        console.log()
         return {
             der: 0,
             color: "#000000",
@@ -47,10 +46,15 @@ export default {
     },
     methods: {
         drawBox() {
-            const tooltip = d3.select("body")
+            d3.select(this.$refs["colorBox"]).selectAll("rect").remove()
+            d3.select("body").select("div.tooltip").remove();
+
+            /*const tooltip = d3.select("body")
                 .append("div")
                 .attr("class", "tooltip")
                 .style("opacity", 0);
+
+             */
 
             d3.select(this.$refs["colorBox"]).append("rect")
                 .attr("class", this.isActive ? "rectangle-active" : "rectangle")
@@ -59,16 +63,16 @@ export default {
                 .attr("width", this.$refs["svg"].clientWidth)
                 .attr("height", this.$refs["svg"].clientHeight)
                 .attr("fill", this.color)
-                .on('mouseover', (event) => this.handleMouseOver(tooltip, event))
-                .on('mousemove', (event) => this.handleMouseMove(tooltip, event))
-                .on('mouseout', () => this.handleMouseOut(tooltip))
                 .on("click", () => this.selectWeight())
+                .on('mouseover', () => this.handleMouseOver())
+                //.on('mousemove', (event) => this.handleMouseMove(tooltip, event))
+                .on('mouseout', () => this.handleMouseOut())
+
         },
         computeDer() {
             this.der = this.network[this.layerIndex][this.neuronIndex].getInputLinks()[this.weightIndex].getAccErrorDer()
         },
         chooseColor() {
-            console.log(this.colors.blue[this.color.length - 1])
             if (this.der < -10) {
                 this.color = this.colors.blue[this.colors.blue.length - 1];
                 return
@@ -92,31 +96,32 @@ export default {
         changeTrajectory() {
             this.$store.commit('changeIndex', [this.layerIndex, this.neuronIndex, this.weightIndex]);
         },
-        handleMouseOver(tooltip, event) {
-            tooltip.transition()
+        handleMouseOver() {
+            /*tooltip.transition()
                 .style("opacity", 0.9);
             tooltip.html("<span>L" + this.layerIndex +
                 "<span> - N" + this.neuronIndex +
                 "<span> - W" + this.weightIndex + "</span>")
                 .style("left", (event.pageX) + "px")
                 .style("top", (event.pageY) + "px");
+                             */
             this.changeTrajectory()
         },
         handleMouseMove(tooltip, event) {
             tooltip.style("left", (event.pageX) + "px")
                 .style("top", (event.pageY) + "px");
         },
-        handleMouseOut(tooltip) {
+        handleMouseOut() {
             this.changeTrajectory()
-            tooltip.transition()
+            /*tooltip.transition()
                 .style("opacity", 0);
+
+             */
         },
         selectWeight() {
-            if (this.selectedWeights.length < 5 || this.isActive) {
-                this.isActive = !this.isActive
-                d3.select(this.$refs["colorBox"]).select("rect").attr("class", this.isActive ? "rectangle-active" : "rectangle")
-                this.$store.commit('selectWeight', [this.layerIndex, this.neuronIndex, this.weightIndex]);
-            }
+            //this.isActive = true
+            //d3.select(this.$refs["colorBox"]).select("rect").attr("class", this.isActive ? "rectangle-active" : "rectangle")
+            this.$store.commit('selectWeight', [this.layerIndex, this.neuronIndex, this.weightIndex]);
         },
     },
     computed: {
@@ -130,6 +135,16 @@ export default {
                 return this.$store.getters.network
             }
         },
+        networkShape: {
+            get: function() {
+                return this.$store.getters.networkShape.slice(1)
+            }
+        },
+        weights: {
+            get: function() {
+                return this.$store.getters.weights
+            }
+        },
         colors: {
             get: function() {
                 return this.$store.getters.colors
@@ -139,6 +154,24 @@ export default {
             get: function() {
                 return this.$store.getters.selectedWeights
             }
+        },
+    },
+    watch: {
+        networkShape: {
+            handler() {
+                this.computeDer()
+                this.chooseColor()
+                this.drawBox()
+            },
+            deep: true,
+        },
+        weights: {
+            handler() {
+                this.computeDer()
+                this.chooseColor()
+                this.drawBox()
+            },
+            deep: true,
         },
     }
 }

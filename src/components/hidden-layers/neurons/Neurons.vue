@@ -1,7 +1,7 @@
 <template>
   <div>
-    <svg class="main-svg" ref="svg">
-      <g class="neuron-circle" ref="neuronCircle"></g>
+    <svg class="main-svg-neurons" ref="svg">
+      <g class="circle-neuron" ref="neuronCircle"></g>
     </svg>
   </div>
 </template>
@@ -27,21 +27,30 @@ export default {
           .join("circle")
           .attr("class", "circle-neuron")
           .attr("cx", this.$refs["svg"].clientWidth/2)
-          .attr("cy", (d,i) => (this.numberNeurons * 2 * 10 > this.$refs["svg"].clientHeight) ? (1+i) * this.$refs["svg"].clientHeight/(this.numberNeurons) : (1+i) * 2 * 10)
+          .attr("cy", (d,i) => (this.numberNeurons * 2 * 10 > this.$refs["svg"].clientHeight) ? (i+0.5) * this.$refs["svg"].clientHeight/(this.numberNeurons) : (i+0.5) * this.$refs["svg"].clientHeight/(this.numberNeurons))
           .attr("r", (this.numberNeurons * 2 * 10 > this.$refs["svg"].clientHeight) ? this.$refs["svg"].clientHeight/(this.numberNeurons * 2) : 10)
           .attr("fill", "#000000")
     },
   },
-  computed: {}
+  computed: {},
+  watch: {
+      numberNeurons: {
+          handler() {
+              this.drawCircle()
+          },
+          deep: true,
+      },
+  }
 }
 </script>
 <style>
 .circle-neuron  {
-    fill: #B7B6B6;
-    stroke: #ffffff;
+    fill: #c9c6bf;
+    stroke: #000000;
     stroke-width: 1;
+
 }
-.main-svg {
+.main-svg-neurons {
   width: 100%;
   height: 100%;
 }

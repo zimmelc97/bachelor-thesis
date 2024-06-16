@@ -6,16 +6,24 @@
                 <div class="row">
                     <div class="col-md-2" :style="{display: 'flex', alignItems: 'center'}">
                         <div class="col">
-                            <ScatterPlotInput/>
+                            <div>
+                                <label for="numberArray" >Enter #neurons in hidden layers (comma-separated):</label>
+                                <input type="text" id="numberArray" v-model="networkShapeInput" placeholder="5,5" @keydown.enter="processInput">
+                            </div>
+                            <br/><br/>
+                            <ScatterPlotOutput/>
                             <LoggingButton/>
+                            <div v-for="(dataset, index) in selectedWeights" :key="index" >
+                                <LineChart :layerIndex="dataset[0]" :neuronIndex="dataset[1]" :weightIndex="dataset[2]" />
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-10">
                       <component @swapComponent="swapComponent" v-bind:is="currentComponent"/>
                     </div>
-                    <div class="col-md-2" :style="{display: 'flex', alignItems: 'center'}">
+                    <!--<div class="col-md-2" :style="{display: 'flex', alignItems: 'center'}">
                         <ScatterPlotOutput/>
-                    </div>
+                    </div>-->
                 </div>
             </div>
         </div>
@@ -29,10 +37,12 @@ import ScatterPlotOutput from "@/components/input-output-layer/ScatterPlotOutput
 import LoggingButton from "@/components/Logging.vue";
 import GradientHeatmapVis from "@/components/hidden-layers/gradient/GradientHeatmapVis.vue";
 import WeightSlicesSelection from "@/components/hidden-layers/slices/WeightSlicesSelection.vue";
+import LineChart from "@/components/hidden-layers/slices/LineChart.vue";
 
 export default {
     name: 'App',
     components: {
+        LineChart,
         'slices': WeightSlicesSelection,
         'gradient': GradientHeatmapVis,
         LoggingButton,
@@ -41,20 +51,28 @@ export default {
     },
     data() {
         return {
-            currentComponent: 'gradient'
+            currentComponent: 'gradient',
+            networkShapeInput: ""
         }
     },
     mounted() {
         this.$store.dispatch('loadData');
     },
     computed: {
-        networkShape: {
-            set(networkShape) {
-                this.$store.commit('changeNetworkShape', networkShape);
+        selectedWeights: {
+            get: function() {
+                return this.$store.getters.selectedWeights
             }
         },
     },
     methods: {
+        processInput() {
+            const input = this.networkShapeInput.split(',')
+                .map(item => item.trim())
+                .filter(item => item !== '')
+                .map(item => Number(item))
+            this.$store.commit('changeNetworkShape', input);
+        },
         swapComponent: function(component) {
             this.currentComponent = component;
         }
@@ -69,5 +87,6 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+    background: #F0EBE3;
 }
 </style>

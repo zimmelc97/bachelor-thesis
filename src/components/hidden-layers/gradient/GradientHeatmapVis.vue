@@ -1,28 +1,32 @@
 <template>
         <div class="heatmap">
-            <div class="gradientButton">
+            <!--<div class="gradientButton">
                 <button @click="swapComponent">Show Slices</button>
-            </div>
+            </div>-->
+            <br/>
             <div class="layers">
                 <div v-for="(numberNeurons, layerIndex) in networkShape" :key="'layer' + layerIndex" >
-                  <div class="network">
-                      <div class="layer">
-                        <p>L{{ layerIndex + 1 }}</p>
-                        <div class="neurons">
-                          <div v-for="(dataset, neuronIndex) in [...Array(networkShape[layerIndex]).keys()]" :key="'neuron' + neuronIndex" class="neuron">
-                            <div class="weights">
-                              <div v-for="(dataset, weightIndex) in network[layerIndex + 1][neuronIndex].getInputLinks()" :key="'weight' + weightIndex"
-                                   class="weight">
-                                <GradientHeatmap :layerIndex="layerIndex + 1" :neuronIndex="neuronIndex" :weightIndex="weightIndex"
-                                                 :isActiveProp="setIsActive([layerIndex + 1, neuronIndex, weightIndex])" class="weight-box" />
-                              </div>
+                    <div class="structure">
+                        <Neurons v-if="layerIndex === 0" :numberNeurons="1" class="neuron-circles"></Neurons>
+                        <div class="network">
+                            <div class="layer">
+                                <p>L{{ layerIndex + 1 }}</p>
+                                <div class="neurons">
+                                    <div v-for="(dataset, neuronIndex) in [...Array(networkShape[layerIndex]).keys()]" :key="'neuron' + neuronIndex" class="neuron">
+                                        <div class="weights">
+                                            <div v-for="(dataset, weightIndex) in network[layerIndex + 1][neuronIndex].getInputLinks()" :key="'weight' + weightIndex"
+                                                 class="weight">
+                                                <GradientHeatmap :layerIndex="layerIndex + 1" :neuronIndex="neuronIndex" :weightIndex="weightIndex"
+                                                                 :isActiveProp="setIsActive([layerIndex + 1, neuronIndex, weightIndex])" class="weight-box" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                          </div>
                         </div>
-                      </div>
-                      <!--<Neurons v-if="layerIndex !== networkShape.length - 1" :numberNeurons="numberNeurons" class="neuron-circles"></Neurons>-->
-                  </div>
-                  </div>
+                        <Neurons v-if="layerIndex !== networkShape.length" :numberNeurons="numberNeurons" class="neuron-circles"></Neurons>
+                    </div>
+                </div>
             </div>
         </div>
 </template>
@@ -30,12 +34,13 @@
 <script>
 import GradientHeatmap from "@/components/hidden-layers/gradient/GradientHeatmap.vue";
 import {computeDer, Errors, forwardProp, setAccErrDerToZero} from "@/neural-network/nn";
-//import Neurons from "@/components/hidden-layers/neurons/Neurons.vue";
+import Neurons from "@/components/hidden-layers/neurons/Neurons.vue";
 
 export default {
     name: 'GradientHeatmapVis',
-    components: { GradientHeatmap},
+    components: { GradientHeatmap, Neurons},
     mounted() {
+        console.log("hello")
         this.computeDer();
     },
     props: {},
@@ -43,6 +48,11 @@ export default {
         data: {
             get: function() {
                 return this.$store.getters.inputData
+            }
+        },
+        weights: {
+            get: function() {
+                return this.$store.getters.weights
             }
         },
         network: {
@@ -85,6 +95,12 @@ export default {
             },
             deep: true,
         },
+        weights: {
+            handler() {
+                this.computeDer();
+            },
+            deep: true,
+        },
     }
 }
 </script>
@@ -93,12 +109,19 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100vh;
 }
 .gradientButton {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 10vh;
+}
+
+.structure {
+    display: flex;
+    flex-direction: row;
+    height: 100%
 }
 .network{
   display: flex;
@@ -110,31 +133,32 @@ export default {
 }
 
 .neuron-circles {
-    height: 90vh;
+    height: 100%;
     width: 2vw;
 }
 
 .layer {
     display: flex;
     flex-direction: column;
-    background: #A5A5A5;
+    background: #ffffff;
     padding-left: 0.3vw;
     padding-right: 0.3vw;
     margin-left: 0.3vw;
     margin-right: 0.3vw;
+    border-radius: 5px;
 }
 
 .neurons {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    height: 80vh;
+    height: 90vh;
 }
 
 .neuron {
     display: flex;
     flex-direction: column;
-    background: #B7B6B6;
+    background: #c9c6bf;
     padding: 0.1vw;
     margin: 0.5vh 0.15vw;
 //margin: auto;
@@ -144,7 +168,7 @@ export default {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    max-height: 78vh;
+    max-height: 88vh;
 }
 .weight {
     position: relative;

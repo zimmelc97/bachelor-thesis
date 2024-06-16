@@ -120,6 +120,7 @@ export default {
         },
         drawCircle() {
             const circleGroup = d3.select(this.$refs["circleGroup"]);
+
             let drag = d3.drag()
                 .on('drag', this.dragged);
 
@@ -160,7 +161,6 @@ export default {
         },
         weights: {
             get: function() {
-                console.log("weights")
                 return this.$store.getters.weights
             }
         },
@@ -168,6 +168,11 @@ export default {
           get: function() {
               return getInputWeight(this.network[this.layerIndex][this.neuronIndex], this.weightIndex)
           }
+        },
+        selectedWeights: {
+            get: function() {
+                return this.$store.getters.selectedWeights
+            }
         },
         MSE: {
             get: function() {
@@ -195,6 +200,13 @@ export default {
     },
     watch: {
         MSE: {
+            handler() {
+                //this.drawLine()
+                this.drawCircle()
+            },
+            deep: true,
+        },
+        selectedWeights: {
             handler() {
                 this.drawLine()
                 this.drawCircle()

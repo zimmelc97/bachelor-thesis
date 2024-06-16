@@ -142,7 +142,6 @@ export function buildNetwork(networkShape, activation, outputActivation) {
       }
     }
   }
-  console.log(network)
   return network;
 }
 
