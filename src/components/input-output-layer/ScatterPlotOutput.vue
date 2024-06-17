@@ -6,6 +6,7 @@
                 <g class="axis axis-x" ref="axisX"></g>
                 <g class="axis axis-y" ref="axisY"></g>
                 <g class="line-group" ref="lineGroup"></g>
+                <g class="line-group-err" ref="lineGroupErr"></g>
                 <g class="circle-group" ref="circleGroupInput"></g>
                 <g class="circle-group" ref="circleGroupOutput"></g>
             </g>
@@ -22,6 +23,7 @@
     props: {},
     data() {
         return {
+            msePerDataPoint: [],
             svgWidth: 250,
             svgHeight: 250,
             svgPadding: {
@@ -97,6 +99,24 @@
                     .attr("fill", "none")
             }
         },
+        drawLinesErr() {
+            const linesGroup = d3.select(this.$refs["lineGroupErr"]);
+            linesGroup.selectAll('.line-error').remove();
+
+            const line = d3.line()
+                .x((d) => this.xScale(d.x))
+                .y((d) => this.yScale(d.err));
+
+            const clipPath = linesGroup
+                .attr('clip-path', 'url(#clip)');
+
+            clipPath.selectAll('.line')
+                .data(this.msePerDataPoint)
+                .join('path')
+                .attr('class', 'line-error')
+                .attr('d', d => line(d))
+                .attr("fill", "none")
+        },
         computeTrajectory() {
             let trajectories = []
             for(let i=0; i<this.range.length; i++) {
@@ -118,9 +138,14 @@
         },
         computeMSE() {
             let mse = 0
+            this.msePerDataPoint = []
             for(let i=0; i<this.inputData.length; i++) {
+                //let tmp = []
                 let y = forwardProp(this.network, [this.inputData[i].x])
                 mse += Math.pow((y-this.inputData[i].label),2)
+                //tmp.push({x : this.inputData[i].x, err: y })
+                //tmp.push({x : this.inputData[i].x, err: this.inputData[i].label})
+                //this.msePerDataPoint.push(tmp)
             }
             return mse/this.inputData.length
         },
@@ -184,6 +209,7 @@
             handler() {
                 this.setMSE()
                 this.drawCircles(this.predictedData, "Output");
+                //this.drawLinesErr()
             },
             deep: true,
         },
@@ -203,6 +229,12 @@
         opacity: 0.4;
         border: none;
         border-top: 1px dotted black;
+    }
+    .line-error {
+        stroke: #A5A5A5;
+        stroke-width: 1;
+        opacity: 0.2;
+        stroke-dasharray: 10,4;
     }
     .circle-Output {
         fill: #616161;
