@@ -119,6 +119,7 @@ export default {
                 .attr("fill", "none")
         },
         drawCircle() {
+            console.log(this.selectedWeights)
             const circleGroup = d3.select(this.$refs["circleGroup"]);
 
             let drag = d3.drag()
@@ -185,12 +186,12 @@ export default {
           }
         },
         range() {
-            return d3.range(-5.1, 5.1, 1)
+            return d3.range(-20.1, 20.1, 1)
         },
         xScale() {
             return d3.scaleLinear()
                 .range([0, this.svgWidth - this.svgPadding.left - this.svgPadding.right])
-                .domain([-5, 5]);
+                .domain([-20, 20]);
         },
         yScale() {
             return d3.scaleLinear()

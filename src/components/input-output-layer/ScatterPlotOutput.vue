@@ -192,7 +192,7 @@
         yScale() {
             return d3.scaleLinear()
                 .range([this.svgHeight - this.svgPadding.top - this.svgPadding.bottom, 0])
-                .domain([Math.sin(-1.5) * 1.1, Math.sin(1.5) * 1.1]);
+                .domain([-5,5]);
         },
         range() {
             return d3.range(-5, 5.1, 1)

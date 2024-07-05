@@ -3,11 +3,16 @@
             <!--<div class="gradientButton">
                 <button @click="swapComponent">Show Slices</button>
             </div>-->
+            <select v-model="selected" @change="changeInputFunction">
+                <option v-for="(option, index) in options" v-bind:key="index" v-bind:value="option.value">
+                    {{ option.text }}
+                </option>
+            </select>
             <br/>
             <div class="layers">
                 <div v-for="(numberNeurons, layerIndex) in networkShape" :key="'layer' + layerIndex" >
                     <div class="structure">
-                        <Neurons v-if="layerIndex === 0" :numberNeurons="1" class="neuron-circles"></Neurons>
+                        <Neurons v-if="layerIndex === 0" :layerIndex="layerIndex" :numberNeurons="1"  @hover="handleHover" class="neuron-circles"></Neurons>
                         <div class="network">
                             <div class="layer">
                                 <p>L{{ layerIndex + 1 }}</p>
@@ -17,14 +22,15 @@
                                             <div v-for="(dataset, weightIndex) in network[layerIndex + 1][neuronIndex].getInputLinks()" :key="'weight' + weightIndex"
                                                  class="weight">
                                                 <GradientHeatmap :layerIndex="layerIndex + 1" :neuronIndex="neuronIndex" :weightIndex="weightIndex"
-                                                                 :isActiveProp="setIsActive([layerIndex + 1, neuronIndex, weightIndex])" class="weight-box" />
+                                                                 :isActiveProp="setIsActive([layerIndex + 1, neuronIndex, weightIndex])"
+                                                                 :highlightedNeuron="highlightedNeuron" class="weight-box" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <Neurons v-if="layerIndex !== networkShape.length" :numberNeurons="numberNeurons" class="neuron-circles"></Neurons>
+                        <Neurons v-if="layerIndex !== networkShape.length" :layerIndex="layerIndex+1" :numberNeurons="numberNeurons" @hover="handleHover" class="neuron-circles"></Neurons>
                     </div>
                 </div>
             </div>
@@ -39,8 +45,21 @@ import Neurons from "@/components/hidden-layers/neurons/Neurons.vue";
 export default {
     name: 'GradientHeatmapVis',
     components: { GradientHeatmap, Neurons},
+    data() {
+        return {
+            highlightedNeuron: null,
+            selected: 'sin',
+            options: [
+                { text: 'Sin()', value: 'sin' },
+                { text: 'Cos()', value: 'cos' },
+                { text: 'Exp()', value: 'exp' },
+                { text: '()^2', value: 'squared' },
+                { text: '()^3', value: 'cubic' },
+                { text: '()', value: 'linear' }
+            ]
+        }
+    },
     mounted() {
-        console.log("hello")
         this.computeDer();
     },
     props: {},
@@ -86,6 +105,12 @@ export default {
             const weightsJSON = JSON.stringify(this.selectedWeights)
             const weightJSON = JSON.stringify(index)
             return weightsJSON.indexOf(weightJSON) !== -1
+        },
+        handleHover(neuron) {
+            this.highlightedNeuron = neuron;
+        },
+        changeInputFunction() {
+            this.$store.commit('changeInput', this.selected)
         }
     },
     watch: {

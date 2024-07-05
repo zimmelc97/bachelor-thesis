@@ -74,6 +74,10 @@ export const Activations = {
       return output * (1 - output);
     }
   },
+  RELU: {
+    output: x => Math.max(0, x),
+    der: x => x <= 0 ? 0 : 1
+  },
   LINEAR: {
     output: x => x,
     der: x => x/x
@@ -248,3 +252,100 @@ export function changeInputWeight(node, weightIndex, newWeight) {
 export function getOutputNode(network) {
   return network[network.length - 1][0];
 }
+
+/*
+export function backProp(network, target, errorFunc) {
+  // The output node is a special case. We use the user-defined error
+  // function for the derivative.
+  let outputNode = network[network.length - 1][0];
+  outputNode.outputDer = errorFunc.der(outputNode.output, target);
+
+  // Go through the layers backwards.
+  for (let layerIdx = network.length - 1; layerIdx >= 1; layerIdx--) {
+    let currentLayer = network[layerIdx];
+    // Compute the error derivative of each node with respect to:
+    // 1) its total input
+    // 2) each of its input weights.
+    for (let i = 0; i < currentLayer.length; i++) {
+      let node = currentLayer[i];
+      node.inputDer = node.outputDer * node.activation.der(node.totalInput);
+      node.accInputDer += node.inputDer;
+      node.numAccumulatedDers++;
+    }
+
+    // Error derivative with respect to each weight coming into the node.
+    for (let i = 0; i < currentLayer.length; i++) {
+      let node = currentLayer[i];
+      for (let j = 0; j < node.inputLinks.length; j++) {
+        let link = node.inputLinks[j];
+        if (link.isDead) {
+          continue;
+        }
+        link.errorDer = node.inputDer * link.source.output;
+        link.accErrorDer += link.errorDer;
+        link.numAccumulatedDers++;
+      }
+    }
+    if (layerIdx === 1) {
+      continue;
+    }
+    let prevLayer = network[layerIdx - 1];
+    for (let i = 0; i < prevLayer.length; i++) {
+      let node = prevLayer[i];
+      // Compute the error derivative with respect to each node's output.
+      node.outputDer = 0;
+      for (let j = 0; j < node.outputs.length; j++) {
+        let output = node.outputs[j];
+        node.outputDer += output.weight * output.dest.inputDer;
+      }
+    }
+  }
+}
+*/
+/**
+ * Updates the weights of the network using the previously accumulated error
+ * derivatives.
+ */
+/*
+export function updateWeights(network, learningRate, regularizationRate) {
+  for (let layerIdx = 1; layerIdx < network.length; layerIdx++) {
+    let currentLayer = network[layerIdx];
+    for (let i = 0; i < currentLayer.length; i++) {
+      let node = currentLayer[i];
+      // Update the node's bias.
+      if (node.numAccumulatedDers > 0) {
+        node.bias -= learningRate * node.accInputDer / node.numAccumulatedDers;
+        node.accInputDer = 0;
+        node.numAccumulatedDers = 0;
+      }
+      // Update the weights coming into this node.
+      for (let j = 0; j < node.inputLinks.length; j++) {
+        let link = node.inputLinks[j];
+        if (link.isDead) {
+          continue;
+        }
+        let regulDer = link.regularization ?
+            link.regularization.der(link.weight) : 0;
+        if (link.numAccumulatedDers > 0) {
+          // Update the weight based on dE/dw.
+          link.weight = link.weight -
+              (learningRate / link.numAccumulatedDers) * link.accErrorDer;
+          // Further update the weight based on regularization.
+          let newLinkWeight = link.weight -
+              (learningRate * regularizationRate) * regulDer;
+          if (link.regularization === RegularizationFunction.L1 &&
+              link.weight * newLinkWeight < 0) {
+            // The weight crossed 0 due to the regularization term. Set it to 0.
+            link.weight = 0;
+            link.isDead = true;
+          } else {
+            link.weight = newLinkWeight;
+          }
+          link.accErrorDer = 0;
+          link.numAccumulatedDers = 0;
+        }
+      }
+    }
+  }
+}
+*/

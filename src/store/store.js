@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { buildNetwork, Activations, changeInputWeight } from '@/neural-network/nn.js';
+import {buildNetwork, Activations, changeInputWeight, getInputWeight} from '@/neural-network/nn.js';
 //import * as d3 from "d3";
 
 Vue.use(Vuex);
@@ -35,6 +35,60 @@ const store = new Vuex.Store({
                 state.index = index;
             }
         },
+        changeInput (state, functionName) {
+            console.log(state.inputData)
+
+            state.inputData = []
+            switch(functionName) {
+                case "sin":
+                    for(let i=0; i<50; i++) {
+                        let random = Math.random() * 3 - 1.5
+                        state.inputData.push({x: random, label: Math.sin(random)})
+                    }
+                    break;
+                case "cos":
+                    for(let i=0; i<50; i++) {
+                        let random = Math.random() * 3 - 1.5
+                        state.inputData.push({x: random, label: Math.cos(random)})
+                    }
+                    break;
+                case "exp":
+                    for(let i=0; i<50; i++) {
+                        let random = Math.random() * 3 - 1.5
+                        state.inputData.push({x: random, label: Math.exp(random)})
+                    }
+                    break;
+                case "squared":
+                    for(let i=0; i<50; i++) {
+                        let random = Math.random() * 3 - 1.5
+                        state.inputData.push({x: random, label: Math.pow((random), 2)})
+                    }
+                    break;
+                case "cubic":
+                    for(let i=0; i<50; i++) {
+                        let random = Math.random() * 3 - 1.5
+                        state.inputData.push({x: random, label: Math.pow((random), 3)})
+                    }
+                    break;
+                case "linear":
+                    for(let i=0; i<50; i++) {
+                        let random = Math.random() * 3 - 1.5
+                        state.inputData.push({x: random, label: random})
+                    }
+                    break;
+                default:
+                    for(let i=0; i<50; i++) {
+                        let random = Math.random() * 3 - 1.5
+                        state.inputData.push({x: random, label: Math.sin(random)})
+                    }
+            }
+
+            console.log(state.inputData)
+
+            state.network = buildNetwork(state.networkShape, Activations.SIGMOID, Activations.LINEAR)
+            this.commit("setWeights")
+            state.selectedWeights = []
+        },
         changeMSE (state, MSE) {
             state.MSE = MSE;
         },
@@ -51,7 +105,7 @@ const store = new Vuex.Store({
         },
         selectWeight (state, index) {
             state.selectedWeights = []
-            state.selectedWeights.push(index);
+            state.selectedWeights.push({index: index, value: getInputWeight(state.network[index[0]][index[1]], index[2])});
             /*const weightsJSON = JSON.stringify(state.selectedWeights)
             const weightJSON = JSON.stringify(index)
             if (state.selectedWeights.length < 1 && weightsJSON.indexOf(weightJSON) === -1) {
@@ -69,6 +123,9 @@ const store = new Vuex.Store({
             });
 
              */
+        },
+        changeSelectedWeightValue(state, weight) {
+            state.selectedWeights[0].value = weight
         },
         setWeights(state) {
             state.weights = []

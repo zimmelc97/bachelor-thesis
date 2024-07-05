@@ -12,27 +12,44 @@ export default {
   name: 'Neurons',
   components: {},
   props: {
+    layerIndex: {
+        type: Number,
+        required: true
+    },
     numberNeurons: {
       type: Number,
       required: true
     }
   },
   mounted() {
-    this.drawCircle()
+      this.drawCircle()
   },
   methods: {
     drawCircle() {
       d3.select(this.$refs["neuronCircle"]).selectAll('.circle-neuron')
-          .data(d3.range(0, this.numberNeurons, 1))
+          .data(this.network[this.layerIndex])
           .join("circle")
           .attr("class", "circle-neuron")
           .attr("cx", this.$refs["svg"].clientWidth/2)
           .attr("cy", (d,i) => (this.numberNeurons * 2 * 10 > this.$refs["svg"].clientHeight) ? (i+0.5) * this.$refs["svg"].clientHeight/(this.numberNeurons) : (i+0.5) * this.$refs["svg"].clientHeight/(this.numberNeurons))
           .attr("r", (this.numberNeurons * 2 * 10 > this.$refs["svg"].clientHeight) ? this.$refs["svg"].clientHeight/(this.numberNeurons * 2) : 10)
           .attr("fill", "#000000")
+          .on("mouseover",  (e,d) => {
+              this.hoverNeuron(d.id)
+          })
+          .on("mouseout",  () => this.hoverNeuron(null))
     },
+    hoverNeuron(neuron) {
+        this.$emit('hover', neuron);
+    }
   },
-  computed: {},
+  computed: {
+      network: {
+          get: function() {
+              return this.$store.getters.network
+          }
+      },
+  },
   watch: {
       numberNeurons: {
           handler() {

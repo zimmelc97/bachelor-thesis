@@ -31,6 +31,10 @@ export default {
             type: Boolean,
             required: true
         },
+        highlightedNeuron: {
+            type: String,
+            required: false
+        },
     },
     data() {
         return {
@@ -57,7 +61,7 @@ export default {
              */
 
             d3.select(this.$refs["colorBox"]).append("rect")
-                .attr("class", this.isActive ? "rectangle-active" : "rectangle")
+                .attr("class", this.isHighlighted(this.network[this.layerIndex][this.neuronIndex].getInputLinks()[this.weightIndex]) ? "rectangle-active" : "rectangle")
                 .attr("x", 0)
                 .attr("y", 0)
                 .attr("width", this.$refs["svg"].clientWidth)
@@ -123,6 +127,10 @@ export default {
             //d3.select(this.$refs["colorBox"]).select("rect").attr("class", this.isActive ? "rectangle-active" : "rectangle")
             this.$store.commit('selectWeight', [this.layerIndex, this.neuronIndex, this.weightIndex]);
         },
+        isHighlighted(weight) {
+            const weightIds = weight.id.split('-')
+            return this.highlightedNeuron && (this.highlightedNeuron === weightIds[0] || this.highlightedNeuron === weightIds[1])
+        }
     },
     computed: {
         data: {
@@ -173,6 +181,11 @@ export default {
             },
             deep: true,
         },
+        highlightedNeuron : {
+            handler() {
+               this.drawBox()
+            }
+        }
     }
 }
 </script>
