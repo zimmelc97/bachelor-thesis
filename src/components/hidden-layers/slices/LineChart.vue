@@ -119,7 +119,6 @@ export default {
                 .attr("fill", "none")
         },
         drawCircle() {
-            console.log(this.selectedWeights)
             const circleGroup = d3.select(this.$refs["circleGroup"]);
 
             let drag = d3.drag()

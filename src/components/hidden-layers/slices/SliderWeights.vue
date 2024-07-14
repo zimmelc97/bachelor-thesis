@@ -2,8 +2,7 @@
     <div>
         <label for="range-weights">Weight : {{ parseFloat(weight).toFixed(2) }}</label>
         <b-form-input id="range-weights"
-                      v-model="selectedWeights.value"
-                      @change="commitWeight"
+                      v-model="weight"
                       type="range"
                       min="-20" max="20" step="0.001"
                       v-on:click="changeIndex([layerIndex, neuronIndex, weightIndex])"></b-form-input>
@@ -35,9 +34,7 @@ export default {
     components: {
     },
     data() {
-        return {
-            weightLocal: this.weight
-        }
+        return {}
     },
     mounted() {
     },
@@ -56,15 +53,12 @@ export default {
         weight: {
             get() {
                 return getInputWeight(this.network[this.layerIndex][this.neuronIndex], this.weightIndex)
-            }
-        },
-        selectedWeights: {
-            get() {
-                return this.$store.getters.selectedWeights;
             },
             set(weight) {
-                console.log(weight)
-                this.$store.commit('changeSelectedWeightValue', weight)
+                this.$store.commit('changeWeightInNetwork', {layerIndex: this.layerIndex,
+                    neuronIndex: this.neuronIndex,
+                    weightIndex: this.weightIndex,
+                    weight: weight});
             }
         },
         network: {

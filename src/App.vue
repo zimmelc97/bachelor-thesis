@@ -14,7 +14,7 @@
                             <ScatterPlotOutput/>
                             <LoggingButton/>
                             <div v-for="(dataset, index) in selectedWeights" :key="index" >
-                                <LineChart :layerIndex="dataset.index[0]" :neuronIndex="dataset.index[1]" :weightIndex="dataset.index[2]" />
+                                <LineChart :layerIndex="dataset[0]" :neuronIndex="dataset[1]" :weightIndex="dataset[2]" />
                             </div>
                         </div>
                     </div>
