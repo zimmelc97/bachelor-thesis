@@ -23,6 +23,9 @@ let Node = {
   totalInput: 0,
   outputDer: 0,
   inputDer: 0,
+  accInputDer: 0,
+  numAccumulatedDers: 0,
+  bias: 0,
 
   create: function (id, activation) {
     let node = Object.create(this)
@@ -34,6 +37,9 @@ let Node = {
     node.output = 0
     node.outputDer = 0
     node.inputDer = 0
+    node.accInputDer = 0
+    node.numAccumulatedDers = 0
+    node.bias = 0
     return node
   },
   updateOutput: function () {
@@ -97,6 +103,8 @@ let Link = {
   weight: 0,
   errorDer: 0,
   accErrorDer: 0,
+  numAccumulatedDers: 0,
+  isDead: false,
 
   create: function (source, dest) {
     let link = Object.create(this)
@@ -106,6 +114,8 @@ let Link = {
     link.weight = Math.random() * 4 - 2;
     link.errorDer = 0;
     link.accErrorDer = 0;
+    link.numAccumulatedDers = 0
+    link.isDead = false
     return link;
   },
   changeWeight: function (weight) {
@@ -253,7 +263,7 @@ export function getOutputNode(network) {
   return network[network.length - 1][0];
 }
 
-/*
+
 export function backProp(network, target, errorFunc) {
   // The output node is a special case. We use the user-defined error
   // function for the derivative.
@@ -294,20 +304,20 @@ export function backProp(network, target, errorFunc) {
       let node = prevLayer[i];
       // Compute the error derivative with respect to each node's output.
       node.outputDer = 0;
-      for (let j = 0; j < node.outputs.length; j++) {
-        let output = node.outputs[j];
+      for (let j = 0; j < node.outputLinks.length; j++) {
+        let output = node.outputLinks[j];
         node.outputDer += output.weight * output.dest.inputDer;
       }
     }
   }
 }
-*/
+
 /**
  * Updates the weights of the network using the previously accumulated error
  * derivatives.
  */
-/*
-export function updateWeights(network, learningRate, regularizationRate) {
+
+export function updateWeights(network, learningRate) {
   for (let layerIdx = 1; layerIdx < network.length; layerIdx++) {
     let currentLayer = network[layerIdx];
     for (let i = 0; i < currentLayer.length; i++) {
@@ -324,23 +334,10 @@ export function updateWeights(network, learningRate, regularizationRate) {
         if (link.isDead) {
           continue;
         }
-        let regulDer = link.regularization ?
-            link.regularization.der(link.weight) : 0;
         if (link.numAccumulatedDers > 0) {
           // Update the weight based on dE/dw.
           link.weight = link.weight -
               (learningRate / link.numAccumulatedDers) * link.accErrorDer;
-          // Further update the weight based on regularization.
-          let newLinkWeight = link.weight -
-              (learningRate * regularizationRate) * regulDer;
-          if (link.regularization === RegularizationFunction.L1 &&
-              link.weight * newLinkWeight < 0) {
-            // The weight crossed 0 due to the regularization term. Set it to 0.
-            link.weight = 0;
-            link.isDead = true;
-          } else {
-            link.weight = newLinkWeight;
-          }
           link.accErrorDer = 0;
           link.numAccumulatedDers = 0;
         }
@@ -348,4 +345,3 @@ export function updateWeights(network, learningRate, regularizationRate) {
     }
   }
 }
-*/

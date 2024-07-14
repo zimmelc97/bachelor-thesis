@@ -201,7 +201,7 @@ export default {
     watch: {
         MSE: {
             handler() {
-                //this.drawLine()
+                this.drawLine()
                 this.drawCircle()
             },
             deep: true,

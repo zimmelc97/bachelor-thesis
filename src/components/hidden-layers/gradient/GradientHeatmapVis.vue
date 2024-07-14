@@ -1,8 +1,8 @@
 <template>
         <div class="heatmap">
-            <!--<div class="gradientButton">
-                <button @click="swapComponent">Show Slices</button>
-            </div>-->
+            <div class="gradientButton">
+                <button @click="SGDStep">SGD Step</button>
+            </div>
             <select v-model="selected" @change="changeInputFunction">
                 <option v-for="(option, index) in options" v-bind:key="index" v-bind:value="option.value">
                     {{ option.text }}
@@ -39,7 +39,7 @@
 
 <script>
 import GradientHeatmap from "@/components/hidden-layers/gradient/GradientHeatmap.vue";
-import {computeDer, Errors, forwardProp, setAccErrDerToZero} from "@/neural-network/nn";
+import {backProp, computeDer, Errors, forwardProp, setAccErrDerToZero, updateWeights} from "@/neural-network/nn";
 import Neurons from "@/components/hidden-layers/neurons/Neurons.vue";
 
 export default {
@@ -91,9 +91,20 @@ export default {
         },
     },
     methods: {
+        SGDStep() {
+            setAccErrDerToZero(this.network)
+            for (let i = 0; i < 10; i++) {
+                for (let i = 0; i < this.data.length; i++) {
+                    forwardProp(this.network, [this.data[i].x])
+                    backProp(this.network, this.data[i].label, Errors.SQUARE)
+                    updateWeights(this.network, 0.5)
+                    this.$store.commit("setWeights")
+                }
+            }
+        },
         computeDer() {
             setAccErrDerToZero(this.network)
-            for(let i=0; i<this.data.length; i++) {
+            for (let i = 0; i < this.data.length; i++) {
                 forwardProp(this.network, [this.data[i].x])
                 computeDer(this.network, this.data[i].label, Errors.SQUARE)
             }
