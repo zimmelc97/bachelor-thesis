@@ -59,6 +59,7 @@ export default {
                     neuronIndex: this.neuronIndex,
                     weightIndex: this.weightIndex,
                     weight: weight});
+                console.log(this.network)
             }
         },
         network: {

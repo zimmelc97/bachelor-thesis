@@ -243,9 +243,12 @@ export function setAccErrDerToZero(network) {
     let currentLayer = network[layerIdx];
     for (let i = 0; i < currentLayer.length; i++) {
       let node = currentLayer[i];
+      node.accInputDer = 0;
+      node.numAccumulatedDers = 0;
       for (let j = 0; j < node.inputLinks.length; j++) {
         let link = node.inputLinks[j];
-        link.accErrorDer = 0
+        link.accErrorDer = 0;
+        link.numAccumulatedDers = 0
       }
     }
   }

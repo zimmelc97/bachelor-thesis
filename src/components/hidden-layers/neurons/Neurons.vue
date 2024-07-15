@@ -19,6 +19,10 @@ export default {
     numberNeurons: {
       type: Number,
       required: true
+    },
+    highlightedNeuron: {
+        type: String || null,
+        required: false
     }
   },
   mounted() {
@@ -26,21 +30,33 @@ export default {
   },
   methods: {
     drawCircle() {
+        d3.select(this.$refs["neuronCircle"]).selectAll('circle').remove()
       d3.select(this.$refs["neuronCircle"]).selectAll('.circle-neuron')
           .data(this.network[this.layerIndex])
           .join("circle")
-          .attr("class", "circle-neuron")
+          .attr("class", (d) => {
+              console.log(this.highlightedNeuron)
+              console.log(d.id)
+              if (this.highlightedNeuron)
+                  return this.highlightedNeuron === d.id ? "circle-neuron-active" : "circle-neuron"
+              else
+                  return "circle-neuron"
+          })
           .attr("cx", this.$refs["svg"].clientWidth/2)
           .attr("cy", (d,i) => (this.numberNeurons * 2 * 10 > this.$refs["svg"].clientHeight) ? (i+0.5) * this.$refs["svg"].clientHeight/(this.numberNeurons) : (i+0.5) * this.$refs["svg"].clientHeight/(this.numberNeurons))
           .attr("r", (this.numberNeurons * 2 * 10 > this.$refs["svg"].clientHeight) ? this.$refs["svg"].clientHeight/(this.numberNeurons * 2) : 10)
-          .attr("fill", "#000000")
           .on("mouseover",  (e,d) => {
               this.hoverNeuron(d.id)
           })
           .on("mouseout",  () => this.hoverNeuron(null))
+          .on("click", (e,d) => {
+                  this.clickNeuron(d.id)})
     },
     hoverNeuron(neuron) {
         this.$emit('hover', neuron);
+    },
+    clickNeuron(neuron) {
+      this.$emit('click', neuron);
     }
   },
   computed: {
@@ -57,6 +73,12 @@ export default {
           },
           deep: true,
       },
+      highlightedNeuron: {
+          handler() {
+              this.drawCircle()
+          },
+          deep: true,
+      },
   }
 }
 </script>
@@ -65,7 +87,11 @@ export default {
     fill: #c9c6bf;
     stroke: #000000;
     stroke-width: 1;
-
+}
+.circle-neuron-active  {
+    fill: #c9c6bf;
+    stroke: #000000;
+    stroke-width: 4;
 }
 .main-svg-neurons {
   width: 100%;

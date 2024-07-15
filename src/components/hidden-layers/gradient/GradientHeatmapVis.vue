@@ -1,18 +1,22 @@
 <template>
         <div class="heatmap">
-            <div class="gradientButton">
-                <button @click="SGDStep">SGD Step</button>
+            <div class = "row">
+                <div class="gradientButton">
+                    <button @click="SGDStep">SGD Step</button>
+                </div>
+                <select v-model="selected" @change="changeInputFunction">
+                    <option v-for="(option, index) in options" v-bind:key="index" v-bind:value="option.value">
+                        {{ option.text }}
+                    </option>
+                </select>
             </div>
-            <select v-model="selected" @change="changeInputFunction">
-                <option v-for="(option, index) in options" v-bind:key="index" v-bind:value="option.value">
-                    {{ option.text }}
-                </option>
-            </select>
             <br/>
             <div class="layers">
                 <div v-for="(numberNeurons, layerIndex) in networkShape" :key="'layer' + layerIndex" >
                     <div class="structure">
-                        <Neurons v-if="layerIndex === 0" :layerIndex="layerIndex" :numberNeurons="1"  @hover="handleHover" class="neuron-circles"></Neurons>
+                        <Neurons v-if="layerIndex === 0" :layerIndex="layerIndex" :numberNeurons="1"
+                                 :highlightedNeuron="highlightedNeuronPerm"
+                                 @click="handleClick" @hover="handleHover" class="neuron-circles"></Neurons>
                         <div class="network">
                             <div class="layer">
                                 <p>L{{ layerIndex + 1 }}</p>
@@ -23,14 +27,16 @@
                                                  class="weight">
                                                 <GradientHeatmap :layerIndex="layerIndex + 1" :neuronIndex="neuronIndex" :weightIndex="weightIndex"
                                                                  :isActiveProp="setIsActive([layerIndex + 1, neuronIndex, weightIndex])"
-                                                                 :highlightedNeuron="highlightedNeuron" class="weight-box" />
+                                                                 :highlightedNeuron="highlightedNeuron" :highlightedNeuronPerm="highlightedNeuronPerm" class="weight-box" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <Neurons v-if="layerIndex !== networkShape.length" :layerIndex="layerIndex+1" :numberNeurons="numberNeurons" @hover="handleHover" class="neuron-circles"></Neurons>
+                        <Neurons v-if="layerIndex !== networkShape.length" :layerIndex="layerIndex+1"
+                                 :numberNeurons="numberNeurons" :highlightedNeuron="highlightedNeuronPerm"
+                                 @click="handleClick" @hover="handleHover" class="neuron-circles"></Neurons>
                     </div>
                 </div>
             </div>
@@ -39,7 +45,7 @@
 
 <script>
 import GradientHeatmap from "@/components/hidden-layers/gradient/GradientHeatmap.vue";
-import {backProp, computeDer, Errors, forwardProp, setAccErrDerToZero, updateWeights} from "@/neural-network/nn";
+import {backProp, Errors, forwardProp, setAccErrDerToZero, updateWeights} from "@/neural-network/nn";
 import Neurons from "@/components/hidden-layers/neurons/Neurons.vue";
 
 export default {
@@ -48,6 +54,7 @@ export default {
     data() {
         return {
             highlightedNeuron: null,
+            highlightedNeuronPerm: null,
             selected: 'sin',
             options: [
                 { text: 'Sin()', value: 'sin' },
@@ -93,7 +100,7 @@ export default {
     methods: {
         SGDStep() {
             setAccErrDerToZero(this.network)
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 1; i++) {
                 for (let i = 0; i < this.data.length; i++) {
                     forwardProp(this.network, [this.data[i].x])
                     backProp(this.network, this.data[i].label, Errors.SQUARE)
@@ -106,7 +113,7 @@ export default {
             setAccErrDerToZero(this.network)
             for (let i = 0; i < this.data.length; i++) {
                 forwardProp(this.network, [this.data[i].x])
-                computeDer(this.network, this.data[i].label, Errors.SQUARE)
+                backProp(this.network, this.data[i].label, Errors.SQUARE)
             }
         },
         swapComponent() {
@@ -119,6 +126,14 @@ export default {
         },
         handleHover(neuron) {
             this.highlightedNeuron = neuron;
+        },
+        handleClick(neuron) {
+            if (this.highlightedNeuronPerm !== neuron) {
+                this.highlightedNeuronPerm = neuron;
+            }
+            else {
+                this.highlightedNeuronPerm = null
+            }
         },
         changeInputFunction() {
             this.$store.commit('changeInput', this.selected)
@@ -151,7 +166,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 10vh;
+
 }
 
 .structure {

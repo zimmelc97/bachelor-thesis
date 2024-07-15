@@ -35,6 +35,10 @@ export default {
             type: String,
             required: false
         },
+        highlightedNeuronPerm: {
+            type: String,
+            required: false
+        },
     },
     data() {
         return {
@@ -129,7 +133,10 @@ export default {
         },
         isHighlighted(weight) {
             const weightIds = weight.id.split('-')
-            return this.highlightedNeuron && (this.highlightedNeuron === weightIds[0] || this.highlightedNeuron === weightIds[1])
+            if (!this.highlightedNeuronPerm)
+                return this.highlightedNeuron && (this.highlightedNeuron === weightIds[0] || this.highlightedNeuron === weightIds[1])
+            else
+                return this.highlightedNeuronPerm && (this.highlightedNeuronPerm === weightIds[0] || this.highlightedNeuronPerm === weightIds[1])
         }
     },
     computed: {
@@ -184,6 +191,11 @@ export default {
         highlightedNeuron : {
             handler() {
                this.drawBox()
+            }
+        },
+        highlightedNeuronPerm : {
+            handler() {
+                this.drawBox()
             }
         }
     }
