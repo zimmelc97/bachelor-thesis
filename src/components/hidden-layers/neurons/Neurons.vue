@@ -35,8 +35,6 @@ export default {
           .data(this.network[this.layerIndex])
           .join("circle")
           .attr("class", (d) => {
-              console.log(this.highlightedNeuron)
-              console.log(d.id)
               if (this.highlightedNeuron)
                   return this.highlightedNeuron === d.id ? "circle-neuron-active" : "circle-neuron"
               else

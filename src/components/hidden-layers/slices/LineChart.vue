@@ -43,6 +43,9 @@ export default {
             svgPadding: {
                 top: 10, right: 10, bottom: 30, left: 30,
             },
+            idleTimeout: null,
+            brush: null,
+            zoom: null
         }
     },
     mounted() {
@@ -56,6 +59,35 @@ export default {
             this.drawYAxis();
             this.drawLine();
             this.drawCircle()
+
+            this.brush = d3.brushX()
+                .extent([
+                    [0, 0],
+                    [this.svgWidth, this.svgHeight]
+                ])
+                .on("brush end", this.brushed)
+
+            this.zoom = d3.zoom()
+                .scaleExtent([1, Infinity])
+                .translateExtent([[0, 0], [this.svgWidth, this.svgHeight]])
+                .extent([[0, 0], [this.svgWidth, this.svgHeight]])
+                .on('zoom', this.zoomed);
+
+            d3.select(this.$refs["chartGroup"])
+                .append("g")
+                .attr("class", "brush")
+                .call(this.brush)
+                .call(this.brush.move, this.xScale.range())
+
+            d3.select(this.$refs["chartGroup"]).append("rect")
+                .attr("class", "zoom")
+                .attr("width", this.svgWidth)
+                .attr("height", this.svgHeight)
+                .style('fill', 'none')
+                .style('pointer-events', 'all')
+                .style('cursor', 'move')
+                .attr("transform", "translate(0,-"  + this.svgPadding.top + ")")
+                .call(this.zoom);
         },
         drawXAxis() {
             d3.select(this.$refs["axisX"]).select(".axis-label").remove()
@@ -146,6 +178,27 @@ export default {
         },
         changeTrajectory() {
             this.$store.commit('changeIndex', [this.layerIndex, this.neuronIndex, this.weightIndex]);
+        },
+        brushed(event) {
+            if (event.sourceEvent && event.sourceEvent.type === "zoom") return;
+
+            let s = event.selection ;
+
+            this.xScale.domain(s.map(this.xScale.invert, this.xScale));
+
+
+            d3.select(this.$refs["chartGroup"]).select(".zoom").call(this.zoom.transform, d3.zoomIdentity
+                .scale(this.svgWidth / (s[1] - s[0]))
+                .translate(-s[0], 0));
+
+        },
+        zoomed(event) {
+            if (event.sourceEvent && event.sourceEvent.type === "brush") return;
+
+            let t = event.transform;
+            this.xScale.domain(t.rescaleX(this.xScale).domain());
+
+            d3.select(this.$refs["chartGroup"]).select(".brush").call(this.brush.move, this.xScale.range().map(t.invertX, t));
         },
     },
     computed: {

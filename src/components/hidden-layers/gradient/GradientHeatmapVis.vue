@@ -143,6 +143,7 @@ export default {
         data: {
             handler() {
                 this.computeDer();
+                this.highlightedNeuronPerm = null
             },
             deep: true,
         },
@@ -203,7 +204,7 @@ export default {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    height: 90vh;
+    height: 87vh;
 }
 
 .neuron {
