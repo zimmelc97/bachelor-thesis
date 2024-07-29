@@ -43,13 +43,13 @@ export default {
             svgPadding: {
                 top: 10, right: 10, bottom: 30, left: 30,
             },
-            idleTimeout: null,
-            brush: null,
-            zoom: null
+            currentTransform: null,
+            zoomLevel: 1
         }
     },
     mounted() {
         this.drawChart()
+        this.initZoom()
     },
     methods: {
         drawChart() {
@@ -59,35 +59,25 @@ export default {
             this.drawYAxis();
             this.drawLine();
             this.drawCircle()
-
-            this.brush = d3.brushX()
-                .extent([
-                    [0, 0],
-                    [this.svgWidth, this.svgHeight]
-                ])
-                .on("brush end", this.brushed)
-
-            this.zoom = d3.zoom()
-                .scaleExtent([1, Infinity])
-                .translateExtent([[0, 0], [this.svgWidth, this.svgHeight]])
+        },
+        initZoom() {
+            this.currentTransform = null
+            const zoom = d3.zoom()
+                .scaleExtent([1, 20])  // Trurhis controls how much you can unzoom (x0.5) and zoom (x20)
                 .extent([[0, 0], [this.svgWidth, this.svgHeight]])
-                .on('zoom', this.zoomed);
+                .on("zoom", this.updateChart.bind(this))
 
-            d3.select(this.$refs["chartGroup"])
-                .append("g")
-                .attr("class", "brush")
-                .call(this.brush)
-                .call(this.brush.move, this.xScale.range())
-
-            d3.select(this.$refs["chartGroup"]).append("rect")
-                .attr("class", "zoom")
+            d3.select(this.$refs.lineGroup).append("rect")
                 .attr("width", this.svgWidth)
                 .attr("height", this.svgHeight)
-                .style('fill', 'none')
-                .style('pointer-events', 'all')
-                .style('cursor', 'move')
-                .attr("transform", "translate(0,-"  + this.svgPadding.top + ")")
-                .call(this.zoom);
+                .style("fill", "none")
+                .style("pointer-events", "all")
+                .attr('transform', 'translate(' + 0 + ',' + (-this.svgPadding.bottom - this.svgPadding.top) + ')')
+                .call(zoom);
+
+            if (!this.currentTransform) {
+                this.currentTransform = d3.zoomIdentity;
+            }
         },
         drawXAxis() {
             d3.select(this.$refs["axisX"]).select(".axis-label").remove()
@@ -140,23 +130,78 @@ export default {
                 .x((d) => this.xScale(d[0]))
                 .y((d) => this.yScale(d[1]));
 
+            d3.select(this.$refs["lineGroup"]).append("defs").append("lineGroup:clipPath")
+                .attr("id", "clip")
+                .append("SVG:rect")
+                .attr("width", this.svgWidth )
+                .attr("height", this.svgHeight - this.svgPadding.bottom - this.svgPadding.top )
+                .attr("x", 0)
+                .attr("y", 0);
+
             const clipPath = linesGroup
+                .append("g")
+                .attr("id", "testClip")
                 .attr('clip-path', 'url(#clip)');
 
             clipPath.selectAll('.line')
                 .data([this.slice()])
                 .join('path')
+                .attr("id", "testLine")
                 .attr('class', 'mse-line')
                 .attr('d', line)
-                .attr("fill", "none")
+                .attr("fill", "none");
+        },
+        updateChart({transform}) {
+            const xAxis = d3.select(this.$refs.axisX);
+            const yAxis = d3.select(this.$refs.axisY);
+            const clipPath =  d3.select(this.$refs["lineGroup"])
+            const circle = d3.select(this.$refs["circleGroup"])
+            this.currentTransform = transform;
+            // Recover the new scale
+            let newX = transform.rescaleX(this.xScale);
+            let newY = transform.rescaleY(this.yScale);
+
+            // Update axes with these new boundaries
+            xAxis.call(d3.axisBottom(newX));
+            yAxis.call(d3.axisLeft(newY));
+
+            const newLineGenerator = d3.line()
+                .x(d => newX(d[0]))
+                .y(d => newY(d[1]));
+
+            // Update line path
+            clipPath
+                .selectAll("path.mse-line")
+                .attr("d", newLineGenerator);
+
+            circle.
+                selectAll("circle")
+                .attr('cx', (d) => newX(d[0]))
+                .attr('cy', (d) => newY(d[1]))
+
+            this.zoomLevel = transform.k
         },
         drawCircle() {
             const circleGroup = d3.select(this.$refs["circleGroup"]);
+            circleGroup.selectAll('.circle').remove();
 
             let drag = d3.drag()
                 .on('drag', this.dragged);
 
-            circleGroup.selectAll('.circle')
+            d3.select(this.$refs["circleGroup"]).append("defs").append("circleGroup:clipPath")
+                .attr("id", "clip")
+                .append("SVG:rect")
+                .attr("width", this.svgWidth )
+                .attr("height", this.svgHeight - this.svgPadding.bottom - this.svgPadding.top )
+                .attr("x", 0)
+                .attr("y", 0);
+
+            const clipPath = circleGroup
+                .append("g")
+                .attr("id", "testClip")
+                .attr('clip-path', 'url(#clip)');
+
+            clipPath.selectAll('.circle')
                 .data([[this.weight, this.MSE]])
                 .join('circle')
                 .attr('class', 'circle')
@@ -167,38 +212,18 @@ export default {
                 .call(drag)
                 .on("click", () => this.changeTrajectory())
         },
-        dragged(event) {
+        dragged(event, d) {
+            let newX = this.currentTransform.rescaleX(this.xScale);
+
             this.$store.commit('changeWeightInNetwork', {layerIndex: this.layerIndex,
-              neuronIndex: this.neuronIndex,
-              weightIndex: this.weightIndex,
-              weight: this.xScale.invert(event.x)});
-            d3.select(event.sourceEvent.target)
-                .attr('cx', event.x)
-                .attr('cy', this.yScale(this.MSE));
+                neuronIndex: this.neuronIndex,
+                weightIndex: this.weightIndex,
+                weight: newX.invert(event.x)});
+            d3.select(this).attr("cx", d.x = event.x).attr("cy", d.y = event.y);
+
         },
         changeTrajectory() {
             this.$store.commit('changeIndex', [this.layerIndex, this.neuronIndex, this.weightIndex]);
-        },
-        brushed(event) {
-            if (event.sourceEvent && event.sourceEvent.type === "zoom") return;
-
-            let s = event.selection ;
-
-            this.xScale.domain(s.map(this.xScale.invert, this.xScale));
-
-
-            d3.select(this.$refs["chartGroup"]).select(".zoom").call(this.zoom.transform, d3.zoomIdentity
-                .scale(this.svgWidth / (s[1] - s[0]))
-                .translate(-s[0], 0));
-
-        },
-        zoomed(event) {
-            if (event.sourceEvent && event.sourceEvent.type === "brush") return;
-
-            let t = event.transform;
-            this.xScale.domain(t.rescaleX(this.xScale).domain());
-
-            d3.select(this.$refs["chartGroup"]).select(".brush").call(this.brush.move, this.xScale.range().map(t.invertX, t));
         },
     },
     computed: {
@@ -256,6 +281,9 @@ export default {
             handler() {
                 this.drawLine()
                 this.drawCircle()
+                if (this.currentTransform) {
+                    this.updateChart({ transform: this.currentTransform });
+                }
             },
             deep: true,
         },
@@ -263,6 +291,7 @@ export default {
             handler() {
                 this.drawLine()
                 this.drawCircle()
+                this.initZoom();
             },
             deep: true,
         },
