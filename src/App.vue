@@ -19,12 +19,13 @@
                         </div>
                     </div>
                     <div class="col-md-10">
-                      <component @swapComponent="swapComponent" v-bind:is="currentComponent"/>
+                        <div class="col">
+                        <component @swapComponent="swapComponent" v-bind:is="currentComponent"/>
+                        <SliderEpochs></SliderEpochs>
+                        </div>
                     </div>
-                    <!--<div class="col-md-2" :style="{display: 'flex', alignItems: 'center'}">
-                        <ScatterPlotOutput/>
-                    </div>-->
                 </div>
+
             </div>
         </div>
     </div>
@@ -38,10 +39,12 @@ import LoggingButton from "@/components/Logging.vue";
 import GradientHeatmapVis from "@/components/hidden-layers/gradient/GradientHeatmapVis.vue";
 import WeightSlicesSelection from "@/components/hidden-layers/slices/WeightSlicesSelection.vue";
 import LineChart from "@/components/hidden-layers/slices/LineChart.vue";
+import SliderEpochs from "@/components/SliderEpochs.vue";
 
 export default {
     name: 'App',
     components: {
+        SliderEpochs,
         LineChart,
         'slices': WeightSlicesSelection,
         'gradient': GradientHeatmapVis,

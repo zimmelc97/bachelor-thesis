@@ -15,7 +15,7 @@
 
 <script>
 import LineChart from "@/components/hidden-layers/slices/LineChart.vue";
-import {computeDer, Errors, forwardProp, setAccErrDerToZero} from "@/neural-network/nn";
+import {backProp, Errors, forwardProp, setAccErrDerToZero} from "@/neural-network/nn";
 
 export default {
     name: 'WeightSlicesSelection',
@@ -48,7 +48,7 @@ export default {
             setAccErrDerToZero(this.network)
             for(let i=0; i<this.data.length; i++) {
                 forwardProp(this.network, [this.data[i].x])
-                computeDer(this.network, this.data[i].label, Errors.SQUARE)
+                backProp(this.network, this.data[i].label, Errors.SQUARE)
             }
         },
         swapComponent() {

@@ -161,7 +161,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100vh;
+    height: 95vh;
 }
 .gradientButton {
     display: flex;
@@ -204,7 +204,7 @@ export default {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    height: 87vh;
+    height: 83vh;
 }
 
 .neuron {

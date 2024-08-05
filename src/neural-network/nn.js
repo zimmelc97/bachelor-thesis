@@ -118,6 +118,18 @@ let Link = {
     link.isDead = false
     return link;
   },
+  createLoaded: function (source, dest, weight) {
+    let link = Object.create(this)
+    link.id = source.id + "-" + dest.id;
+    link.source = source;
+    link.dest = dest;
+    link.weight = weight;
+    link.errorDer = 0;
+    link.accErrorDer = 0;
+    link.numAccumulatedDers = 0
+    link.isDead = false
+    return link;
+  },
   changeWeight: function (weight) {
     this.weight = weight
   },
@@ -152,6 +164,35 @@ export function buildNetwork(networkShape, activation, outputActivation) {
           let link = Link.create(prevNode, node);
           prevNode.outputLinks.push(link);
           node.inputLinks.push(link);
+        }
+      }
+    }
+  }
+  return network;
+}
+
+export function buildLoadedNetwork(loadedNetwork) {
+  let numLayers = loadedNetwork.networkShape.length;
+  let count = 0;
+  let id = 1;
+  let network = [];
+  for (let layerIdx = 0; layerIdx < numLayers; layerIdx++) {
+    let isOutputLayer = layerIdx === numLayers - 1;
+    let currentLayer = [];
+    network.push(currentLayer);
+    let numNodes = loadedNetwork.networkShape[layerIdx];
+    for (let i = 0; i < numNodes; i++) {
+      let nodeId = id.toString();
+      id++;
+      let node = Node.create(nodeId, isOutputLayer ? Activations.LINEAR : Activations.SIGMOID);
+      currentLayer.push(node);
+      if (layerIdx >= 1) {
+        for (let j = 0; j < network[layerIdx - 1].length; j++) {
+          let prevNode = network[layerIdx - 1][j];
+          let link = Link.createLoaded(prevNode, node, loadedNetwork.weights[count].weight);
+          prevNode.outputLinks.push(link);
+          node.inputLinks.push(link);
+          count++
         }
       }
     }
@@ -268,17 +309,12 @@ export function getOutputNode(network) {
 
 
 export function backProp(network, target, errorFunc) {
-  // The output node is a special case. We use the user-defined error
-  // function for the derivative.
   let outputNode = network[network.length - 1][0];
   outputNode.outputDer = errorFunc.der(outputNode.output, target);
 
   // Go through the layers backwards.
   for (let layerIdx = network.length - 1; layerIdx >= 1; layerIdx--) {
     let currentLayer = network[layerIdx];
-    // Compute the error derivative of each node with respect to:
-    // 1) its total input
-    // 2) each of its input weights.
     for (let i = 0; i < currentLayer.length; i++) {
       let node = currentLayer[i];
       node.inputDer = node.outputDer * node.activation.der(node.totalInput);
@@ -286,7 +322,6 @@ export function backProp(network, target, errorFunc) {
       node.numAccumulatedDers++;
     }
 
-    // Error derivative with respect to each weight coming into the node.
     for (let i = 0; i < currentLayer.length; i++) {
       let node = currentLayer[i];
       for (let j = 0; j < node.inputLinks.length; j++) {

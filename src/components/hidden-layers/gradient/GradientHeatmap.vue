@@ -44,7 +44,7 @@ export default {
         return {
             der: 0,
             color: "#000000",
-            isActive: this.isActiveProp,
+            isActive: this.isActiveProp
         }
     },
     mounted() {
@@ -63,9 +63,8 @@ export default {
                 .style("opacity", 0);
 
              */
-
             d3.select(this.$refs["colorBox"]).append("rect")
-                .attr("class", this.isHighlighted(this.network[this.layerIndex][this.neuronIndex].getInputLinks()[this.weightIndex]) ? "rectangle-active" : "rectangle")
+                .attr("class", this.isHighlighted(this.network[this.layerIndex][this.neuronIndex].getInputLinks()[this.weightIndex]) || this.isActive ? "rectangle-active" : "rectangle")
                 .attr("x", 0)
                 .attr("y", 0)
                 .attr("width", this.$refs["svg"].clientWidth)
@@ -127,9 +126,15 @@ export default {
              */
         },
         selectWeight() {
-            //this.isActive = true
-            //d3.select(this.$refs["colorBox"]).select("rect").attr("class", this.isActive ? "rectangle-active" : "rectangle")
+            this.isActive = !this.isActive
+            d3.select(this.$refs["colorBox"]).select("rect").attr("class", this.isActive ? "rectangle-active" : "rectangle");
             this.$store.commit('selectWeight', [this.layerIndex, this.neuronIndex, this.weightIndex]);
+        },
+        drawWeight() {
+            const weightsJSON = JSON.stringify(this.selectedWeights)
+            const weightJSON = JSON.stringify([this.layerIndex , this.neuronIndex, this.weightIndex])
+            this.isActive = weightsJSON.indexOf(weightJSON) !== -1
+            d3.select(this.$refs["colorBox"]).select("rect").attr("class", this.isHighlighted(this.network[this.layerIndex][this.neuronIndex].getInputLinks()[this.weightIndex]) || this.isActive ? "rectangle-active" : "rectangle");
         },
         isHighlighted(weight) {
             const weightIds = weight.id.split('-')
@@ -196,6 +201,11 @@ export default {
         highlightedNeuronPerm : {
             handler() {
                 this.drawBox()
+            }
+        },
+        selectedWeights : {
+            handler() {
+                this.drawWeight()
             }
         }
     }

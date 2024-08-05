@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import {buildNetwork, Activations, changeInputWeight} from '@/neural-network/nn.js';
+import {buildNetwork, Activations, changeInputWeight, buildLoadedNetwork} from '@/neural-network/nn.js';
 //import * as d3 from "d3";
 
 Vue.use(Vuex);
@@ -23,9 +23,6 @@ const store = new Vuex.Store({
         changeWeightInNetwork (state, {layerIndex, neuronIndex, weightIndex, weight}) {
             changeInputWeight(state.network[layerIndex][neuronIndex], weightIndex, weight)
             this.commit("setWeights")
-        },
-        changeWeightsPerIndex (state, weight, index) {
-            state.weights[index] = weight;
         },
         changeIndex (state, index) {
             if (state.index[0] === index[0] && state.index[1] === index[1] && state.index[2] === index[2]) {
@@ -98,30 +95,17 @@ const store = new Vuex.Store({
             this.commit("setWeights")
             state.selectedWeights = []
         },
+        loadNetwork(state, network) {
+            state.network = buildLoadedNetwork(network)
+            this.commit("setWeights")
+        },
         selectWeight (state, index) {
-            state.selectedWeights = []
-            state.selectedWeights.push(index);
-            //state.selectedWeights.push({index: index, value: getInputWeight(state.network[index[0]][index[1]], index[2])});
-            /*const weightsJSON = JSON.stringify(state.selectedWeights)
+            const weightsJSON = JSON.stringify(state.selectedWeights)
             const weightJSON = JSON.stringify(index)
-            if (state.selectedWeights.length < 1 && weightsJSON.indexOf(weightJSON) === -1) {
+            if (weightsJSON.indexOf(weightJSON) === -1) {
+                state.selectedWeights = []
                 state.selectedWeights.push(index);
             }
-
-            if (weightsJSON.indexOf(weightJSON) !== -1) {
-                state.selectedWeights = state.selectedWeights.filter(element => {
-                    return !(element[0] === index[0] && element[1] === index[1] && element[2] === index[2])
-                })
-            }
-
-            state.selectedWeights = state.selectedWeights.sort((a, b) => {
-                return d3.ascending(a[0], b[0]) || d3.ascending(a[1], b[1]) || d3.ascending(a[2], b[2]);
-            });
-
-             */
-        },
-        changeSelectedWeightValue(state, weight) {
-            state.selectedWeights[0].value = weight
         },
         setWeights(state) {
             state.weights = []

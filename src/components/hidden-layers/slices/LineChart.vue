@@ -263,7 +263,7 @@ export default {
           }
         },
         range() {
-            return d3.range(-20.1, 20.1, 1)
+            return d3.range(-20.1, 20.1, 0.1)
         },
         xScale() {
             return d3.scaleLinear()
@@ -279,7 +279,6 @@ export default {
     watch: {
         MSE: {
             handler() {
-                this.drawLine()
                 this.drawCircle()
                 if (this.currentTransform) {
                     this.updateChart({ transform: this.currentTransform });

@@ -1,41 +1,36 @@
 <template>
     <div>
-        <button @click="saveDataToFile">Download File</button>
+        <label for="range-weights"></label>
+        <b-form-input id="range-weights"
+                      v-model="epochs"
+                      type="range"
+                      min="0" :max="steps" step="1"
+                      @click=buildLoadedNetwork></b-form-input>
     </div>
 </template>
+
 <script>
+import network from './../../logs/2024-08-05T06_55_40.398Z.json'
 
 export default {
-    name: 'LoggingButton',
-    components: {},
+    name: 'SliderEpochs',
     props: {},
+    components: {
+    },
     data() {
         return {
-            appendedData: []
+            loadedNetwork : network,
+            epochs: 0,
+            steps : 5
         }
     },
     mounted() {
     },
     methods: {
-        appendData(mse, weights) {
-            this.appendedData = []
-            this.appendedData.push({
-                MSE: mse,
-                weights: weights,
-            });
-        },
-        saveDataToFile() {
-            const dataStr = JSON.stringify(this.appendedData, null, 2);
-            const blob = new Blob([dataStr], { type: "application/json" });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            let timestamp = new Date().toISOString()
-            link.download = timestamp + '.json';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            this.appendedData = []
+        buildLoadedNetwork() {
+            this.$store.commit("loadNetwork", this.loadedNetwork[0])
         }
+
     },
     computed: {
         network: {
@@ -73,9 +68,6 @@ export default {
             },
             deep: true,
         },
-    }
+    },
 }
 </script>
-<style>
-
-</style>
