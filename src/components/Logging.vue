@@ -17,9 +17,10 @@ export default {
     mounted() {
     },
     methods: {
-        appendData(mse, weights) {
+        appendData(mse, weights, epoch) {
             this.appendedData = []
             this.appendedData.push({
+                epoch : epoch,
                 MSE: mse,
                 weights: weights,
             });

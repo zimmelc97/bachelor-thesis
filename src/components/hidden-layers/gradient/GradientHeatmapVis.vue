@@ -1,4 +1,5 @@
 <template>
+    <div class="container w-100">
         <div class="heatmap">
             <div class = "row">
                 <div class="gradientButton">
@@ -41,16 +42,21 @@
                 </div>
             </div>
         </div>
+        <div class="mt-2">
+            <SliderEpochs ref="sliderEpochs"></SliderEpochs>
+        </div>
+    </div>
 </template>
 
 <script>
 import GradientHeatmap from "@/components/hidden-layers/gradient/GradientHeatmap.vue";
 import {backProp, Errors, forwardProp, setAccErrDerToZero, updateWeights} from "@/neural-network/nn";
 import Neurons from "@/components/hidden-layers/neurons/Neurons.vue";
+import SliderEpochs from "@/components/SliderEpochs.vue";
 
 export default {
     name: 'GradientHeatmapVis',
-    components: { GradientHeatmap, Neurons},
+    components: {SliderEpochs, GradientHeatmap, Neurons},
     data() {
         return {
             highlightedNeuron: null,
@@ -108,6 +114,8 @@ export default {
                     this.$store.commit("setWeights")
                 }
             }
+            this.$store.commit("setDrawLineChart")
+            this.$refs.sliderEpochs.appendData()
         },
         computeDer() {
             setAccErrDerToZero(this.network)
@@ -137,6 +145,9 @@ export default {
         },
         changeInputFunction() {
             this.$store.commit('changeInput', this.selected)
+        },
+        appendData() {
+            this.$refs.sliderEpochs.appendData()
         }
     },
     watch: {
@@ -157,11 +168,15 @@ export default {
 }
 </script>
 <style>
+.container {
+    padding: 0;
+    height: 100vh;
+}
 .heatmap {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 95vh;
+    height: 90%;
 }
 .gradientButton {
     display: flex;
@@ -204,7 +219,7 @@ export default {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    height: 83vh;
+    height: 82vh;
 }
 
 .neuron {
@@ -220,7 +235,7 @@ export default {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    max-height: 88vh;
+    max-height: 80vh;
 }
 .weight {
     position: relative;

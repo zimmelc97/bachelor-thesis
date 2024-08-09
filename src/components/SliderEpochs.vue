@@ -1,36 +1,52 @@
 <template>
     <div>
         <label for="range-weights"></label>
-        <b-form-input id="range-weights"
-                      v-model="epochs"
-                      type="range"
-                      min="0" :max="steps" step="1"
-                      @click=buildLoadedNetwork></b-form-input>
+        <VueSlider id="range-weights"
+                   v-model="epoch"
+                   :dot-options="{tooltip: 'none'}"
+                   :process-style="{background: 'white'}"
+                   :min="0" :max="this.currentEpochs" marks :adsorb="true" :lazy="true" drag-on-click
+                   @change=buildLoadedNetwork(epoch)></VueSlider>
     </div>
 </template>
 
 <script>
-import network from './../../logs/2024-08-05T06_55_40.398Z.json'
+import VueSlider from 'vue-slider-component'
 
 export default {
     name: 'SliderEpochs',
     props: {},
     components: {
+        VueSlider
     },
     data() {
         return {
-            loadedNetwork : network,
-            epochs: 0,
-            steps : 5
+            appendedData: [],
+            epoch: 0,
+            currentEpochs: 0,
         }
     },
     mounted() {
+        this.appendedData = [{
+            epoch: this.currentEpochs,
+            networkShape: this.networkShape,
+            MSE: this.MSE,
+            weights: this.weights,
+        }]
     },
     methods: {
-        buildLoadedNetwork() {
-            this.$store.commit("loadNetwork", this.loadedNetwork[0])
+        appendData() {
+            this.currentEpochs++
+            this.appendedData.push({
+                networkShape: this.networkShape,
+                weights: this.weights,
+            })
+            this.epoch = this.currentEpochs
+        },
+        buildLoadedNetwork(epoch) {
+            this.$store.commit("setDrawLineChart")
+            this.$store.commit("loadNetwork", this.appendedData[epoch])
         }
-
     },
     computed: {
         network: {
@@ -41,6 +57,11 @@ export default {
         MSE: {
             get: function() {
                 return this.$store.getters.MSE
+            }
+        },
+        networkShape: {
+            get: function() {
+                return this.$store.getters.networkShape
             }
         },
         weights: {
@@ -61,10 +82,16 @@ export default {
         },
     },
     watch: {
-        weights: {
+        networkShape: {
             handler() {
-                //this.appendData(this.MSE, this.weights)
-                //this.saveDataToFile()
+                this.currentEpochs = 0
+                this.epoch = 0
+                this.appendedData = [{
+                    epoch: this.currentEpochs,
+                    networkShape: this.networkShape,
+                    MSE: this.MSE,
+                    weights: this.weights,
+                }]
             },
             deep: true,
         },

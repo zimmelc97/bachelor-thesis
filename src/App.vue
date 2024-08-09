@@ -14,14 +14,13 @@
                             <ScatterPlotOutput/>
                             <LoggingButton/>
                             <div v-for="(dataset, index) in selectedWeights" :key="index" >
-                                <LineChart :layerIndex="dataset[0]" :neuronIndex="dataset[1]" :weightIndex="dataset[2]" />
+                                <LineChart :layerIndex="dataset[0]" :neuronIndex="dataset[1]" :weightIndex="dataset[2]" v-on:append-data="$refs.heatmap.appendData()"/>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-10">
                         <div class="col">
-                        <component @swapComponent="swapComponent" v-bind:is="currentComponent"/>
-                        <SliderEpochs></SliderEpochs>
+                        <GradientHeatmapVis ref="heatmap"/>
                         </div>
                     </div>
                 </div>
@@ -33,24 +32,18 @@
 
 <script>
 
-import ScatterPlotInput from "@/components/input-output-layer/ScatterPlotInput.vue";
 import ScatterPlotOutput from "@/components/input-output-layer/ScatterPlotOutput.vue";
 import LoggingButton from "@/components/Logging.vue";
 import GradientHeatmapVis from "@/components/hidden-layers/gradient/GradientHeatmapVis.vue";
-import WeightSlicesSelection from "@/components/hidden-layers/slices/WeightSlicesSelection.vue";
 import LineChart from "@/components/hidden-layers/slices/LineChart.vue";
-import SliderEpochs from "@/components/SliderEpochs.vue";
 
 export default {
     name: 'App',
     components: {
-        SliderEpochs,
         LineChart,
-        'slices': WeightSlicesSelection,
-        'gradient': GradientHeatmapVis,
+        GradientHeatmapVis,
         LoggingButton,
         ScatterPlotOutput,
-        ScatterPlotInput
     },
     data() {
         return {
@@ -76,9 +69,6 @@ export default {
                 .map(item => Number(item))
             this.$store.commit('changeNetworkShape', input);
         },
-        swapComponent: function(component) {
-            this.currentComponent = component;
-        }
     }
 }
 </script>

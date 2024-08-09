@@ -10,7 +10,7 @@
             </g>
         </svg>
         <p>Der : {{ this.der.toFixed(4) }}</p>
-        <SliderWeights :layerIndex="layerIndex" :neuronIndex="neuronIndex" :weightIndex="weightIndex"/>
+        <SliderWeights :layerIndex="layerIndex" :neuronIndex="neuronIndex" :weightIndex="weightIndex" v-on:append-data="$emit('append-data')"/>
     </div>
 </template>
 <script>
@@ -186,7 +186,8 @@ export default {
             circleGroup.selectAll('.circle').remove();
 
             let drag = d3.drag()
-                .on('drag', this.dragged);
+                .on('drag', this.dragged)
+                .on('end', this.draggedEnd);
 
             d3.select(this.$refs["circleGroup"]).append("defs").append("circleGroup:clipPath")
                 .attr("id", "clip")
@@ -212,15 +213,22 @@ export default {
                 .call(drag)
                 .on("click", () => this.changeTrajectory())
         },
-        dragged(event, d) {
+        dragged(event) {
+            const xCoor = event.x;
+            const yCoor = event.y;
             let newX = this.currentTransform.rescaleX(this.xScale);
 
             this.$store.commit('changeWeightInNetwork', {layerIndex: this.layerIndex,
                 neuronIndex: this.neuronIndex,
                 weightIndex: this.weightIndex,
                 weight: newX.invert(event.x)});
-            d3.select(this).attr("cx", d.x = event.x).attr("cy", d.y = event.y);
+            d3.select(this.$refs["circleGroup"])
+                .attr("cx", xCoor)
+                .attr("cy", yCoor);
 
+        },
+        draggedEnd() {
+            this.$emit('append-data')
         },
         changeTrajectory() {
             this.$store.commit('changeIndex', [this.layerIndex, this.neuronIndex, this.weightIndex]);
@@ -262,6 +270,11 @@ export default {
               return this.network[this.layerIndex][this.neuronIndex].getInputLinks()[this.weightIndex].getAccErrorDer()
           }
         },
+        drawLineChart: {
+           get: function() {
+               return this.$store.getters.drawLineChart
+           }
+        },
         range() {
             return d3.range(-20.1, 20.1, 0.1)
         },
@@ -291,6 +304,12 @@ export default {
                 this.drawLine()
                 this.drawCircle()
                 this.initZoom();
+            },
+            deep: true,
+        },
+        drawLineChart: {
+            handler() {
+                this.drawLine()
             },
             deep: true,
         },

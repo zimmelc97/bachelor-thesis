@@ -17,7 +17,8 @@ const store = new Vuex.Store({
         colors:
             {blue: ["#D1DCFF","#BAC9F8","#A3B5F2","#8BA2EB","#748FE5","#5D7BDE","#4668D8","#2E55D1","#1741CB","#002EC4"],
             white: ["#FFFFFF"],
-            red: ["#F1DBDB","#ECC3C3","#E7AAAA","#E29292","#DD7A7A","#D86161","#D34949","#CE3131","#C91818","#C40000"]}
+            red: ["#F1DBDB","#ECC3C3","#E7AAAA","#E29292","#DD7A7A","#D86161","#D34949","#CE3131","#C91818","#C40000"]},
+        drawLineChart: false
     },
     mutations: {
         changeWeightInNetwork (state, {layerIndex, neuronIndex, weightIndex, weight}) {
@@ -106,6 +107,9 @@ const store = new Vuex.Store({
                 state.selectedWeights = []
                 state.selectedWeights.push(index);
             }
+            else {
+                state.selectedWeights = []
+            }
         },
         setWeights(state) {
             state.weights = []
@@ -119,6 +123,9 @@ const store = new Vuex.Store({
                     }
                 }
             }
+        },
+        setDrawLineChart(state) {
+            state.drawLineChart = !state.drawLineChart
         }
     },
     methods: {
@@ -148,6 +155,9 @@ const store = new Vuex.Store({
         },
         selectedWeights (state) {
             return state.selectedWeights
+        },
+        drawLineChart (state) {
+            return state.drawLineChart
         }
     },
     actions: {

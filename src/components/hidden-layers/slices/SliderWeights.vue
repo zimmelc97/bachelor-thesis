@@ -5,7 +5,9 @@
                       v-model="weight"
                       type="range"
                       min="-20" max="20" step="0.001"
-                      v-on:click="changeIndex([layerIndex, neuronIndex, weightIndex])"></b-form-input>
+                      @click="changeIndex([layerIndex, neuronIndex, weightIndex])"
+                      v-on:mouseup="$emit('append-data')"
+        ></b-form-input>
     </div>
 </template>
 
