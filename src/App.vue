@@ -12,16 +12,18 @@
                             </div>
                             <br/><br/>
                             <ScatterPlotOutput/>
-                            <LoggingButton/>
                             <div v-for="(dataset, index) in selectedWeights" :key="index" >
                                 <LineChart :layerIndex="dataset[0]" :neuronIndex="dataset[1]" :weightIndex="dataset[2]" v-on:append-data="$refs.heatmap.appendData()"/>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-10">
+                    <div class="col-md-9">
                         <div class="col">
-                        <GradientHeatmapVis ref="heatmap"/>
+                        <GradientHeatmapVis @setIsWeight="setIsWeight" ref="heatmap"/>
                         </div>
+                    </div>
+                    <div class="col-md-1">
+                        <Legend :isWeight="isWeight"></Legend>
                     </div>
                 </div>
 
@@ -33,22 +35,23 @@
 <script>
 
 import ScatterPlotOutput from "@/components/input-output-layer/ScatterPlotOutput.vue";
-import LoggingButton from "@/components/Logging.vue";
 import GradientHeatmapVis from "@/components/hidden-layers/gradient/GradientHeatmapVis.vue";
 import LineChart from "@/components/hidden-layers/slices/LineChart.vue";
+import Legend from "@/components/hidden-layers/gradient/Legend.vue";
 
 export default {
     name: 'App',
     components: {
         LineChart,
         GradientHeatmapVis,
-        LoggingButton,
         ScatterPlotOutput,
+        Legend
     },
     data() {
         return {
             currentComponent: 'gradient',
-            networkShapeInput: ""
+            networkShapeInput: "",
+            isWeight: false
         }
     },
     mounted() {
@@ -69,6 +72,9 @@ export default {
                 .map(item => Number(item))
             this.$store.commit('changeNetworkShape', input);
         },
+        setIsWeight(value) {
+            this.isWeight = value
+        }
     }
 }
 </script>

@@ -8,23 +8,17 @@
 export default {
     name: 'LoggingButton',
     components: {},
-    props: {},
-    data() {
-        return {
-            appendedData: []
+    props: {
+        appendedData: {
+            required: true
         }
+    },
+    data() {
+        return {}
     },
     mounted() {
     },
     methods: {
-        appendData(mse, weights, epoch) {
-            this.appendedData = []
-            this.appendedData.push({
-                epoch : epoch,
-                MSE: mse,
-                weights: weights,
-            });
-        },
         saveDataToFile() {
             const dataStr = JSON.stringify(this.appendedData, null, 2);
             const blob = new Blob([dataStr], { type: "application/json" });
@@ -34,46 +28,15 @@ export default {
             link.download = timestamp + '.json';
             document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link);
-            this.appendedData = []
+            document.body.removeChild(link)
         }
     },
     computed: {
-        network: {
-            get: function() {
-                return this.$store.getters.network
-            }
-        },
-        MSE: {
-            get: function() {
-                return this.$store.getters.MSE
-            }
-        },
-        weights: {
-            get: function() {
-                let weights = []
-                for (let layerIdx = 1; layerIdx < this.network.length; layerIdx++) {
-                    let currentLayer = this.network[layerIdx];
-                    for (let i = 0; i < currentLayer.length; i++) {
-                        let node = currentLayer[i];
-                        for (let j = 0; j < node.getInputLinks().length; j++) {
-                            let link = node.getInputLinks()[j];
-                            weights.push({layerIndex: layerIdx, neuronIndex: i, weightIndex: j, weight: link.getWeight()})
-                        }
-                    }
-                }
-                return weights
-            }
-        },
+
     },
     watch: {
-        weights: {
-            handler() {
-                //this.appendData(this.MSE, this.weights)
-                //this.saveDataToFile()
-            },
-            deep: true,
-        },
+
+
     }
 }
 </script>

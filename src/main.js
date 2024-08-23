@@ -8,11 +8,13 @@ import "vue-slider-component/theme/default.css";
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
+import VTooltip from 'v-tooltip'
 
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(VueResizeText)
 
+Vue.use(VTooltip)
 
 Vue.config.productionTip = false;
 

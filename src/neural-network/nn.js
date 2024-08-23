@@ -362,7 +362,6 @@ export function updateWeights(network, learningRate) {
       let node = currentLayer[i];
       // Update the node's bias.
       if (node.numAccumulatedDers > 0) {
-        node.bias -= learningRate * node.accInputDer / node.numAccumulatedDers;
         node.accInputDer = 0;
         node.numAccumulatedDers = 0;
       }

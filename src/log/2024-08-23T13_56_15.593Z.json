@@ -1,0 +1,1544 @@
+[
+  {
+    "epoch": 0,
+    "networkShape": [
+      1,
+      5,
+      5,
+      1
+    ],
+    "MSE": 0.653185044599071,
+    "weights": [
+      {
+        "layerIndex": 1,
+        "neuronIndex": 0,
+        "weightIndex": 0,
+        "weight": -0.294447048607541
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 1,
+        "weightIndex": 0,
+        "weight": 0.5940003484564249
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 2,
+        "weightIndex": 0,
+        "weight": 1.7686530241200078
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 3,
+        "weightIndex": 0,
+        "weight": -0.260172261994863
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 4,
+        "weightIndex": 0,
+        "weight": 1.977247895467369
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 0,
+        "weight": 1.4296032389155169
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 1,
+        "weight": -1.5059951647967607
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 2,
+        "weight": -1.6017652198236432
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 3,
+        "weight": -0.9840878101105037
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 4,
+        "weight": -1.9343150327032497
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 0,
+        "weight": 1.7908977115196691
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 1,
+        "weight": -0.8771754774052214
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 2,
+        "weight": 0.32583918300845927
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 3,
+        "weight": 1.9321247215150104
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 4,
+        "weight": -0.463742231605651
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 0,
+        "weight": -0.19926742689411459
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 1,
+        "weight": -1.0376404878153602
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 2,
+        "weight": -1.1868660549936827
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 3,
+        "weight": -0.0822150946926703
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 4,
+        "weight": 0.5100936555820264
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 0,
+        "weight": 1.9386029952137367
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 1,
+        "weight": -0.02130740492777683
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 2,
+        "weight": -0.8470984483604171
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 3,
+        "weight": -1.3629636174379618
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 4,
+        "weight": -0.8724545666076597
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 0,
+        "weight": 0.3607783168139882
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 1,
+        "weight": 0.8700806658034939
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 2,
+        "weight": 0.20550378714284712
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 3,
+        "weight": -1.8416699456604837
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 4,
+        "weight": 0.10219717315910426
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 0,
+        "weight": -1.944327564501946
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 1,
+        "weight": 0.8419934231296775
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 2,
+        "weight": -1.7045084748382031
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 3,
+        "weight": 1.5435229647203563
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 4,
+        "weight": 0.22327398958552358
+      }
+    ]
+  },
+  {
+    "networkShape": [
+      1,
+      5,
+      5,
+      1
+    ],
+    "weights": [
+      {
+        "layerIndex": 1,
+        "neuronIndex": 0,
+        "weightIndex": 0,
+        "weight": 0.08657043951087183
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 1,
+        "weightIndex": 0,
+        "weight": 1.0303689641764144
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 2,
+        "weightIndex": 0,
+        "weight": 2.019110044587686
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 3,
+        "weightIndex": 0,
+        "weight": -0.4289539846744007
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 4,
+        "weightIndex": 0,
+        "weight": 1.9877361873240782
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 0,
+        "weight": 1.8219813170301078
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 1,
+        "weight": -1.2527424411003525
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 2,
+        "weight": -1.4727820078158413
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 3,
+        "weight": -0.5634187222680084
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 4,
+        "weight": -1.8133220682841782
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 0,
+        "weight": 1.767949504305797
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 1,
+        "weight": -0.8185581894167345
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 2,
+        "weight": 0.4473832012982262
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 3,
+        "weight": 1.8912072727672018
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 4,
+        "weight": -0.33839133145756317
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 0,
+        "weight": -0.021523341088248212
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 1,
+        "weight": -1.11916135536481
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 2,
+        "weight": -1.4791650011699944
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 3,
+        "weight": 0.14884110213387958
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 4,
+        "weight": 0.20472359156470396
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 0,
+        "weight": 1.7635381394563125
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 1,
+        "weight": 0.0050562043338638896
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 2,
+        "weight": -0.6581660199864248
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 3,
+        "weight": -1.581085573915281
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 4,
+        "weight": -0.6731655915362142
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 0,
+        "weight": 0.31775182797943113
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 1,
+        "weight": 0.8862324032399092
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 2,
+        "weight": 0.2660425906982872
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 3,
+        "weight": -1.902999257221702
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 4,
+        "weight": 0.16455489157783437
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 0,
+        "weight": -2.436121918597878
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 1,
+        "weight": 0.5580108491442035
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 2,
+        "weight": -2.0260256338623783
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 3,
+        "weight": 1.042949321918225
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 4,
+        "weight": 0.603339478882743
+      }
+    ]
+  },
+  {
+    "networkShape": [
+      1,
+      5,
+      5,
+      1
+    ],
+    "weights": [
+      {
+        "layerIndex": 1,
+        "neuronIndex": 0,
+        "weightIndex": 0,
+        "weight": 0.2613416389988394
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 1,
+        "weightIndex": 0,
+        "weight": 1.003509660621331
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 2,
+        "weightIndex": 0,
+        "weight": 2.0315113942819703
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 3,
+        "weightIndex": 0,
+        "weight": -0.4874271115542347
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 4,
+        "weightIndex": 0,
+        "weight": 1.9758935318328075
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 0,
+        "weight": 1.8747533765832305
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 1,
+        "weight": -1.1615550302579267
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 2,
+        "weight": -1.3704564860407797
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 3,
+        "weight": -0.5425057441056573
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 4,
+        "weight": -1.711189348265391
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 0,
+        "weight": 1.7678869861778674
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 1,
+        "weight": -0.8064129592088297
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 2,
+        "weight": 0.46922230258328546
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 3,
+        "weight": 1.8808957266805402
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 4,
+        "weight": -0.31678895187786504
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 0,
+        "weight": 0.0036055334866122273
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 1,
+        "weight": -1.0858025544422985
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 2,
+        "weight": -1.4526904335820965
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 3,
+        "weight": 0.16785521665364866
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 4,
+        "weight": 0.2314233551006546
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 0,
+        "weight": 1.7601619307085106
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 1,
+        "weight": 0.017268983243501932
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 2,
+        "weight": -0.6293712064415037
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 3,
+        "weight": -1.5979617826392145
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 4,
+        "weight": -0.6447958283897643
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 0,
+        "weight": 0.30672053113889847
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 1,
+        "weight": 0.8892429463412683
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 2,
+        "weight": 0.28193571720024546
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 3,
+        "weight": -1.9260933342602684
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 4,
+        "weight": 0.18012255094993151
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 0,
+        "weight": -2.404345440616136
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 1,
+        "weight": 0.5705312504351302
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 2,
+        "weight": -2.028264528906987
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 3,
+        "weight": 1.0227477626799257
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 4,
+        "weight": 0.6892046524555587
+      }
+    ]
+  },
+  {
+    "networkShape": [
+      1,
+      5,
+      5,
+      1
+    ],
+    "weights": [
+      {
+        "layerIndex": 1,
+        "neuronIndex": 0,
+        "weightIndex": 0,
+        "weight": 0.38580175353938573
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 1,
+        "weightIndex": 0,
+        "weight": 0.9823706147875914
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 2,
+        "weightIndex": 0,
+        "weight": 2.0394013865328025
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 3,
+        "weightIndex": 0,
+        "weight": -0.5330882816195373
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 4,
+        "weightIndex": 0,
+        "weight": 1.967429250031873
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 0,
+        "weight": 1.9185551441788065
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 1,
+        "weight": -1.0954549738627
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 2,
+        "weight": -1.295451991118124
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 3,
+        "weight": -0.5303564329634917
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 4,
+        "weight": -1.636317359623445
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 0,
+        "weight": 1.7691003116591264
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 1,
+        "weight": -0.7991485101455216
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 2,
+        "weight": 0.48321954681122603
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 3,
+        "weight": 1.8732871392987018
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 4,
+        "weight": -0.3030457554413356
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 0,
+        "weight": 0.023903448162875388
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 1,
+        "weight": -1.0587725041097318
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 2,
+        "weight": -1.4291506565320777
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 3,
+        "weight": 0.17919451578361445
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 4,
+        "weight": 0.2552304597952038
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 0,
+        "weight": 1.7626420228278963
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 1,
+        "weight": 0.02844741068159385
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 2,
+        "weight": -0.6057521492626634
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 3,
+        "weight": -1.6084933548204057
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 4,
+        "weight": -0.6216804013269772
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 0,
+        "weight": 0.29901271560899567
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 1,
+        "weight": 0.8896496341393706
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 2,
+        "weight": 0.29257108441760077
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 3,
+        "weight": -1.9458011481506683
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 4,
+        "weight": 0.19035640756569205
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 0,
+        "weight": -2.3832582495775547
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 1,
+        "weight": 0.5850317724386224
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 2,
+        "weight": -2.02554851334696
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 3,
+        "weight": 1.0161434538856928
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 4,
+        "weight": 0.7504363791707717
+      }
+    ]
+  },
+  {
+    "networkShape": [
+      1,
+      5,
+      5,
+      1
+    ],
+    "weights": [
+      {
+        "layerIndex": 1,
+        "neuronIndex": 0,
+        "weightIndex": 0,
+        "weight": 0.47681951742270434
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 1,
+        "weightIndex": 0,
+        "weight": 0.9689956417141314
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 2,
+        "weightIndex": 0,
+        "weight": 2.0464339694177522
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 3,
+        "weightIndex": 0,
+        "weight": -0.5711753227163425
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 4,
+        "weightIndex": 0,
+        "weight": 1.9619818031904044
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 0,
+        "weight": 1.9553290810710977
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 1,
+        "weight": -1.0460107694144696
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 2,
+        "weight": -1.2400890540145177
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 3,
+        "weight": -0.5203312500262312
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 4,
+        "weight": -1.5809942919278042
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 0,
+        "weight": 1.7708081489780798
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 1,
+        "weight": -0.7939444831705955
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 2,
+        "weight": 0.49358746953375976
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 3,
+        "weight": 1.867434802797771
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 4,
+        "weight": -0.29292103720255347
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 0,
+        "weight": 0.041521020536945875
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 1,
+        "weight": -1.03692744705327
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 2,
+        "weight": -1.4099667340672755
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 3,
+        "weight": 0.18826603077236226
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 4,
+        "weight": 0.2747008483222091
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 0,
+        "weight": 1.7672574611848595
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 1,
+        "weight": 0.038915618480514995
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 2,
+        "weight": -0.5848519766254425
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 3,
+        "weight": -1.6167336569350303
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 4,
+        "weight": -0.6013036765939762
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 0,
+        "weight": 0.2930550211734124
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 1,
+        "weight": 0.8890661252963542
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 2,
+        "weight": 0.3007059221888948
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 3,
+        "weight": -1.963459639362674
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 4,
+        "weight": 0.19806667639097775
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 0,
+        "weight": -2.371779102886527
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 1,
+        "weight": 0.597735386030078
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 2,
+        "weight": -2.0234336031221805
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 3,
+        "weight": 1.0151509024467247
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 4,
+        "weight": 0.7990193796898785
+      }
+    ]
+  },
+  {
+    "networkShape": [
+      1,
+      5,
+      5,
+      1
+    ],
+    "weights": [
+      {
+        "layerIndex": 1,
+        "neuronIndex": 0,
+        "weightIndex": 0,
+        "weight": 0.5456602883099277
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 1,
+        "weightIndex": 0,
+        "weight": 0.960400567683016
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 2,
+        "weightIndex": 0,
+        "weight": 2.0525840731834104
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 3,
+        "weightIndex": 0,
+        "weight": -0.6033758526450828
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 4,
+        "weightIndex": 0,
+        "weight": 1.9583918789168064
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 0,
+        "weight": 1.9855557887078463
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 1,
+        "weight": -1.0081434502205768
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 2,
+        "weight": -1.1983100648679184
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 3,
+        "weight": -0.5121255177943755
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 4,
+        "weight": -1.5391919243377454
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 0,
+        "weight": 1.7725758666265494
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 1,
+        "weight": -0.789998391337127
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 2,
+        "weight": 0.5016320955849475
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 3,
+        "weight": 1.8627813122037
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 4,
+        "weight": -0.2850983455113687
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 0,
+        "weight": 0.05686651442891178
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 1,
+        "weight": -1.0187577449554266
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 2,
+        "weight": -1.3938782429180099
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 3,
+        "weight": 0.19572226148399766
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 4,
+        "weight": 0.2910638717687695
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 0,
+        "weight": 1.7724673211797852
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 1,
+        "weight": 0.04823059351878699
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 2,
+        "weight": -0.5666442647129668
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 3,
+        "weight": -1.6237450044861452
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 4,
+        "weight": -0.5836030792811936
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 0,
+        "weight": 0.28800860694400493
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 1,
+        "weight": 0.887751199011256
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 2,
+        "weight": 0.30689601937630934
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 3,
+        "weight": -1.9795319512525813
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 4,
+        "weight": 0.2038403613935297
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 0,
+        "weight": -2.365283306034567
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 1,
+        "weight": 0.6084360516198529
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 2,
+        "weight": -2.0217164740060674
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 3,
+        "weight": 1.0170736833580605
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 4,
+        "weight": 0.8386595016378402
+      }
+    ]
+  },
+  {
+    "networkShape": [
+      1,
+      5,
+      5,
+      1
+    ],
+    "weights": [
+      {
+        "layerIndex": 1,
+        "neuronIndex": 0,
+        "weightIndex": 0,
+        "weight": 0.5994359380231575
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 1,
+        "weightIndex": 0,
+        "weight": 0.9547386950007393
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 2,
+        "weightIndex": 0,
+        "weight": 2.057855832019153
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 3,
+        "weightIndex": 0,
+        "weight": -0.6310150367387228
+      },
+      {
+        "layerIndex": 1,
+        "neuronIndex": 4,
+        "weightIndex": 0,
+        "weight": 1.9559355645697396
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 0,
+        "weight": 2.010399619977779
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 1,
+        "weight": -0.9784207835776765
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 2,
+        "weight": -1.1659710139705162
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 3,
+        "weight": -0.5054410198831105
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 0,
+        "weightIndex": 4,
+        "weight": -1.506792736385619
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 0,
+        "weight": 1.7742481193350825
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 1,
+        "weight": -0.7868888894499424
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 2,
+        "weight": 0.5080805850353312
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 3,
+        "weight": 1.8589768208040576
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 1,
+        "weightIndex": 4,
+        "weight": -0.2788486678107003
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 0,
+        "weight": 0.07034496140301244
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 1,
+        "weight": -1.0032820027694287
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 2,
+        "weight": -1.3800366675740547
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 3,
+        "weight": 0.20194801695892112
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 2,
+        "weightIndex": 4,
+        "weight": 0.3051545426643394
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 0,
+        "weight": 1.7776137889903283
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 1,
+        "weight": 0.05634953892013246
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 2,
+        "weight": -0.5508536585510986
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 3,
+        "weight": -1.6299988380824788
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 3,
+        "weightIndex": 4,
+        "weight": -0.5682880835202045
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 0,
+        "weight": 0.28348117017174135
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 1,
+        "weight": 0.8859151037207738
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 2,
+        "weight": 0.3115852114297245
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 3,
+        "weight": -1.9943124328039468
+      },
+      {
+        "layerIndex": 2,
+        "neuronIndex": 4,
+        "weightIndex": 4,
+        "weight": 0.20813535997794838
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 0,
+        "weight": -2.361421023340571
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 1,
+        "weight": 0.6173898132803762
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 2,
+        "weight": -2.020224829860304
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 3,
+        "weight": 1.020510609587116
+      },
+      {
+        "layerIndex": 3,
+        "neuronIndex": 0,
+        "weightIndex": 4,
+        "weight": 0.8717119613424797
+      }
+    ]
+  }
+]

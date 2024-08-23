@@ -10,6 +10,9 @@
                         {{ option.text }}
                     </option>
                 </select>
+                <div class="gradientButton">
+                    <button @click="isWeight = !isWeight; $emit('setIsWeight', isWeight)">{{ !isWeight ? 'show weights' : 'show gradients' }}</button>
+                </div>
             </div>
             <br/>
             <div class="layers">
@@ -28,7 +31,8 @@
                                                  class="weight">
                                                 <GradientHeatmap :layerIndex="layerIndex + 1" :neuronIndex="neuronIndex" :weightIndex="weightIndex"
                                                                  :isActiveProp="setIsActive([layerIndex + 1, neuronIndex, weightIndex])"
-                                                                 :highlightedNeuron="highlightedNeuron" :highlightedNeuronPerm="highlightedNeuronPerm" class="weight-box" />
+                                                                 :highlightedNeuron="highlightedNeuron" :highlightedNeuronPerm="highlightedNeuronPerm"
+                                                                 :isWeight="isWeight" class="weight-box" />
                                             </div>
                                         </div>
                                     </div>
@@ -69,7 +73,8 @@ export default {
                 { text: '()^2', value: 'squared' },
                 { text: '()^3', value: 'cubic' },
                 { text: '()', value: 'linear' }
-            ]
+            ],
+            isWeight: false
         }
     },
     mounted() {
@@ -176,7 +181,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 90%;
+    height: 88%;
 }
 .gradientButton {
     display: flex;
@@ -219,7 +224,7 @@ export default {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    height: 82vh;
+    height: 80vh;
 }
 
 .neuron {
@@ -235,7 +240,7 @@ export default {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    max-height: 80vh;
+    max-height: 78vh;
 }
 .weight {
     position: relative;

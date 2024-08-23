@@ -1,13 +1,13 @@
 <template>
     <div>
         <label for="range-weights">Weight : {{ parseFloat(weight).toFixed(2) }}</label>
-        <b-form-input id="range-weights"
-                      v-model="weight"
-                      type="range"
-                      min="-20" max="20" step="0.001"
-                      @click="changeIndex([layerIndex, neuronIndex, weightIndex])"
-                      v-on:mouseup="$emit('append-data')"
-        ></b-form-input>
+        <VueSlider id="range-weights"
+                   v-model="weight"
+                   :dot-options="{tooltip: 'none'}"
+                   :process-style="{background: 'white'}"
+                   :min="-20" :max="20" :interval="0.0001"
+                   @click="changeIndex([layerIndex, neuronIndex, weightIndex])"
+                   @drag-end="$emit('append-data')"></VueSlider>
     </div>
 </template>
 
@@ -15,7 +15,7 @@
 
 import { getInputWeight } from "@/neural-network/nn";
 
-//import VueSlider from "vue-slider-component";
+import VueSlider from "vue-slider-component";
 
 export default {
     name: 'SliderWeights',
@@ -34,6 +34,7 @@ export default {
         },
     },
     components: {
+        VueSlider
     },
     data() {
         return {}

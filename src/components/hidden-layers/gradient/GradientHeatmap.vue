@@ -6,10 +6,10 @@
         </svg>
     </div>
 </template>
-<script>
-//import * as d3 from "d3";
 
+<script>
 import * as d3 from "d3";
+import {getInputWeight} from "@/neural-network/nn";
 
 export default {
     name: 'GradientHeatmap',
@@ -39,6 +39,10 @@ export default {
             type: String,
             required: false
         },
+        isWeight: {
+            type: Boolean,
+            required: true
+        }
     },
     data() {
         return {
@@ -48,8 +52,12 @@ export default {
         }
     },
     mounted() {
-        this.computeDer()
-        this.chooseColor()
+        if (this.isWeight)
+            this.chooseColor(this.weight, 4, 0.1)
+        else {
+            this.computeDer()
+            this.chooseColor(this.der, 10, 0.1)
+        }
         this.drawBox()
     },
     methods: {
@@ -57,12 +65,6 @@ export default {
             d3.select(this.$refs["colorBox"]).selectAll("rect").remove()
             d3.select("body").select("div.tooltip").remove();
 
-            /*const tooltip = d3.select("body")
-                .append("div")
-                .attr("class", "tooltip")
-                .style("opacity", 0);
-
-             */
             d3.select(this.$refs["colorBox"]).append("rect")
                 .attr("class", this.isHighlighted(this.network[this.layerIndex][this.neuronIndex].getInputLinks()[this.weightIndex]) || this.isActive ? "rectangle-active" : "rectangle")
                 .attr("x", 0)
@@ -72,29 +74,29 @@ export default {
                 .attr("fill", this.color)
                 .on("click", () => this.selectWeight())
                 .on('mouseover', () => this.handleMouseOver())
-                //.on('mousemove', (event) => this.handleMouseMove(tooltip, event))
                 .on('mouseout', () => this.handleMouseOut())
 
         },
         computeDer() {
             this.der = this.network[this.layerIndex][this.neuronIndex].getInputLinks()[this.weightIndex].getAccErrorDer()
         },
-        chooseColor() {
-            if (this.der < -10) {
+        chooseColor(value, limit, zeroRange) {
+            if (value < -limit) {
                 this.color = this.colors.blue[this.colors.blue.length - 1];
                 return
             }
-            if (this.der > 10) {
+            if (value > limit) {
                 this.color = this.colors.red[this.colors.red.length - 1];
                 return
             }
-            if (this.der < 0.1 && this.der > -0.1) {
+            if (value < zeroRange && value > -zeroRange) {
                 this.color = this.colors.white;
                 return
             }
 
-            const index = Math.floor(Math.abs(this.der));
-            if (this.der < 0) {
+            console.log(this.colors.red.length)
+            const index = Math.floor(Math.abs(value / limit * this.colors.red.length));
+            if (value < 0) {
                 this.color = this.colors.blue[index];
             } else {
                 this.color = this.colors.red[index];
@@ -104,26 +106,10 @@ export default {
             this.$store.commit('changeIndex', [this.layerIndex, this.neuronIndex, this.weightIndex]);
         },
         handleMouseOver() {
-            /*tooltip.transition()
-                .style("opacity", 0.9);
-            tooltip.html("<span>L" + this.layerIndex +
-                "<span> - N" + this.neuronIndex +
-                "<span> - W" + this.weightIndex + "</span>")
-                .style("left", (event.pageX) + "px")
-                .style("top", (event.pageY) + "px");
-                             */
             this.changeTrajectory()
-        },
-        handleMouseMove(tooltip, event) {
-            tooltip.style("left", (event.pageX) + "px")
-                .style("top", (event.pageY) + "px");
         },
         handleMouseOut() {
             this.changeTrajectory()
-            /*tooltip.transition()
-                .style("opacity", 0);
-
-             */
         },
         selectWeight() {
             this.isActive = !this.isActive
@@ -175,20 +161,33 @@ export default {
                 return this.$store.getters.selectedWeights
             }
         },
+        weight: {
+            get: function() {
+                return getInputWeight(this.network[this.layerIndex][this.neuronIndex], this.weightIndex)
+            }
+        },
     },
     watch: {
         networkShape: {
             handler() {
-                this.computeDer()
-                this.chooseColor()
+                if (this.isWeight)
+                    this.chooseColor(this.weight, 4, 0.1)
+                else {
+                    this.computeDer()
+                    this.chooseColor(this.der, 10, 0.1)
+                }
                 this.drawBox()
             },
             deep: true,
         },
         weights: {
             handler() {
-                this.computeDer()
-                this.chooseColor()
+                if (this.isWeight)
+                    this.chooseColor(this.weight, 4, 0.1)
+                else {
+                    this.computeDer()
+                    this.chooseColor(this.der, 10, 0.1)
+                }
                 this.drawBox()
             },
             deep: true,
@@ -206,6 +205,17 @@ export default {
         selectedWeights : {
             handler() {
                 this.drawWeight()
+            }
+        },
+        isWeight : {
+            handler() {
+                if (this.isWeight)
+                    this.chooseColor(this.weight, 4, 0.1)
+                else {
+                    this.computeDer()
+                    this.chooseColor(this.der, 10, 0.1)
+                }
+                this.drawBox()
             }
         }
     }

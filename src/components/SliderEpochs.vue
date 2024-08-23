@@ -1,7 +1,11 @@
 <template>
     <div>
+        <div class="row">
+            <LoggingButton :appendedData="appendedData"/>
+            <button @click="buildLoadedNetworkFile">Load network</button>
+        </div>
         <label for="range-weights"></label>
-        <VueSlider id="range-weights"
+        <VueSlider id="range-epochs"
                    v-model="epoch"
                    :dot-options="{tooltip: 'none'}"
                    :process-style="{background: 'white'}"
@@ -11,13 +15,16 @@
 </template>
 
 <script>
+import network from './../log/2024-08-23T13_56_15.593Z.json'
 import VueSlider from 'vue-slider-component'
+import LoggingButton from "@/components/Logging.vue";
 
 export default {
     name: 'SliderEpochs',
     props: {},
     components: {
-        VueSlider
+        VueSlider,
+        LoggingButton
     },
     data() {
         return {
@@ -46,6 +53,13 @@ export default {
         buildLoadedNetwork(epoch) {
             this.$store.commit("setDrawLineChart")
             this.$store.commit("loadNetwork", this.appendedData[epoch])
+        },
+        buildLoadedNetworkFile() {
+            this.appendedData = network
+            this.currentEpochs = network.length
+            this.epoch = this.currentEpochs
+            this.$store.commit("setDrawLineChart")
+            this.$store.commit("loadNetwork", this.appendedData[this.currentEpochs])
         }
     },
     computed: {
