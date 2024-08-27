@@ -94,7 +94,6 @@ export default {
                 return
             }
 
-            console.log(this.colors.red.length)
             const index = Math.floor(Math.abs(value / limit * this.colors.red.length));
             if (value < 0) {
                 this.color = this.colors.blue[index];

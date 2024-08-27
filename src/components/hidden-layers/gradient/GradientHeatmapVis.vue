@@ -2,7 +2,7 @@
     <div class="container w-100">
         <div class="heatmap">
             <div class = "row">
-                <div class="gradientButton">
+                <div class="gradientButton mt-1 mx-2">
                     <button @click="SGDStep">SGD Step</button>
                 </div>
                 <select v-model="selected" @change="changeInputFunction">
@@ -10,7 +10,7 @@
                         {{ option.text }}
                     </option>
                 </select>
-                <div class="gradientButton">
+                <div class="gradientButton mt-1 mx-2">
                     <button @click="isWeight = !isWeight; $emit('setIsWeight', isWeight)">{{ !isWeight ? 'show weights' : 'show gradients' }}</button>
                 </div>
             </div>

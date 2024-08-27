@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="row">
-            <LoggingButton :appendedData="appendedData"/>
+            <LoggingButton class="mx-2" :appendedData="appendedData"/>
             <button @click="buildLoadedNetworkFile">Load network</button>
         </div>
         <label for="range-weights"></label>
