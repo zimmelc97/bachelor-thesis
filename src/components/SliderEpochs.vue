@@ -55,11 +55,11 @@ export default {
             this.$store.commit("loadNetwork", this.appendedData[epoch])
         },
         buildLoadedNetworkFile() {
+            const length = network.length
             this.appendedData = network
-            this.currentEpochs = network.length
-            this.epoch = this.currentEpochs
-            this.$store.commit("setDrawLineChart")
-            this.$store.commit("loadNetwork", this.appendedData[this.currentEpochs])
+            this.currentEpochs = length
+            this.epoch = length
+            this.buildLoadedNetwork(length - 1)
         }
     },
     computed: {
