@@ -35,9 +35,7 @@ export default {
     },
     mounted() {
         this.appendedData = [{
-            epoch: this.currentEpochs,
             networkShape: this.networkShape,
-            MSE: this.MSE,
             weights: this.weights,
         }]
     },
@@ -101,9 +99,7 @@ export default {
                 this.currentEpochs = 0
                 this.epoch = 0
                 this.appendedData = [{
-                    epoch: this.currentEpochs,
-                    networkShape: this.networkShape,
-                    MSE: this.MSE,
+                   networkShape: this.networkShape,
                     weights: this.weights,
                 }]
             },
