@@ -1,6 +1,6 @@
 <template>
     <div>
-        <button @click="saveDataToFile">Download File</button>
+        <button class="generalButton" @click="saveDataToFile">Download Epochs</button>
     </div>
 </template>
 <script>
@@ -41,5 +41,24 @@ export default {
 }
 </script>
 <style>
-
+.generalButton {
+    background-color: #FFFFFF;
+    border: 0 solid rgba(0, 0, 0, 0);
+    border-radius: .25rem;
+    box-shadow: rgba(0, 0, 0, 0.02) 0 0 0 0;
+    box-sizing: border-box;
+    color: rgba(0, 0, 0, 1);
+    cursor: pointer;
+    font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    justify-content: center;
+    line-height: 1.25;
+    margin: 0;
+    height: 3rem;
+    padding: calc(.875rem - 1px);
+    position: relative;
+    vertical-align: baseline;
+    width: auto;
+}
 </style>

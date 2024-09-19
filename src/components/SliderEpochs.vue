@@ -1,9 +1,5 @@
 <template>
-    <div>
-        <div class="row">
-            <LoggingButton class="mx-2" :appendedData="appendedData"/>
-            <button @click="buildLoadedNetworkFile">Load network</button>
-        </div>
+    <div class="mt-5">
         <label for="range-weights"></label>
         <VueSlider id="range-epochs"
                    v-model="epoch"
@@ -17,14 +13,12 @@
 <script>
 import network from './../log/2024-08-23T13_56_15.593Z.json'
 import VueSlider from 'vue-slider-component'
-import LoggingButton from "@/components/Logging.vue";
 
 export default {
     name: 'SliderEpochs',
     props: {},
     components: {
-        VueSlider,
-        LoggingButton
+        VueSlider
     },
     data() {
         return {
@@ -38,6 +32,7 @@ export default {
             networkShape: this.networkShape,
             weights: this.weights,
         }]
+        this.$emit("setAppendedData", this.appendedData)
     },
     methods: {
         appendData() {
@@ -47,6 +42,7 @@ export default {
                 weights: this.weights,
             })
             this.epoch = this.currentEpochs
+            this.$emit("setAppendedData", this.appendedData)
         },
         buildLoadedNetwork(epoch) {
             this.$store.commit("setDrawLineChart")
@@ -57,6 +53,7 @@ export default {
             this.appendedData = network
             this.currentEpochs = length
             this.epoch = length
+            this.$emit("setAppendedData", this.appendedData)
             this.buildLoadedNetwork(length - 1)
         }
     },
@@ -102,6 +99,7 @@ export default {
                    networkShape: this.networkShape,
                     weights: this.weights,
                 }]
+                this.$emit("setAppendedData", this.appendedData)
             },
             deep: true,
         },

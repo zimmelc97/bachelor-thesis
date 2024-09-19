@@ -1,6 +1,5 @@
 <template>
     <div>
-        <span>{{ isWeight ? 'weights:' : 'gradients' }}</span>
         <svg class="main-svg mt-3 ml-4" ref="svg" width="200" height="1000">
             <g class="legend" ref="legend"></g>
         </svg>
@@ -103,5 +102,7 @@ export default {
 </script>
 
 <style>
-
+.legend {
+    font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
 </style>

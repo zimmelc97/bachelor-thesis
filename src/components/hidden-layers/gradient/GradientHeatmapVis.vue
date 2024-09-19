@@ -2,16 +2,33 @@
     <div class="container w-100">
         <div class="heatmap">
             <div class = "row">
-                <div class="gradientButton mt-1 mx-2">
-                    <button @click="SGDStep">SGD Step</button>
+                <div class="toggleBox mt-1 mx-2">
+                    <select class="generalButton" v-model="selected" @change="changeInputFunction">
+                        <option v-for="(option, index) in options" v-bind:key="index" v-bind:value="option.value">
+                            {{ option.text }}
+                        </option>
+                    </select>
                 </div>
-                <select v-model="selected" @change="changeInputFunction">
-                    <option v-for="(option, index) in options" v-bind:key="index" v-bind:value="option.value">
-                        {{ option.text }}
-                    </option>
-                </select>
-                <div class="gradientButton mt-1 mx-2">
-                    <button @click="isWeight = !isWeight; $emit('setIsWeight', isWeight)">{{ !isWeight ? 'show weights' : 'show gradients' }}</button>
+                <div class="toggleBox mt-1 mx-2">
+                    <button
+                        class="visButton"
+                        @click="isWeight = true; $emit('setIsWeight', isWeight)"
+                        :class="[!isWeight ? 'inactive' : '']"
+                    >weights</button>
+                    <button
+                        class="visButton"
+                        @click="isWeight = false; $emit('setIsWeight', isWeight)"
+                        :class="[isWeight ? 'inactive' : '']"
+                    >gradients</button>
+                </div>
+                <div class="toggleBox mt-1 mx-2">
+                    <button class="generalButton" @click="SGDStep">SGD Step</button>
+                </div>
+                <div class="toggleBox mt-1 mx-2">
+                    <LoggingButton :appendedData="appendedData"/>
+                </div>
+                <div class="toggleBox mt-1 mx-2">
+                    <button class="generalButton" @click="buildLoadedNetworkFile">Load Network</button>
                 </div>
             </div>
             <br/>
@@ -47,7 +64,7 @@
             </div>
         </div>
         <div class="mt-2">
-            <SliderEpochs ref="sliderEpochs"></SliderEpochs>
+            <SliderEpochs ref="sliderEpochs" @setAppendedData="setAppendedData"></SliderEpochs>
         </div>
     </div>
 </template>
@@ -57,10 +74,11 @@ import GradientHeatmap from "@/components/hidden-layers/gradient/GradientHeatmap
 import {backProp, Errors, forwardProp, setAccErrDerToZero, updateWeights} from "@/neural-network/nn";
 import Neurons from "@/components/hidden-layers/neurons/Neurons.vue";
 import SliderEpochs from "@/components/SliderEpochs.vue";
+import LoggingButton from "@/components/Logging.vue";
 
 export default {
     name: 'GradientHeatmapVis',
-    components: {SliderEpochs, GradientHeatmap, Neurons},
+    components: {LoggingButton, SliderEpochs, GradientHeatmap, Neurons},
     data() {
         return {
             highlightedNeuron: null,
@@ -74,7 +92,8 @@ export default {
                 { text: '()^3', value: 'cubic' },
                 { text: '()', value: 'linear' }
             ],
-            isWeight: false
+            isWeight: false,
+            appendedData: null
         }
     },
     mounted() {
@@ -106,7 +125,7 @@ export default {
             get: function() {
                 return this.$store.getters.selectedWeights
             }
-        },
+        }
     },
     methods: {
         SGDStep() {
@@ -153,6 +172,12 @@ export default {
         },
         appendData() {
             this.$refs.sliderEpochs.appendData()
+        },
+        setAppendedData(item) {
+            this.appendedData = item
+        },
+        buildLoadedNetworkFile() {
+            this.$refs.sliderEpochs.buildLoadedNetworkFile()
         }
     },
     watch: {
@@ -182,12 +207,6 @@ export default {
     flex-direction: column;
     align-items: center;
     height: 88%;
-}
-.gradientButton {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
 }
 
 .structure {
@@ -256,4 +275,66 @@ export default {
     height: 80%;
     width: 80%;
 }
+
+.generalButton {
+    background-color: #FFFFFF;
+    border: 0 solid rgba(0, 0, 0, 0);
+    border-radius: .25rem;
+    box-shadow: rgba(0, 0, 0, 0.02) 0 0 0 0;
+    box-sizing: border-box;
+    color: rgba(0, 0, 0, 1);
+    cursor: pointer;
+    font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    justify-content: center;
+    line-height: 1.25;
+    margin: 0;
+    height: 3rem;
+    padding: calc(.875rem - 1px);
+    position: relative;
+    vertical-align: baseline;
+    width: auto;
+}
+
+.generalButton:active {
+    background-color: #F0F0F1;
+    border-color: rgba(0, 0, 0, 0.15);
+    box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+    transform: translateY(0);
+}
+
+.toggleBox {
+    background-color: transparent;
+    border-radius: .25rem;
+    cursor: pointer;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.visButton {
+    background-color: #FFFFFF;
+    border: 0 solid rgba(0, 0, 0, 0);
+    border-radius: .25rem;
+    box-shadow: rgba(0, 0, 0, 0.02) 0 0 0 0;
+    box-sizing: border-box;
+    color: rgba(0, 0, 0, 1);
+    cursor: pointer;
+    font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    justify-content: center;
+    line-height: 1.25;
+    margin: 0;
+    height: 3rem;
+    padding: calc(.875rem - 1px) ;
+    position: relative;
+    vertical-align: baseline;
+    width: auto;
+}
+
+.inactive {
+    background-color: #F0EBE3;
+    color: rgba(0, 0, 0, .3)
+}
+
 </style>
