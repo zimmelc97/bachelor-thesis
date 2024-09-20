@@ -27,7 +27,7 @@ export default {
         if (this.isWeight)
             this.drawLegend(5)
         else
-            this.drawLegend(10)
+            this.drawLegend(5)
     },
     methods: {
         drawLegend(range) {
@@ -93,7 +93,7 @@ export default {
                 if (this.isWeight)
                     this.drawLegend(5)
                 else {
-                    this.drawLegend(10)
+                    this.drawLegend(5)
                 }
             }
         }

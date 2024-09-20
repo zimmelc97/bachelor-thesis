@@ -1,9 +1,11 @@
 <template>
     <div>
         <!--<p>{{ der.toFixed(4) }}</p>-->
+        <div ref="tooltipGrad" class="tooltipStyle" :class="[tooltipVisible ? 'visible' : '']">{{ tooltipText }}</div>
         <svg class="main-svg" ref="svg">
             <g class="color-box" ref="colorBox"></g>
         </svg>
+
     </div>
 </template>
 
@@ -48,7 +50,9 @@ export default {
         return {
             der: 0,
             color: "#000000",
-            isActive: this.isActiveProp
+            isActive: this.isActiveProp,
+            tooltipText: '',
+            tooltipVisible: false,
         }
     },
     mounted() {
@@ -56,7 +60,7 @@ export default {
             this.chooseColor(this.weight, 4, 0.1)
         else {
             this.computeDer()
-            this.chooseColor(this.der, 10, 0.1)
+            this.chooseColor(this.der, 5, 0.1)
         }
         this.drawBox()
     },
@@ -106,9 +110,11 @@ export default {
         },
         handleMouseOver() {
             this.changeTrajectory()
+            this.showTooltip()
         },
         handleMouseOut() {
             this.changeTrajectory()
+            this.hideTooltip()
         },
         selectWeight() {
             this.isActive = !this.isActive
@@ -127,6 +133,15 @@ export default {
                 return this.highlightedNeuron && (this.highlightedNeuron === weightIds[0] || this.highlightedNeuron === weightIds[1])
             else
                 return this.highlightedNeuronPerm && (this.highlightedNeuronPerm === weightIds[0] || this.highlightedNeuronPerm === weightIds[1])
+        },
+        showTooltip() {
+            // Show the tooltip with some data
+            this.tooltipText = this.isWeight ? this.weight.toFixed(3) : this.der.toFixed(3);
+            this.tooltipVisible = true;
+        },
+        hideTooltip() {
+            // Hide the tooltip
+            this.tooltipVisible = false;
         }
     },
     computed: {
@@ -173,7 +188,7 @@ export default {
                     this.chooseColor(this.weight, 4, 0.1)
                 else {
                     this.computeDer()
-                    this.chooseColor(this.der, 10, 0.1)
+                    this.chooseColor(this.der, 5, 0.1)
                 }
                 this.drawBox()
             },
@@ -185,7 +200,7 @@ export default {
                     this.chooseColor(this.weight, 4, 0.1)
                 else {
                     this.computeDer()
-                    this.chooseColor(this.der, 10, 0.1)
+                    this.chooseColor(this.der, 5, 0.1)
                 }
                 this.drawBox()
             },
@@ -212,7 +227,7 @@ export default {
                     this.chooseColor(this.weight, 4, 0.1)
                 else {
                     this.computeDer()
-                    this.chooseColor(this.der, 10, 0.1)
+                    this.chooseColor(this.der, 5, 0.1)
                 }
                 this.drawBox()
             }
@@ -232,18 +247,26 @@ export default {
 .main-svg {
     width: 100%;
     height: 100%;
+    z-index: -1;
 }
-.tooltip {
+
+.tooltipStyle {
     position: absolute;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 8px;
+    background-color: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 4px;
     font-size: 12px;
+    display: none;
     pointer-events: none;
+    z-index: 10000;
+    left: 20px;
+    top: 0;
 }
-.tooltip-text-bold{
+
+.visible {
     display: block;
-    text-align: center;
-    font-weight: 700;
 }
 </style>
