@@ -37,38 +37,38 @@ const store = new Vuex.Store({
             state.inputData = []
             switch(functionName) {
                 case "sin":
-                    for(let i=0; i<50; i++) {
-                        let random = Math.random() * 3 - 1.5
+                    for(let i=0; i<30+1; i++) {
+                        let random = -1.5 + (3/(30)) * i
                         state.inputData.push({x: random, label: Math.sin(random)})
                     }
                     break;
                 case "cos":
-                    for(let i=0; i<50; i++) {
-                        let random = Math.random() * 3 - 1.5
+                    for(let i=0; i<30+1; i++) {
+                        let random = -1.5 + (3/(30)) * i
                         state.inputData.push({x: random, label: Math.cos(random)})
                     }
                     break;
                 case "exp":
-                    for(let i=0; i<50; i++) {
-                        let random = Math.random() * 3 - 1.5
+                    for(let i=0; i<30+1; i++) {
+                        let random = -1.5 + (3/(30)) * i
                         state.inputData.push({x: random, label: Math.exp(random)})
                     }
                     break;
                 case "squared":
-                    for(let i=0; i<50; i++) {
-                        let random = Math.random() * 3 - 1.5
+                    for(let i=0; i<30+1; i++) {
+                        let random = -1.5 + (3/(30)) * i
                         state.inputData.push({x: random, label: Math.pow((random), 2)})
                     }
                     break;
                 case "cubic":
-                    for(let i=0; i<50; i++) {
-                        let random = Math.random() * 3 - 1.5
+                    for(let i=0; i<30+1; i++) {
+                        let random = -1.5 + (3/(30)) * i
                         state.inputData.push({x: random, label: Math.pow((random), 3)})
                     }
                     break;
                 case "linear":
-                    for(let i=0; i<50; i++) {
-                        let random = Math.random() * 3 - 1.5
+                    for(let i=0; i<30+1; i++) {
+                        let random = -1.5 + (3/(30)) * i
                         state.inputData.push({x: random, label: random})
                     }
                     break;
@@ -86,9 +86,11 @@ const store = new Vuex.Store({
             state.MSE = MSE;
         },
         changeNetworkShape (state, networkShape) {
+            console.log(networkShape)
             state.networkShape = []
             state.networkShape.push(1)
             for (let i=0; i<networkShape.length; i++) {
+                console.log("hello")
                 state.networkShape.push(networkShape[i])
             }
             state.networkShape.push(1)
@@ -162,8 +164,8 @@ const store = new Vuex.Store({
     },
     actions: {
         loadData({state}) {
-            for(let i=0; i<50; i++) {
-                let random = Math.random() * 3 - 1.5
+            for(let i=0; i<30+1; i++) {
+                let random = -1.5 + (3/(30)) * i
                 state.inputData.push({x: random, label: Math.sin(random)})
             }
             state.network = buildNetwork(state.networkShape, Activations.SIGMOID, Activations.LINEAR)
