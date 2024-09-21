@@ -49,7 +49,8 @@
                                                 <GradientHeatmap :layerIndex="layerIndex + 1" :neuronIndex="neuronIndex" :weightIndex="weightIndex"
                                                                  :isActiveProp="setIsActive([layerIndex + 1, neuronIndex, weightIndex])"
                                                                  :highlightedNeuron="highlightedNeuron" :highlightedNeuronPerm="highlightedNeuronPerm"
-                                                                 :isWeight="isWeight" class="weight-box" />
+                                                                 :isWeight="isWeight" class="weight-box" @show-tooltip="showTooltip"
+                                                                 @hide-tooltip="hideTooltip"/>
                                             </div>
                                         </div>
                                     </div>
@@ -65,6 +66,13 @@
         </div>
         <div class="mt-2">
             <SliderEpochs ref="sliderEpochs" @setAppendedData="setAppendedData"></SliderEpochs>
+        </div>
+        <div
+            class="tooltipStyle"
+            :class="[tooltipVisible ? 'visible' : '']"
+            :style="{ left: `${tooltipX}px`, top: `${tooltipY}px` }"
+        >
+          {{ tooltipText }}
         </div>
     </div>
 </template>
@@ -93,7 +101,11 @@ export default {
                 { text: '()', value: 'linear' }
             ],
             isWeight: false,
-            appendedData: null
+            appendedData: null,
+            tooltipVisible: false,
+            tooltipText: '',
+            tooltipX: 0,
+            tooltipY: 0,
         }
     },
     mounted() {
@@ -178,6 +190,16 @@ export default {
         },
         buildLoadedNetworkFile() {
             this.$refs.sliderEpochs.buildLoadedNetworkFile()
+        },
+        showTooltip({ text, box }) {
+            this.tooltipText = text;
+            const tooltipOffset = 7.5;
+            this.tooltipX = box.left + box.width + tooltipOffset;
+            this.tooltipY = box.top - tooltipOffset ;
+            this.tooltipVisible = true;
+        },
+        hideTooltip() {
+          this.tooltipVisible = false;
         }
     },
     watch: {
@@ -335,6 +357,24 @@ export default {
 .inactive {
     background-color: #F0EBE3;
     color: rgba(0, 0, 0, .3)
+}
+
+.tooltipStyle {
+  position: fixed;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  color: black;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  display: none;
+  pointer-events: none;
+  z-index: 10000;
+}
+
+.tooltipStyle.visible {
+  display: block;
 }
 
 </style>
