@@ -85,12 +85,10 @@ const store = new Vuex.Store({
         changeMSE (state, MSE) {
             state.MSE = MSE;
         },
-        changeNetworkShape (state, networkShape) {
-            console.log(networkShape)
+        async changeNetworkShape (state, networkShape) {
             state.networkShape = []
             state.networkShape.push(1)
             for (let i=0; i<networkShape.length; i++) {
-                console.log("hello")
                 state.networkShape.push(networkShape[i])
             }
             state.networkShape.push(1)

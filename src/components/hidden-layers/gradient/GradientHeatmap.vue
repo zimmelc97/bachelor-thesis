@@ -1,6 +1,5 @@
 <template>
     <div>
-        <!--<p>{{ der.toFixed(4) }}</p>-->
         <svg class="main-svg" ref="svg">
             <g class="color-box" ref="colorBox"></g>
         </svg>
@@ -108,12 +107,11 @@ export default {
         },
         handleMouseOver() {
             this.changeTrajectory()
-          const box = this.$refs.colorBox.getBoundingClientRect();
-          console.log(box)
+            const box = this.$refs.colorBox.getBoundingClientRect();
             this.$emit('show-tooltip', {
               text: this.isWeight ? this.weight.toFixed(3) : this.der.toFixed(3),
               box: box
-          });
+            });
         },
         handleMouseOut() {
             this.changeTrajectory()

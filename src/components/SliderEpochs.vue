@@ -47,18 +47,17 @@ export default {
             this.$emit("setAppendedData", this.appendedData)
         },
         buildLoadedNetwork(epoch) {
-            //console.log(this.appendedData)
             this.$store.commit("setDrawLineChart")
             this.$store.commit("loadNetwork", this.appendedData[epoch])
         },
-        buildLoadedNetworkFile() {
+        async buildLoadedNetworkFile() {
             const length = network.length - 1
+            await this.$store.commit('changeNetworkShape', network[0].networkShape.slice(1, network[0].networkShape.length-1));
+            this.$emit("setAppendedData", network)
             this.appendedData = network
+            this.buildLoadedNetwork(length, network)
             this.currentEpochs = length
             this.epoch = length
-            this.$emit("setAppendedData", this.appendedData)
-            this.$store.commit('changeNetworkShape', this.appendedData[0].networkShape.slice(1, this.appendedData[0].networkShape.length-1));
-            this.buildLoadedNetwork(length)
         }
     },
     computed: {
