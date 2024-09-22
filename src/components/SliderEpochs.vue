@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import network from '../log/network.json'
+import networkFile from '../log/network.json'
 import VueSlider from 'vue-slider-component'
 
 export default {
@@ -51,11 +51,12 @@ export default {
             this.$store.commit("loadNetwork", this.appendedData[epoch])
         },
         async buildLoadedNetworkFile() {
-            const length = network.length - 1
-            await this.$store.commit('changeNetworkShape', network[0].networkShape.slice(1, network[0].networkShape.length-1));
-            this.$emit("setAppendedData", network)
-            this.appendedData = network
-            this.buildLoadedNetwork(length, network)
+            const length = networkFile.length - 1
+            this.appendedData = JSON.parse(JSON.stringify(networkFile));
+            await this.$store.commit('changeNetworkShape', networkFile[0].networkShape.slice(1, networkFile[0].networkShape.length-1));
+            await this.$emit("setAppendedData", networkFile)
+            this.appendedData = JSON.parse(JSON.stringify(networkFile));
+            this.buildLoadedNetwork(length)
             this.currentEpochs = length
             this.epoch = length
         }
@@ -64,6 +65,11 @@ export default {
         network: {
             get: function() {
                 return this.$store.getters.network
+            }
+        },
+        inputData: {
+            get: function() {
+                return this.$store.getters.inputData
             }
         },
         MSE: {
@@ -95,6 +101,19 @@ export default {
     },
     watch: {
         networkShape: {
+            handler() {
+                this.currentEpochs = 0
+                this.epoch = 0
+                this.appendedData = [{
+                    MSE: this.MSE,
+                    networkShape: this.networkShape,
+                    weights: this.weights,
+                }]
+                this.$emit("setAppendedData", this.appendedData)
+            },
+            deep: true,
+        },
+        inputData: {
             handler() {
                 this.currentEpochs = 0
                 this.epoch = 0
