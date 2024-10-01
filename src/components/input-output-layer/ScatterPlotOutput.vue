@@ -195,7 +195,7 @@
                 .domain([-5,5]);
         },
         range() {
-            return d3.range(-5, 5.1, 1)
+            return d3.range(-20, 20.1, 1)
         },
     },
     watch: {
